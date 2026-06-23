@@ -55,7 +55,7 @@ body.all-caps { text-transform: uppercase; }
 .section-label { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--text-muted); margin-bottom: 24px; display: flex; align-items: center; gap: 10px; }
 .section-label::after { content: ''; flex: 1; height: 2px; background: rgba(0,0,0,0.06); }
 
-/* ── GRILLA DE PROUESTAS ── */
+/* ── GRILLA DE PROPUESTAS ── */
 .proposals-grid { display: flex; flex-direction: column; gap: 1.25rem; }
 
 .proposal-card {
@@ -85,13 +85,13 @@ body.all-caps { text-transform: uppercase; }
 .proposal-card:hover .prop-arrow { transform: translateX(4px); color: var(--text); }
 
 /* VARIACIONES DE COLOR POR FICHA */
-.p-bucles { border-left: 6px solid var(--scratch-orange); }
-.p-bucles .prop-icon { background: #fff3e6; }
-.p-bucles:hover { border-color: var(--scratch-orange); }
-
 .p-condicionales { border-left: 6px solid var(--scratch-yellow); }
 .p-condicionales .prop-icon { background: #fffbeb; }
 .p-condicionales:hover { border-color: var(--scratch-yellow); }
+
+.p-bucles { border-left: 6px solid var(--scratch-orange); }
+.p-bucles .prop-icon { background: #fff3e6; }
+.p-bucles:hover { border-color: var(--scratch-orange); }
 
 /* CARD DESHABILITADA (FUTURAS PROPUESTAS) */
 .p-locked { border-left: 6px solid #cbd5e1; opacity: 0.7; pointer-events: none; }
@@ -118,28 +118,31 @@ body.all-caps { text-transform: uppercase; }
 
   <div class="proposals-grid">
 
-    <a href="Scratch2.html" class="proposal-card p-bucles">
-      <div class="prop-content">
-        <div class="prop-icon">🔄</div>
-        <div class="prop-details">
-          <h2>Clase 1: Bucles Eficientes</h2>
-          <p>Estructuras de repetición, optimización de código y la regla de los 360° para figuras geométricas.</p>
-        </div>
-      </div>
-      <div class="prop-arrow">→</div>
-    </a>
-
+    <!-- PROPUESTA 1: CONDICIONALES (Mapeada a Scratch1.html) -->
     <a href="Scratch1.html" class="proposal-card p-condicionales">
       <div class="prop-content">
         <div class="prop-icon">🔀</div>
         <div class="prop-details">
-          <h2>Clase 2: Toma de Decisiones Inteligentes</h2>
+          <h2>Clase 1: Toma de Decisiones Inteligentes</h2>
           <p>Uso de condicionales simples y dobles (si/sino), sensores de entorno y operadores lógicos binarios.</p>
         </div>
       </div>
       <div class="prop-arrow">→</div>
     </a>
 
+    <!-- PROPUESTA 2: BUCLES (Mapeada a Scratch2.html) -->
+    <a href="Scratch2.html" class="proposal-card p-bucles">
+      <div class="prop-content">
+        <div class="prop-icon">🔄</div>
+        <div class="prop-details">
+          <h2>Clase 2: Bucles Eficientes</h2>
+          <p>Estructuras de repetición, optimización de código y la regla de los 360° para figuras geométricas.</p>
+        </div>
+      </div>
+      <div class="prop-arrow">→</div>
+    </a>
+
+    <!-- COMODÍN PARA FUTURA PROPUESTA -->
     <div class="proposal-card p-locked" style="display: none;">
       <div class="prop-content">
         <div class="prop-icon">🚀</div>
