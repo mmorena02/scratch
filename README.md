@@ -1,2 +1,2 @@
-# scratch
-Sitio web con propuestas de Scratch
+# Scratch
+Sitio web con actividades para entender el uso de Scratch
