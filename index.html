@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portal de Programación — Scratch</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #F7F4EF;
+  --card: #FFFFFF;
+  --text: #1a1a2e;
+  --text-muted: #6b7280;
+  --scratch-purple: #9966FF;
+  --scratch-orange: #FF8C00;
+  --scratch-yellow: #FFB900;
+  --radius: 14px;
+  --shadow: 0 4px 16px rgba(0,0,0,0.06);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  padding: 0;
+  font-size: 17px;
+}
+
+body.all-caps { text-transform: uppercase; }
+
+/* ── HEADER DE BIENVENIDA ── */
+.portal-header {
+  background: #2c1b4d;
+  padding: 4rem 2rem 3.5rem;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+.portal-header::before {
+  content: ''; position: absolute; top: -50px; left: -50px; width: 180px; height: 180px; border-radius: 50%; background: rgba(255,140,0,0.1);
+}
+.portal-header::after {
+  content: ''; position: absolute; bottom: -50px; right: -50px; width: 220px; height: 220px; border-radius: 50%; background: rgba(153,102,255,0.12);
+}
+.header-inner { max-width: 800px; margin: 0 auto; position: relative; z-index: 1; }
+.portal-header h1 { font-size: 40px; font-weight: 800; color: #fff; margin-bottom: 12px; }
+.portal-header p { font-size: 19px; color: rgba(255,255,255,0.8); max-width: 600px; margin: 0 auto; line-height: 1.6; }
+
+/* ── CONTENEDOR PRINCIPAL ── */
+.main { max-width: 800px; margin: 0 auto; padding: 3rem 2rem; }
+
+.section-label { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--text-muted); margin-bottom: 24px; display: flex; align-items: center; gap: 10px; }
+.section-label::after { content: ''; flex: 1; height: 2px; background: rgba(0,0,0,0.06); }
+
+/* ── GRILLA DE PROUESTAS ── */
+.proposals-grid { display: flex; flex-direction: column; gap: 1.25rem; }
+
+.proposal-card {
+  background: var(--card);
+  border: 1px solid rgba(0,0,0,0.06);
+  border-radius: var(--radius);
+  padding: 1.75rem;
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.proposal-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+}
+
+.prop-content { display: flex; align-items: center; gap: 20px; }
+.prop-icon { width: 54px; height: 54px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 26px; flex-shrink: 0; }
+.prop-details h2 { font-size: 20px; font-weight: 800; color: var(--text); margin-bottom: 4px; }
+.prop-details p { font-size: 15px; color: var(--text-muted); line-height: 1.4; }
+
+.prop-arrow { font-size: 20px; color: var(--text-muted); font-weight: 700; padding-left: 10px; transition: transform 0.2s; }
+.proposal-card:hover .prop-arrow { transform: translateX(4px); color: var(--text); }
+
+/* VARIACIONES DE COLOR POR FICHA */
+.p-bucles { border-left: 6px solid var(--scratch-orange); }
+.p-bucles .prop-icon { background: #fff3e6; }
+.p-bucles:hover { border-color: var(--scratch-orange); }
+
+.p-condicionales { border-left: 6px solid var(--scratch-yellow); }
+.p-condicionales .prop-icon { background: #fffbeb; }
+.p-condicionales:hover { border-color: var(--scratch-yellow); }
+
+/* CARD DESHABILITADA (FUTURAS PROPUESTAS) */
+.p-locked { border-left: 6px solid #cbd5e1; opacity: 0.7; pointer-events: none; }
+.p-locked .prop-icon { background: #f1f5f9; }
+
+/* ── ACCESIBILIDAD ── */
+.btn-accessibility { position: fixed; bottom: 20px; right: 20px; background: var(--scratch-purple); color: white; border: none; padding: 12px 20px; border-radius: 30px; font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 800; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 1000; }
+</style>
+</head>
+<body>
+
+<button class="btn-accessibility" onclick="toggleAllCaps()" id="capsBtn">Abc → ABC</button>
+
+<header class="portal-header">
+  <div class="header-inner">
+    <h1>Fichas Interactivas de Programación</h1>
+    <p>Seleccioná la actividad correspondiente para ingresar a los desafíos interactivos de Scratch y generar tu reporte.</p>
+  </div>
+</header>
+
+<main class="main">
+
+  <div class="section-label">Actividades Disponibles</div>
+
+  <div class="proposals-grid">
+
+    <a href="Scratch2.html" class="proposal-card p-bucles">
+      <div class="prop-content">
+        <div class="prop-icon">🔄</div>
+        <div class="prop-details">
+          <h2>Clase 1: Bucles Eficientes</h2>
+          <p>Estructuras de repetición, optimización de código y la regla de los 360° para figuras geométricas.</p>
+        </div>
+      </div>
+      <div class="prop-arrow">→</div>
+    </a>
+
+    <a href="Scratch1.html" class="proposal-card p-condicionales">
+      <div class="prop-content">
+        <div class="prop-icon">🔀</div>
+        <div class="prop-details">
+          <h2>Clase 2: Toma de Decisiones Inteligentes</h2>
+          <p>Uso de condicionales simples y dobles (si/sino), sensores de entorno y operadores lógicos binarios.</p>
+        </div>
+      </div>
+      <div class="prop-arrow">→</div>
+    </a>
+
+    <div class="proposal-card p-locked" style="display: none;">
+      <div class="prop-content">
+        <div class="prop-icon">🚀</div>
+        <div class="prop-details">
+          <h2>Clase 3: Próximamente</h2>
+          <p>Nueva actividad interactiva en desarrollo para seguir potenciando tus habilidades de programación.</p>
+        </div>
+      </div>
+      <div class="prop-arrow" style="opacity: 0;">→</div>
+    </div>
+
+  </div>
+
+</main>
+
+<script>
+function toggleAllCaps() {
+  document.body.classList.toggle('all-caps');
+  const btn = document.getElementById('capsBtn');
+  if (document.body.classList.contains('all-caps')) {
+    btn.textContent = "ABC → Abc";
+  } else {
+    btn.textContent = "Abc → ABC";
+  }
+}
+</script>
+
+</body>
+</html>

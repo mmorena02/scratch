@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Secuencias en Scratch — Clase 1 (Versión Completa 9 Ejercicios)</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style>
+:root {
+  --bg: #F0F4F8;
+  --card: #FFFFFF;
+  --text: #1a1a2e;
+  --text-muted: #555e6d;
+  --scratch-orange: #FF8C00;
+  --scratch-blue: #4C97FF;
+  --scratch-purple: #9966FF;
+  --scratch-green: #59C059;
+  --scratch-red: #EF4444;
+  --radius: 16px;
+  --shadow: 0 4px 16px rgba(0,0,0,0.06);
+  --easy-bg: #E0F2FE; --easy-text: #0369a1;
+  --med-bg: #FEF3C7;  --med-text: #b45309;
+  --hard-bg: #FEE2E2; --hard-text: #b91c1c;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 0; font-size: 17px; }
+body.all-caps, body.all-caps .block, body.all-caps textarea, body.all-caps input, body.all-caps .check { text-transform: uppercase; }
+
+.page-header { background: #1e293b; padding: 3rem 2rem 2.5rem; position: relative; overflow: hidden; }
+.header-inner { max-width: 800px; margin: 0 auto; position: relative; z-index: 1; }
+.header-tag { display: inline-block; background: var(--scratch-blue); color: white; font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; padding: 6px 14px; border-radius: 20px; margin-bottom: 16px; }
+.page-header h1 { font-size: 34px; font-weight: 800; color: #fff; margin-bottom: 12px; }
+.page-header p { font-size: 18px; color: rgba(255,255,255,0.8); line-height: 1.6; max-width: 650px; }
+
+.main { max-width: 800px; margin: 0 auto; padding: 2.5rem 2rem; }
+.acc-bar { display: flex; gap: 10px; justify-content: flex-end; margin-bottom: 1.5rem; }
+.btn-acc { background: #ffffff; border: 1.5px solid #cbd5e1; font-family: inherit; font-size: 14px; font-weight: 700; padding: 6px 14px; border-radius: 20px; cursor: pointer; }
+.btn-acc.active { background: #e0f2fe; border-color: var(--scratch-blue); color: #0369a1; }
+
+.student-info-card { background: var(--card); border: 2px dashed var(--scratch-blue); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 2rem; box-shadow: var(--shadow); }
+.student-info-card h3 { font-size: 18px; font-weight: 800; margin-bottom: 12px; color: #1e3a8a; }
+.student-fields input { width: 100%; padding: 10px 14px; font-size: 16px; font-weight: 600; border: 2px solid #cbd5e1; border-radius: 8px; font-family: inherit; }
+
+.section-label { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--text-muted); margin: 2rem 0 16px; display: flex; align-items: center; gap: 10px; }
+.section-label::after { content: ''; flex: 1; height: 2px; background: rgba(0,0,0,0.06); }
+
+.concept-card { background: var(--card); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: var(--shadow); }
+.scratch-blocks { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+.block { font-family: 'Space Mono', monospace; font-size: 13px; font-weight: 700; padding: 6px 12px; border-radius: 6px; color: #fff; }
+.block-events { background: #FFBF00; } .block-move { background: var(--scratch-blue); } .block-pen { background: var(--scratch-purple); }
+
+/* Selector de Dificultad */
+.difficulty-selector { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 2rem; }
+.diff-btn { font-family: inherit; font-size: 15px; font-weight: 800; padding: 12px; border-radius: 12px; border: 2px solid #cbd5e1; background: #fff; cursor: pointer; text-align: center; }
+.diff-btn.easy-tab.active { background: var(--easy-bg); border-color: var(--easy-text); color: var(--easy-text); }
+.diff-btn.med-tab.active { background: var(--med-bg); border-color: var(--med-text); color: var(--med-text); }
+.diff-btn.hard-tab.active { background: var(--hard-bg); border-color: var(--hard-text); color: var(--hard-text); }
+
+/* Bloques de Desafíos */
+.challenges-grid { display: none; flex-direction: column; gap: 1.5rem; margin-bottom: 2.5rem; }
+.challenges-grid.active { display: flex; }
+.ch-card { background: var(--card); border: 1.5px solid rgba(0,0,0,0.06); border-radius: var(--radius); padding: 1.5rem; box-shadow: var(--shadow); }
+.ch-card.done { border-color: #6ee7b7 !important; background: #f0fdf4; }
+.ch-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+.ch-num { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; background: #e2e8f0; }
+.ch-title { font-size: 18px; font-weight: 800; }
+.ch-desc { font-size: 15px; color: var(--text-muted); margin-bottom: 12px; line-height: 1.5; }
+.ch-hint { font-family: 'Space Mono', monospace; font-size: 13px; color: #475569; background: #f1f5f9; padding: 6px 12px; border-radius: 6px; display: inline-block; margin-bottom: 12px; }
+
+.evidence-container { margin-top: 12px; background: #f8fafc; padding: 12px; border-radius: 10px; border: 2px dashed #93c5fd; }
+.ch-card.done .evidence-container { border-color: #a7f3d0; background: #f4fbf7; }
+.drop-zone { height: 110px; border: 2px dashed #cbd5e1; border-radius: 8px; display: flex; align-items: center; justify-content: center; background: #ffffff; cursor: pointer; color: #64748b; font-size: 13px; position: relative; overflow: hidden; text-align: center; padding: 5px; }
+.drop-zone img { max-height: 100%; max-width: 100%; object-fit: contain; }
+
+.ch-solution-area { margin: 10px 0; }
+.ch-solution-area label { font-size: 14px; font-weight: 700; display: block; margin-bottom: 4px; }
+.ch-solution-area textarea { width: 100%; height: 65px; padding: 8px; font-size: 15px; font-family: inherit; border: 1.5px solid #cbd5e1; border-radius: 8px; resize: none; }
+
+.ch-footer { display: flex; align-items: center; gap: 12px; margin-top: 10px; }
+.btn-done { font-family: inherit; font-size: 14px; font-weight: 700; padding: 6px 16px; border-radius: 20px; border: none; background: #1e293b; color: #fff; cursor: pointer; }
+.done-msg { font-size: 14px; font-weight: 700; color: #16a34a; display: none; }
+.ch-card.done .btn-done { display: none; } .ch-card.done .done-msg { display: block; }
+
+.progress-container { background: var(--card); padding: 1.5rem; border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 2.5rem; text-align: center; }
+.pbar-bg { width: 100%; height: 12px; background: #e2e8f0; border-radius: 6px; overflow: hidden; margin: 10px 0; }
+.pbar-fill { width: 0%; height: 100%; background: var(--scratch-blue); transition: width .3s; }
+
+.report-section { text-align: center; margin-bottom: 3rem; }
+.btn-generate-report { font-family: inherit; font-size: 18px; font-weight: 800; color: #fff; background: #2563eb; border: none; padding: 14px 36px; border-radius: 30px; cursor: pointer; box-shadow: 0 10px 15px -3px rgba(37,99,235,0.2); }
+
+#reporte-pdf { display: none; font-family: 'Nunito', sans-serif; padding: 40px; color: #1e293b; background: #fff; }
+.page-footer { background: #1e293b; color: rgba(255,255,255,0.6); text-align: center; padding: 1.5rem; font-size: 14px; }
+</style>
+</head>
+<body>
+
+<header class="page-header">
+  <div class="header-inner">
+    <span class="header-tag">Ficha Oficial Completa</span>
+    <h1>Secuencias en Scratch</h1>
+    <p>Clase 1: Resolvé los desafíos lógicos organizados por niveles. Probá tus secuencias en Scratch, pegá tus capturas y descargá tu reporte en PDF.</p>
+  </div>
+</header>
+
+<main class="main">
+  <div class="acc-bar">
+    <button class="btn-acc" id="caps-btn" onclick="toggleAllCaps()">🗣️ TODO MAYÚSCULAS</button>
+  </div>
+
+  <div class="student-info-card">
+    <h3>📝 Datos del Alumno/a</h3>
+    <div class="student-fields">
+      <input type="text" id="student-name" placeholder="Escribí tu nombre y apellido completo acá...">
+    </div>
+  </div>
+
+  <div class="section-label">Caja de Herramientas</div>
+  <div class="concept-card">
+    <p>Recordá el orden secuencial de arriba hacia abajo:</p>
+    <div class="scratch-blocks">
+      <span class="block block-events">al hacer clic en bandera verde</span>
+      <span class="block block-move">mover (50) pasos</span>
+      <span class="block block-move">girar [derecha] (90) grados</span>
+      <span class="block block-pen">bajar lápiz</span>
+    </div>
+  </div>
+
+  <div class="section-label">Elegí un Nivel de Desafío</div>
+  <div class="difficulty-selector">
+    <button class="diff-btn easy-tab active" onclick="switchTab('easy')">🟢 Nivel Inicial (1 - 3)</button>
+    <button class="diff-btn med-tab" onclick="switchTab('med')">🟡 Nivel Medio (4 - 6)</button>
+    <button class="diff-btn hard-tab" onclick="switchTab('hard')">🔴 Nivel Avanzado (7 - 9)</button>
+  </div>
+
+  <div class="challenges-grid active" id="sec-easy">
+    <div class="ch-card" id="ch1">
+      <div class="ch-header"><div class="ch-num">1</div><div class="ch-title">El Pasadizo Directo</div></div>
+      <div class="ch-desc">El gato debe avanzar recto 50 pasos, girar a la derecha para entrar al túnel y avanzar otros 50 pasos. Escribí los bloques en orden.</div>
+      <div class="ch-hint">Secuencia básica sin saltos.</div>
+      <div class="ch-solution-area"><textarea id="sol-ch1" placeholder="Ej: 1. Mover 50, 2. Girar derecha 90..."></textarea></div>
+      <div class="evidence-container">
+        <div class="drop-zone" id="dz-1"><span id="txt-dz-1">📋 Clic acá y presioná Ctrl+V para pegar captura</span><img id="img-dz-1" style="display:none;"></div>
+        <input type="file" id="fi-1" accept="image/*" style="display:none;">
+      </div>
+      <div class="ch-footer"><button class="btn-done" onclick="markDone(1)">✓ Guardar</button><span class="done-msg">✅ Guardado</span></div>
+    </div>
+    <div class="ch-card" id="ch2">
+      <div class="ch-header"><div class="ch-num">2</div><div class="ch-title">El Lápiz Olvidadizo</div></div>
+      <div class="ch-desc">Queremos pintar una línea pero el objeto se mueve y no dibuja nada. ¿Qué bloque falta poner antes de avanzar?</div>
+      <div class="ch-hint">Bloque morado de Lápiz.</div>
+      <div class="ch-solution-area"><textarea id="sol-ch2" placeholder="Falta poner el bloque..."></textarea></div>
+      <div class="evidence-container">
+        <div class="drop-zone" id="dz-2"><span id="txt-dz-2">📋 Clic acá y presioná Ctrl+V para pegar captura</span><img id="img-dz-2" style="display:none;"></div>
+        <input type="file" id="fi-2" accept="image/*" style="display:none;">
+      </div>
+      <div class="ch-footer"><button class="btn-done" onclick="markDone(2)">✓ Guardar</button><span class="done-msg">✅ Guardado</span></div>
+    </div>
+    <div class="ch-card" id="ch3">
+      <div class="ch-header"><div class="ch-num">3</div><div class="ch-title">Giro Equivocado</div></div>
+      <div class="ch-desc">El objeto arranca mirando a la derecha. Si querés que camine hacia ARRIBA de la pantalla, ¿hacia dónde debe girar 90 grados?</div>
+      <div class="ch-hint">Pensá en la perspectiva del personaje.</div>
+      <div class="ch-solution-area"><textarea id="sol-ch3" placeholder="Debe girar a la..."></textarea></div>
+      <div class="evidence-container">
+        <div class="drop-zone" id="dz-3"><span id="txt-dz-3">📋 Clic acá y presioná Ctrl+V para pegar captura</span><img id="img-dz-3" style="display:none;"></div>
+        <input type="file" id="fi-3" accept="image/*" style="display:none;">
+      </div>
+      <div class="ch-footer"><button class="btn-done" onclick="markDone(3)">✓ Guardar</button><span class="done-msg">✅ Guardado</span></div>
+    </div>
+  </div>
+
+  <div class="challenges-grid" id="sec-med">
+    <div class="ch-card" id="ch4">
+      <div class="ch-header"><div class="ch-num">4</div><div class="ch-title">El Regreso exacto</div></div>
+      <div class="ch-desc">El objeto camina 150 pasos. Escribí los dos comandos necesarios para que mire en dirección opuesta y vuelva al punto inicial.</div>
+      <div class="ch-hint">Giro de media vuelta completa.</div>
+      <div class="ch-solution-area"><textarea id="sol-ch4" placeholder="Girar... grados y mover... pasos."></textarea></div>
+      <div class="evidence-container">
+        <div class="drop-zone" id="dz-4"><span id="txt-dz-4">📋 Clic acá y presioná Ctrl+V para pegar captura</span><img id="img-dz-4" style="display:none;"></div>
+        <input type="file" id="fi-4" accept="image/*" style="display:none;">
+      </div>
+      <div class="ch-footer"><button class="btn-done" onclick="markDone(4)">✓ Guardar</button><span class="done-msg">✅ Guardado</span></div>
+    </div>
+    <div class="ch-card" id="ch5">
+      <div class="ch-header"><div class="ch-num">5</div><div class="ch-title">El Escalón Invertido</div></div>
+      <div class="ch-desc">Para dibujar un escalón que sube y avanza a la derecha, ¿cuál es la secuencia correcta de giros de 90° entre movimiento y movimiento?</div>
+      <div class="ch-hint">Primero sube, luego avanza horizontal.</div>
+      <div class="ch-solution-area"><textarea id="sol-ch5" placeholder="Girar a la... luego mover, luego girar a la..."></textarea></div>
+      <div class="evidence-container">
+        <div class="drop-zone" id="dz-5"><span id="txt-dz-5">📋 Clic acá y presioná Ctrl+V para pegar captura</span><img id="img-dz-5" style="display:none;"></div>
+        <input type="file" id="fi-5" accept="image/*" style="display:none;">
+      </div>
+      <div class="ch-footer"><button class="btn-done" onclick="markDone(5)">✓ Guardar</button><span class="done-msg">✅ Guardado</span></div>
+    </div>
+    <div class="ch-card" id="ch6">
+      <div class="ch-header"><div class="ch-num">6</div><div class="ch-title">Bandera Desconectada</div></div>
+      <div class="ch-desc">Tenés un bloque de movimiento y arriba un giro, pero no pusiste el bloque amarillo de bandera verde arriba de todo. ¿Qué pasa al hacer clic en el juego?</div>
+      <div class="ch-hint">¿Quién inicia el hilo de comandos?</div>
+      <div class="ch-solution-area"><textarea id="sol-ch6" placeholder="El código..."></textarea></div>
+      <div class="evidence-container">
+        <div class="drop-zone" id="dz-6"><span id="txt-dz-6">📋 Clic acá y presioná Ctrl+V para pegar captura</span><img id="img-dz-6" style="display:none;"></div>
+        <input type="file" id="fi-6" accept="image/*" style="display:none;">
+      </div>
+      <div class="ch-footer"><button class="btn-done" onclick="markDone(6)">✓ Guardar</button><span class="done-msg">✅ Guardado</span></div>
+    </div>
+  </div>
+
+  <div class="challenges-grid" id="sec-hard">
+    <div class="ch-card" id="ch7">
+      <div class="ch-header"><div class="ch-num">7</div><div class="ch-title">La U Mayúscula</div></div>
+      <div class="ch-desc">Queremos trazar la forma de una letra "U" cuadrada perfecta. Diseñá la secuencia exacta de pasos y giros empezando desde el extremo superior izquierdo.</div>
+      <div class="ch-hint">Baja, dobla, avanza, dobla, sube.</div>
+      <div class="ch-solution-area"><textarea id="sol-ch7" placeholder="Escribí los pasos lógicos acá..."></textarea></div>
+      <div class="evidence-container">
+        <div class="drop-zone" id="dz-7"><span id="txt-dz-7">📋 Clic acá y presioná Ctrl+V para pegar captura</span><img id="img-dz-7" style="display:none;"></div>
+        <input type="file" id="fi-7" accept="image/*" style="display:none;">
+      </div>
+      <div class="ch-footer"><button class="btn-done" onclick="markDone(7)">✓ Guardar</button><span class="done-msg">✅ Guardado</span></div>
+    </div>
+    <div class="ch-card" id="ch8">
+      <div class="ch-header"><div class="ch-num">8</div><div class="ch-title">El Orden de los Factores</div></div>
+      <div class="ch-desc">Si ponés: [1. mover 100], [2. cambiar color de lápiz a rojo], [3. bajar lápiz]. ¿De qué color sale la línea que se dibujó y por qué?</div>
+      <div class="ch-hint">¿Qué tramo se pintó realmente?</div>
+      <div class="ch-solution-area"><textarea id="sol-ch8" placeholder="La línea sale... porque..."></textarea></div>
+      <div class="evidence-container">
+        <div class="drop-zone" id="dz-8"><span id="txt-dz-8">📋 Clic acá y presioná Ctrl+V para pegar captura</span><img id="img-dz-8" style="display:none;"></div>
+        <input type="file" id="fi-8" accept="image/*" style="display:none;">
+      </div>
+      <div class="ch-footer"><button class="btn-done" onclick="markDone(8)">✓ Guardar</button><span class="done-msg">✅ Guardado</span></div>
+    </div>
+    <div class="ch-card" id="ch9">
+      <div class="ch-header"><div class="ch-num">9</div><div class="ch-title">El Laberinto en Espiral</div></div>
+      <div class="ch-desc">Querés dibujar una espiral cuadrada. Cada tramo debe ser más largo que el anterior. Si el primero mide 20 pasos y el segundo 40, ¿cómo sigue la secuencia?</div>
+      <div class="ch-hint">Sumá una distancia fija entre cada giro.</div>
+      <div class="ch-solution-area"><textarea id="sol-ch9" placeholder="Tramo 3:... pasos, Tramo 4:... pasos. Giros de..."></textarea></div>
+      <div class="evidence-container">
+        <div class="drop-zone" id="dz-9"><span id="txt-dz-9">📋 Clic acá y presioná Ctrl+V para pegar captura</span><img id="img-dz-9" style="display:none;"></div>
+        <input type="file" id="fi-9" accept="image/*" style="display:none;">
+      </div>
+      <div class="ch-footer"><button class="btn-done" onclick="markDone(9)">✓ Guardar</button><span class="done-msg">✅ Guardado</span></div>
+    </div>
+  </div>
+
+  <div class="progress-container">
+    <div class="progress-title">Progreso Total de la Clase</div>
+    <div class="pbar-bg"><div class="pbar-fill" id="pbar"></div></div>
+    <div class="progress-txt" id="ptxt">0 de 9 desafíos guardados en memoria.</div>
+  </div>
+
+  <div class="report-section">
+    <button class="btn-generate-report" onclick="generarReportePDF()">📥 Descargar Reporte Completo (PDF)</button>
+  </div>
+</main>
+
+<div id="reporte-pdf">
+  <div style="border-bottom: 3px solid #1e293b; padding-bottom: 12px; margin-bottom: 20px; display:flex; justify-content:space-between; align-items:center;">
+    <div>
+      <h1 style="font-size: 24px; color: #1e293b; margin: 0;">📋 Reporte: Secuencias en Scratch</h1>
+      <p style="margin: 5px 0 0 0; font-size:14px; color:#555e6d;">Profesor de Clase: <strong>Mario Morena</strong></p>
+    </div>
+    <div style="text-align: right;">
+      <p style="margin:0; font-size:16px;"><strong>Estudiante:</strong> <span id="pdf-nombre-alumno" style="color:#2563eb; font-weight:bold;">-</span></p>
+    </div>
+  </div>
+  <div id="pdf-contenido-desafios"></div>
+</div>
+
+<footer class="page-footer">
+  Ficha Práctica Automatizada · Creado por <strong>Profe Mario Morena</strong>
+</footer>
+
+<script>
+const done = Array(9).fill(false);
+const imagenesBase64 = Array(9).fill("");
+
+function switchTab(level) {
+  document.querySelectorAll('.diff-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.challenges-grid').forEach(g => g.classList.remove('active'));
+  
+  if(level === 'easy') { document.querySelector('.easy-tab').classList.add('active'); document.getElementById('sec-easy').classList.add('active'); }
+  if(level === 'med') { document.querySelector('.med-tab').classList.add('active'); document.getElementById('sec-med').classList.add('active'); }
+  if(level === 'hard') { document.querySelector('.hard-tab').classList.add('active'); document.getElementById('sec-hard').classList.add('active'); }
+}
+
+for(let i=1; i<=9; i++) {
+  const dz = document.getElementById('dz-'+i);
+  const fi = document.getElementById('fi-'+i);
+  const img = document.getElementById('img-'+i);
+  const txt = document.getElementById('txt-dz-'+i);
+
+  dz.addEventListener('click', () => fi.click());
+  fi.addEventListener('change', (e) => { if(e.target.files[0]) cargarImagen(e.target.files[0], img, txt, i); });
+}
+
+window.addEventListener('paste', (e) => {
+  const items = e.clipboardData.items;
+  let targetIndex = 1;
+  if(document.activeElement && document.activeElement.id) {
+    const num = document.activeElement.id.replace(/\D/g, '');
+    if(num >= 1 && num <= 9) targetIndex = parseInt(num);
+  }
+  for (let i = 0; i < items.length; i++) {
+    if (items[i].type.indexOf('image') !== -1) {
+      const file = items[i].getAsFile();
+      cargarImagen(file, document.getElementById('img-'+targetIndex), document.getElementById('txt-dz-'+targetIndex), targetIndex);
+    }
+  }
+});
+
+function cargarImagen(file, imgElement, txtElement, index) {
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    imgElement.src = e.target.result; imgElement.style.display = 'block';
+    txtElement.style.opacity = '0.1'; imagenesBase64[index-1] = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function toggleAllCaps() {
+  document.body.classList.toggle('all-caps');
+  document.getElementById('caps-btn').classList.toggle('active');
+}
+
+function markDone(n) {
+  done[n-1] = true;
+  document.getElementById('ch'+n).classList.add('done');
+  const count = done.filter(Boolean).length;
+  document.getElementById('pbar').style.width = (count/9*100)+'%';
+  document.getElementById('ptxt').textContent = `${count} de 9 desafíos guardados en la entrega.`;
+}
+
+function generarReportePDF() {
+  const nombre = document.getElementById('student-name').value.trim();
+  if(!nombre) { alert("⚠️ Escribí tu nombre antes de descargar el PDF."); return; }
+
+  document.getElementById('pdf-nombre-alumno').innerText = nombre;
+  let listadoHTML = "";
+  
+  for(let i=1; i<=9; i++) {
+    const resp = document.getElementById('sol-ch'+i).value || "Sin respuesta.";
+    const status = done[i-1] ? "✅ COMPLETADO" : "⏳ NO COMPLETADO";
+    const imgData = imagenesBase64[i-1];
+
+    listadoHTML += `
+      <div style="margin-bottom: 20px; border-bottom: 1px dashed #cbd5e1; padding-bottom: 15px; page-break-inside: avoid;">
+        <h3 style="margin:0; font-size:15px; color:#1e293b;">Desafío ${i} - [${status}]</h3>
+        <p style="background:#f1f5f9; padding:8px; border-radius:6px; font-size:13px; margin:5px 0;"><strong>Respuesta:</strong> ${resp}</p>
+        ${imgData ? `<div style="text-align:center;"><img src="${imgData}" style="max-height:180px; max-width:100%;" /></div>` : `<p style="color:red; font-size:12px;">Sin captura adjunta.</p>`}
+      </div>`;
+  }
+
+  document.getElementById('pdf-contenido-desafios').innerHTML = listadoHTML;
+  const elemento = document.getElementById('reporte-pdf');
+  elemento.style.display = 'block';
+
+  html2pdf().set({
+    margin: 15, filename: `Reporte_Secuencias_${nombre.replace(/\s+/g, '_')}.pdf`,
+    image: { type: 'jpeg', quality: 0.95 }, html2canvas: { scale: 2 },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+  }).from(elemento).save().then(() => elemento.style.display = 'none');
+}
+</script>
+</body>
+</html>
