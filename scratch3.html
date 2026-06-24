@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Variables en Scratch — Clase 3 (Versión Completa 9 Ejercicios)</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style>
+:root {
+  --bg: #F0F4F8;
+  --card: #FFFFFF;
+  --text: #1a1a2e;
+  --text-muted: #555e6d;
+  --scratch-orange: #FF8C00;
+  --scratch-blue: #4C97FF;
+  --scratch-purple: #9966FF;
+  --scratch-green: #59C059;
+  --scratch-red: #EF4444;
+  --radius: 16px;
+  --shadow: 0 4px 16px rgba(0,0,0,0.06);
+  --easy-bg: #E0F2FE; --easy-text: #0369a1;
+  --med-bg: #FEF3C7;  --med-text: #b45309;
+  --hard-bg: #FEE2E2; --hard-text: #b91c1c;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 0; font-size: 17px; }
+body.all-caps, body.all-caps .block, body.all-caps textarea, body.all-caps input, body.all-caps .check { text-transform: uppercase; }
+
+.page-header { background: #1e293b; padding: 3rem 2rem 2.5rem; position: relative; overflow: hidden; }
+.header-inner { max-width: 800px; margin: 0 auto; position: relative; z-index: 1; }
+.header-tag { display: inline-block; background: var(--scratch-orange); color: white; font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; padding: 6px 14px; border-radius: 20px; margin-bottom: 16px; }
+.page-header h1 { font-size: 34px; font-weight: 800; color: #fff; margin-bottom: 12px; }
+.page-header p { font-size: 18px; color: rgba(255,255,255,0.8); line-height: 1.6; max-width: 650px; }
+
+.main { max-width: 800px; margin: 0 auto; padding: 2.5rem 2rem; }
+.acc-bar { display: flex; gap: 10px; justify-content: flex-end; margin-bottom: 1.5rem; }
+.btn-acc { background: #ffffff; border: 1.5px solid #cbd5e1; font-family: inherit; font-size: 14px; font-weight: 700; padding: 6px 14px; border-radius: 20px; cursor: pointer; }
+.btn-acc.active { background: #e0f2fe; border-color: var(--scratch-blue); color: #0369a1; }
+
+.student-info-card { background: var(--card); border: 2px dashed var(--scratch-orange); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 2rem; box-shadow: var(--shadow); }
+.student-info-card h3 { font-size: 18px; font-weight: 800; margin-bottom: 12px; color: #92400e; }
+.student-fields input { width: 100%; padding: 10px 14px; font-size: 16px; font-weight: 600; border: 2px solid #cbd5e1; border-radius: 8px; font-family: inherit; }
+
+.section-label { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--text-muted); margin: 2rem 0 16px; display: flex; align-items: center; gap: 10px; }
+.section-label::after { content: ''; flex: 1; height: 2px; background: rgba(0,0,0,0.06); }
+
+.concept-card { background: var(--card); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: var(--shadow); }
+.scratch-blocks { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+.block { font-family: 'Space Mono', monospace; font-size: 13px; font-weight: 700; padding: 6px 12px; border-radius: 6px; color: #fff; }
+.block-events  { background: #FFBF00; color: #1a1a2e; }
+.block-move    { background: var(--scratch-blue); }
+.block-control { background: #FFAB19; color: #1a1a2e; }
+.block-data    { background: #FF8C1A; }
+.block-looks   { background: var(--scratch-purple); }
+.block-sound   { background: #CF63CF; }
+.block-ops     { background: #59C059; }
+
+/* Selector de Dificultad */
+.difficulty-selector { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 2rem; }
+.diff-btn { font-family: inherit; font-size: 15px; font-weight: 800; padding: 12px; border-radius: 12px; border: 2px solid #cbd5e1; background: #fff; cursor: pointer; text-align: center; }
+.diff-btn.easy-tab.active { background: var(--easy-bg); border-color: var(--easy-text); color: var(--easy-text); }
+.diff-btn.med-tab.active  { background: var(--med-bg);  border-color: var(--med-text);  color: var(--med-text);  }
+.diff-btn.hard-tab.active { background: var(--hard-bg); border-color: var(--hard-text); color: var(--hard-text); }
+
+/* Bloques de Desafíos */
+.challenges-grid { display: none; flex-direction: column; gap: 1.5rem; margin-bottom: 2.5rem; }
+.challenges-grid.active { display: flex; }
+.ch-card { background: var(--card); border: 1.5px solid rgba(0,0,0,0.06); border-radius: var(--radius); padding: 1.5rem; box-shadow: var(--shadow); }
+.ch-card.done { border-color: #6ee7b7 !important; background: #f0fdf4; }
+.ch-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+.ch-num { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; background: #e2e8f0; }
+.ch-title { font-size: 18px; font-weight: 800; }
+.ch-desc { font-size: 15px; color: var(--text-muted); margin-bottom: 12px; line-height: 1.5; }
+.ch-hint { font-family: 'Space Mono', monospace; font-size: 13px; color: #475569; background: #f1f5f9; padding: 6px 12px; border-radius: 6px; display: inline-block; margin-bottom: 12px; }
+
+.evidence-container { margin-top: 12px; background: #f8fafc; padding: 12px; border-radius: 10px; border: 2px dashed #93c5fd; }
+.ch-card.done .evidence-container { border-color: #a7f3d0; background: #f4fbf7; }
+.drop-zone { height: 110px; border: 2px dashed #cbd5e1; border-radius: 8px; display: flex; align-items: center; justify-content: center; background: #ffffff; cursor: pointer; color: #64748b; font-size: 13px; position: relative; overflow: hidden; text-align: center; padding: 5px; }
+.drop-zone img { max-height: 100%; max-width: 100%; object-fit: contain; }
+
+.ch-solution-area { margin: 10px 0; }
+.ch-solution-area label { font-size: 14px; font-weight: 700; display: block; margin-bottom: 4px; }
+.ch-solution-area textarea { width: 100%; height: 65px; padding: 8px; font-size: 15px; font-family: inherit; border: 1.5px solid #cbd5e1; border-radius: 8px; resize: none; }
+
+.ch-footer { display: flex; align-items: center; gap: 12px; margin-top: 10px; }
+.btn-done { font-family: inherit; font-size: 14px; font-weight: 700; padding: 6px 16px; border-radius: 20px; border: none; background: #1e293b; color: #fff; cursor: pointer; }
+.done-msg { font-size: 14px; font-weight: 700; color: #16a34a; display: none; }
+.ch-card.done .btn-done { display: none; }
+.ch-card.done .done-msg { display: block; }
+
+.progress-container { background: var(--card); padding: 1.5rem; border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 2.5rem; text-align: center; }
+.pbar-bg { width: 100%; height: 12px; background: #e2e8f0; border-radius: 6px; overflow: hidden; margin: 10px 0; }
+.pbar-fill { width: 0%; height: 100%; background: var(--scratch-orange); transition: width .3s; }
+
+.report-section { text-align: center; margin-bottom: 3rem; }
+.btn-generate-report { font-family: inherit; font-size: 18px; font-weight: 800; color: #fff; background: #ea580c; border: none; padding: 14px 36px; border-radius: 30px; cursor: pointer; box-shadow: 0 10px 15px -3px rgba(234,88,12,0.25); }
+
+#reporte-pdf { display: none; font-family: 'Nunito', sans-serif; padding: 40px; color: #1e293b; background: #fff; }
+.page-footer { background: #1e293b; color: rgba(255,255,255,0.6); text-align: center; padding: 1.5rem; font-size: 14px; }
+</style>
+</head>
+<body>
+
+<header class="page-header">
+  <div class="header-inner">
+    <span class="header-tag">Ficha Oficial Completa</span>
+    <h1>Variables en Scratch</h1>
+    <p>Clase 3: Aprendé a usar variables para guardar información, crear contadores, puntajes y vidas. El programa recuerda datos mientras corre.</p>
+  </div>
+</header>
+
+<main class="main">
+  <div class="acc-bar">
+    <button class="btn-acc" id="caps-btn" onclick="toggleAllCaps()">🗣️ TODO MAYÚSCULAS</button>
+  </div>
+
+  <div class="student-info-card">
+    <h3>📝 Datos del Estudiante</h3>
+    <div class="student-fields">
+      <input type="text" id="student-name" placeholder="Escribí tu nombre y apellido completo acá...">
+    </div>
+  </div>
+
+  <div class="section-label">Caja de Herramientas</div>
+  <div class="concept-card">
+    <p>Las variables son <strong>cajitas con nombre</strong> que guardan un valor que puede cambiar. Se crean en la categoría <em>Datos</em> (naranja):</p>
+    <div class="scratch-blocks">
+      <span class="block block-data">fijar [puntaje] a (0)</span>
+      <span class="block block-data">cambiar [puntaje] por (1)</span>
+      <span class="block block-data">mostrar variable [puntaje]</span>
+      <span class="block block-data">esconder variable [puntaje]</span>
+      <span class="block block-ops">(puntaje) = (10)</span>
+      <span class="block block-control">si &lt;(puntaje) = (10)&gt; entonces</span>
+    </div>
+    <p style="margin-top:10px; font-size:14px; color:var(--text-muted);">💡 <strong>Regla clave:</strong> Siempre inicializá la variable con <em>fijar a (0)</em> al arrancar la bandera verde, antes de usarla.</p>
+  </div>
+
+  <div class="section-label">Elegí un Nivel de Desafío</div>
+  <div class="difficulty-selector">
+    <button class="diff-btn easy-tab active" onclick="switchTab('easy')">🟢 Nivel Inicial (1 - 3)</button>
+    <button class="diff-btn med-tab" onclick="switchTab('med')">🟡 Nivel Medio (4 - 6)</button>
+    <button class="diff-btn hard-tab" onclick="switchTab('hard')">🔴 Nivel Avanzado (7 - 9)</button>
+  </div>
+
+  <!-- NIVEL INICIAL -->
+  <div class="challenges-grid active" id="sec-easy">
+
+    <div class="ch-card" id="ch1">
+      <div class="ch-header"><div class="ch-num">1</div><div class="ch-title">La Cajita de Nombre</div></div>
+      <div class="ch-desc">Creá una variable llamada <strong>"puntaje"</strong> en la categoría Datos. Usá el bloque <em>fijar [puntaje] a (0)</em> al hacer clic en la bandera verde y luego <em>mostrar variable</em>. ¿Qué aparece en el escenario?</div>
+      <div class="ch-hint">La variable aparece como un marcador naranja en la pantalla.</div>
+      <div class="ch-solution-area"><textarea id="sol-ch1" placeholder="Cuando corro el programa, aparece en pantalla..."></textarea></div>
+      <div class="evidence-container">
+        <div class="drop-zone" id="dz-1"><span id="txt-dz-1">📋 Clic acá y presioná Ctrl+V para pegar captura</span><img id="img-dz-1" style="display:none;"></div>
+        <input type="file" id="fi-1" accept="image/*" style="display:none;">
+      </div>
+      <div class="ch-footer"><button class="btn-done" onclick="markDone(1)">✓ Guardar</button><span class="done-msg">✅ Guardado</span></div>
+    </div>
+
+    <div class="ch-card" id="ch2">
+      <div class="ch-header"><div class="ch-num">2</div><div class="ch-title">El Contador de Pasos</div></div>
+      <div class="ch-desc">Creá una variable <strong>"pasos"</strong>. Inicializala en 0. Dentro de un bucle <em>por siempre</em>, agregá <em>cambiar [pasos] por (1)</em> con una espera de 1 segundo. ¿Cuánto vale la variable después de 5 segundos?</div>
+      <div class="ch-hint">Cada segundo suma 1. Contá las vueltas del bucle.</div>
+      <div class="ch-solution-area"><textarea id="sol-ch2" placeholder="Después de 5 segundos, la variable vale..."></textarea></div>
+      <div class="evidence-container">
+        <div class="drop-zone" id="dz-2"><span id="txt-dz-2">📋 Clic acá y presioná Ctrl+V para pegar captura</span><img id="img-dz-2" style="display:none;"></div>
+        <input type="file" id="fi-2" accept="image/*" style="display:none;">
+      </div>
+      <div class="ch-footer"><button class="btn-done" onclick="markDone(2)">✓ Guardar</button><span class="done-msg">✅ Guardado</span></div>
+    </div>
+
+    <div class="ch-card" id="ch3">
+      <div class="ch-header"><div class="ch-num">3</div><div class="ch-title">Fijar vs. Cambiar</div></div>
+      <div class="ch-desc">¿Cuál es la diferencia entre <em>fijar [puntaje] a (5)</em> y <em>cambiar [puntaje] por (5)</em>? Si la variable vale 10 y ejecutás cada bloque por separado, ¿cuánto vale después de cada uno?</div>
+      <div class="ch-hint">Uno reemplaza el valor, el otro lo suma.</div>
+      <div class="ch-solution-area"><textarea id="sol-ch3" placeholder="Fijar deja el valor en... Cambiar deja el valor en... porque..."></textarea></div>
+      <div class="evidence-container">
+        <div class="drop-zone" id="dz-3"><span id="txt-dz-3">📋 Clic acá y presioná Ctrl+V para pegar captura</span><img id="img-dz-3" style="display:none;"></div>
+        <input type="file" id="fi-3" accept="image/*" style="display:none;">
+      </div>
+      <div class="ch-footer"><button class="btn-done" onclick="markDone(3)">✓ Guardar</button><span class="done-msg">✅ Guardado</span></div>
+    </div>
+
+  </div>
+
+  <!-- NIVEL MEDIO -->
+  <div class="challenges-grid" id="sec-med">
+
+    <div class="ch-card" id="ch4">
+      <div class="ch-header"><div class="ch-num">4</div><div class="ch-title">El Marcador de Puntos</div></div>
+      <div class="ch-desc">Armá un proyecto donde el gato sume <strong>+10 puntos</strong> cada vez que se hace clic sobre él. Usá <em>al hacer clic en este objeto</em> y <em>cambiar [puntaje] por (10)</em>. Inicializá el puntaje en 0 al arrancar la bandera verde.</div>
+      <div class="ch-hint">El bloque de evento va en el sprite, no en el escenario.</div>
+      <div class="ch-solution-area"><textarea id="sol-ch4" placeholder="Describí los bloques que usaste y el resultado al hacer clic 3 veces..."></textarea></div>
+      <div class="evidence-container">
+        <div class="drop-zone" id="dz-4"><span id="txt-dz-4">📋 Clic acá y presioná Ctrl+V para pegar captura</span><img id="img-dz-4" style="display:none;"></div>
+        <input type="file" id="fi-4" accept="image/*" style="display:none;">
+      </div>
+      <div class="ch-footer"><button class="btn-done" onclick="markDone(4)">✓ Guardar</button><span class="done-msg">✅ Guardado</span></div>
+    </div>
+
+    <div class="ch-card" id="ch5">
+      <div class="ch-header"><div class="ch-num">5</div><div class="ch-title">El Sistema de Vidas</div></div>
+      <div class="ch-desc">Creá una variable <strong>"vidas"</strong> que empiece en 3. Cada vez que se presione la tecla <strong>espacio</strong>, restá 1 vida. Cuando llegue a 0, el personaje debe decir "¡GAME OVER!" y detener todo.</div>
+      <div class="ch-hint">Usá <em>cambiar [vidas] por (-1)</em> y un condicional para detectar el 0.</div>
+      <div class="ch-solution-area"><textarea id="sol-ch5" placeholder="Describí la secuencia de bloques que usaste para restar vidas y detectar el game over..."></textarea></div>
+      <div class="evidence-container">
+        <div class="drop-zone" id="dz-5"><span id="txt-dz-5">📋 Clic acá y presioná Ctrl+V para pegar captura</span><img id="img-dz-5" style="display:none;"></div>
+        <input type="file" id="fi-5" accept="image/*" style="display:none;">
+      </div>
+      <div class="ch-footer"><button class="btn-done" onclick="markDone(5)">✓ Guardar</button><span class="done-msg">✅ Guardado</span></div>
+    </div>
+
+    <div class="ch-card" id="ch6">
+      <div class="ch-header"><div class="ch-num">6</div><div class="ch-title">El Cronómetro</div></div>
+      <div class="ch-desc">Creá una variable <strong>"tiempo"</strong> que arranque en 30 y cuente regresivamente hasta 0, restando 1 cada segundo con una espera. Al llegar a 0, el personaje debe decir "¡Se acabó el tiempo!" ¿Qué bloque detiene el programa al final?</div>
+      <div class="ch-hint">Usá un bucle <em>repetir (30)</em> con <em>cambiar [tiempo] por (-1)</em> y <em>esperar (1) segundos</em>.</div>
+      <div class="ch-solution-area"><textarea id="sol-ch6" placeholder="El bloque que detiene todo el programa es... La secuencia fue..."></textarea></div>
+      <div class="evidence-container">
+        <div class="drop-zone" id="dz-6"><span id="txt-dz-6">📋 Clic acá y presioná Ctrl+V para pegar captura</span><img id="img-dz-6" style="display:none;"></div>
+        <input type="file" id="fi-6" accept="image/*" style="display:none;">
+      </div>
+      <div class="ch-footer"><button class="btn-done" onclick="markDone(6)">✓ Guardar</button><span class="done-msg">✅ Guardado</span></div>
+    </div>
+
+  </div>
+
+  <!-- NIVEL AVANZADO -->
+  <div class="challenges-grid" id="sec-hard">
+
+    <div class="ch-card" id="ch7">
+      <div class="ch-header"><div class="ch-num">7</div><div class="ch-title">Puntaje con Nivel</div></div>
+      <div class="ch-desc">Armá un proyecto con dos variables: <strong>"puntaje"</strong> y <strong>"nivel"</strong>. Cada vez que el puntaje llegue a un múltiplo de 50 (50, 100, 150...), el nivel debe subir en 1 y el gato debe decir "¡Subiste de nivel!". Ambas variables deben verse en pantalla.</div>
+      <div class="ch-hint">Usá el operador <em>(puntaje) mod (50) = (0)</em> para detectar múltiplos.</div>
+      <div class="ch-solution-area"><textarea id="sol-ch7" placeholder="Describí la lógica del condicional que detecta el cambio de nivel..."></textarea></div>
+      <div class="evidence-container">
+        <div class="drop-zone" id="dz-7"><span id="txt-dz-7">📋 Clic acá y presioná Ctrl+V para pegar captura</span><img id="img-dz-7" style="display:none;"></div>
+        <input type="file" id="fi-7" accept="image/*" style="display:none;">
+      </div>
+      <div class="ch-footer"><button class="btn-done" onclick="markDone(7)">✓ Guardar</button><span class="done-msg">✅ Guardado</span></div>
+    </div>
+
+    <div class="ch-card" id="ch8">
+      <div class="ch-header"><div class="ch-num">8</div><div class="ch-title">La Variable Trampa</div></div>
+      <div class="ch-desc">Un compañero armó este código: <em>fijar [puntaje] a (0) → cambiar [puntaje] por (10) → fijar [puntaje] a (0)</em>. Al terminar, ¿cuánto vale la variable? Explicá el error y cómo corregirlo para que el puntaje quede en 10.</div>
+      <div class="ch-hint">El orden de los bloques importa. ¿Qué bloque está de más?</div>
+      <div class="ch-solution-area"><textarea id="sol-ch8" placeholder="La variable termina valiendo... El error es... La corrección sería..."></textarea></div>
+      <div class="evidence-container">
+        <div class="drop-zone" id="dz-8"><span id="txt-dz-8">📋 Clic acá y presioná Ctrl+V para pegar captura</span><img id="img-dz-8" style="display:none;"></div>
+        <input type="file" id="fi-8" accept="image/*" style="display:none;">
+      </div>
+      <div class="ch-footer"><button class="btn-done" onclick="markDone(8)">✓ Guardar</button><span class="done-msg">✅ Guardado</span></div>
+    </div>
+
+    <div class="ch-card" id="ch9">
+      <div class="ch-header"><div class="ch-num">9</div><div class="ch-title">El Minijuego Completo</div></div>
+      <div class="ch-desc">Diseñá un minijuego con <strong>tres variables visibles</strong>: <em>puntaje</em> (suma +5 al clic), <em>vidas</em> (empieza en 3, resta 1 cada 5 segundos) y <em>récord</em> (guarda el puntaje más alto alcanzado antes de perder). El juego termina cuando las vidas llegan a 0.</div>
+      <div class="ch-hint">Para el récord, usá un condicional: si (puntaje) > (récord), entonces fijar [récord] a (puntaje).</div>
+      <div class="ch-solution-area"><textarea id="sol-ch9" placeholder="Describí cómo organizaste los tres sistemas de variables y la lógica del récord..."></textarea></div>
+      <div class="evidence-container">
+        <div class="drop-zone" id="dz-9"><span id="txt-dz-9">📋 Clic acá y presioná Ctrl+V para pegar captura</span><img id="img-dz-9" style="display:none;"></div>
+        <input type="file" id="fi-9" accept="image/*" style="display:none;">
+      </div>
+      <div class="ch-footer"><button class="btn-done" onclick="markDone(9)">✓ Guardar</button><span class="done-msg">✅ Guardado</span></div>
+    </div>
+
+  </div>
+
+  <div class="progress-container">
+    <div class="progress-title">Progreso Total de la Clase</div>
+    <div class="pbar-bg"><div class="pbar-fill" id="pbar"></div></div>
+    <div class="progress-txt" id="ptxt">0 de 9 desafíos guardados en memoria.</div>
+  </div>
+
+  <div class="report-section">
+    <button class="btn-generate-report" onclick="generarReportePDF()">📥 Descargar Reporte Completo (PDF)</button>
+  </div>
+</main>
+
+<div id="reporte-pdf">
+  <div style="border-bottom: 3px solid #1e293b; padding-bottom: 12px; margin-bottom: 20px; display:flex; justify-content:space-between; align-items:center;">
+    <div>
+      <h1 style="font-size: 24px; color: #1e293b; margin: 0;">📋 Reporte: Variables en Scratch</h1>
+      <p style="margin: 5px 0 0 0; font-size:14px; color:#555e6d;">Profesor: <strong>Mario Morena</strong></p>
+    </div>
+    <div style="text-align: right;">
+      <p style="margin:0; font-size:16px;"><strong>Estudiante:</strong> <span id="pdf-nombre-alumno" style="color:#ea580c; font-weight:bold;">-</span></p>
+    </div>
+  </div>
+  <div id="pdf-contenido-desafios"></div>
+</div>
+
+<footer class="page-footer">
+  Ficha Práctica Automatizada · Creado por <strong>Mario Morena</strong>
+</footer>
+
+<script>
+const done = Array(9).fill(false);
+const imagenesBase64 = Array(9).fill("");
+
+function switchTab(level) {
+  document.querySelectorAll('.diff-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.challenges-grid').forEach(g => g.classList.remove('active'));
+  if(level === 'easy') { document.querySelector('.easy-tab').classList.add('active'); document.getElementById('sec-easy').classList.add('active'); }
+  if(level === 'med')  { document.querySelector('.med-tab').classList.add('active');  document.getElementById('sec-med').classList.add('active');  }
+  if(level === 'hard') { document.querySelector('.hard-tab').classList.add('active'); document.getElementById('sec-hard').classList.add('active'); }
+}
+
+for(let i = 1; i <= 9; i++) {
+  const dz  = document.getElementById('dz-' + i);
+  const fi  = document.getElementById('fi-' + i);
+  const img = document.getElementById('img-dz-' + i);
+  const txt = document.getElementById('txt-dz-' + i);
+  dz.addEventListener('click', () => fi.click());
+  fi.addEventListener('change', (e) => { if(e.target.files[0]) cargarImagen(e.target.files[0], img, txt, i); });
+}
+
+window.addEventListener('paste', (e) => {
+  const items = e.clipboardData.items;
+  let targetIndex = 1;
+  if(document.activeElement && document.activeElement.id) {
+    const num = document.activeElement.id.replace(/\D/g, '');
+    if(num >= 1 && num <= 9) targetIndex = parseInt(num);
+  }
+  for(let i = 0; i < items.length; i++) {
+    if(items[i].type.indexOf('image') !== -1) {
+      const file = items[i].getAsFile();
+      cargarImagen(file, document.getElementById('img-dz-' + targetIndex), document.getElementById('txt-dz-' + targetIndex), targetIndex);
+    }
+  }
+});
+
+function cargarImagen(file, imgElement, txtElement, index) {
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    imgElement.src = e.target.result;
+    imgElement.style.display = 'block';
+    txtElement.style.opacity = '0.1';
+    imagenesBase64[index - 1] = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function toggleAllCaps() {
+  document.body.classList.toggle('all-caps');
+  document.getElementById('caps-btn').classList.toggle('active');
+}
+
+function markDone(n) {
+  done[n - 1] = true;
+  document.getElementById('ch' + n).classList.add('done');
+  const count = done.filter(Boolean).length;
+  document.getElementById('pbar').style.width = (count / 9 * 100) + '%';
+  document.getElementById('ptxt').textContent = `${count} de 9 desafíos guardados en la entrega.`;
+}
+
+function generarReportePDF() {
+  const nombre = document.getElementById('student-name').value.trim();
+  if(!nombre) { alert("⚠️ Escribí tu nombre antes de descargar el PDF."); return; }
+
+  document.getElementById('pdf-nombre-alumno').innerText = nombre;
+  let listadoHTML = "";
+
+  const titulos = [
+    "La Cajita de Nombre", "El Contador de Pasos", "Fijar vs. Cambiar",
+    "El Marcador de Puntos", "El Sistema de Vidas", "El Cronómetro",
+    "Puntaje con Nivel", "La Variable Trampa", "El Minijuego Completo"
+  ];
+
+  for(let i = 1; i <= 9; i++) {
+    const resp    = document.getElementById('sol-ch' + i).value || "Sin respuesta.";
+    const status  = done[i - 1] ? "✅ COMPLETADO" : "⏳ NO COMPLETADO";
+    const imgData = imagenesBase64[i - 1];
+    listadoHTML += `
+      <div style="margin-bottom: 20px; border-bottom: 1px dashed #cbd5e1; padding-bottom: 15px; page-break-inside: avoid;">
+        <h3 style="margin:0; font-size:15px; color:#1e293b;">Desafío ${i}: ${titulos[i-1]} — [${status}]</h3>
+        <p style="background:#f1f5f9; padding:8px; border-radius:6px; font-size:13px; margin:5px 0;"><strong>Respuesta:</strong> ${resp}</p>
+        ${imgData ? `<div style="text-align:center;"><img src="${imgData}" style="max-height:180px; max-width:100%;" /></div>`
+                  : `<p style="color:red; font-size:12px;">Sin captura adjunta.</p>`}
+      </div>`;
+  }
+
+  document.getElementById('pdf-contenido-desafios').innerHTML = listadoHTML;
+  const elemento = document.getElementById('reporte-pdf');
+  elemento.style.display = 'block';
+
+  html2pdf().set({
+    margin: 15,
+    filename: `Reporte_Variables_${nombre.replace(/\s+/g, '_')}.pdf`,
+    image: { type: 'jpeg', quality: 0.95 },
+    html2canvas: { scale: 2 },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+  }).from(elemento).save().then(() => elemento.style.display = 'none');
+}
+</script>
+</body>
+</html>
