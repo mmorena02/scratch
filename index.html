@@ -11,10 +11,16 @@
   --card: #FFFFFF;
   --text: #1a1a2e;
   --text-muted: #6b7280;
-  --scratch-purple: #9966FF;
-  --scratch-orange: #FF8C00;
-  --scratch-blue: #4C97FF;
-  --scratch-yellow: #FFB900;
+  
+  /* Paleta temática basada en bloques de Scratch */
+  --scratch-blue: #4C97FF;      /* Movimiento / Sensores */
+  --scratch-orange: #FF8C00;    /* Control */
+  --scratch-purple: #9966FF;    /* Sonido / Ext */
+  --scratch-yellow: #FFB900;    /* Variables */
+  --scratch-green: #59C059;     /* Operadores / Verde IA */
+  --scratch-pink: #FF6680;      /* Mis Bloques / Eventos */
+  --scratch-teal: #0FBD8C;      /* Extensiones / ML */
+  
   --radius: 14px;
   --shadow: 0 4px 16px rgba(0,0,0,0.06);
 }
@@ -85,25 +91,42 @@ body.all-caps { text-transform: uppercase; }
 .prop-arrow { font-size: 20px; color: var(--text-muted); font-weight: 700; padding-left: 10px; transition: transform 0.2s; }
 .proposal-card:hover .prop-arrow { transform: translateX(4px); color: var(--text); }
 
-/* VARIACIONES DE COLOR POR FICHA */
-.p-secuencias { border-left: 6px solid var(--scratch-blue); }
-.p-secuencias .prop-icon { background: #e0f2fe; }
-.p-secuencias:hover { border-color: var(--scratch-blue); }
+/* VARIACIONES DE COLOR TEMÁTICAS */
+.p-c1 { border-left: 6px solid var(--scratch-blue); }
+.p-c1 .prop-icon { background: #e0f2fe; }
 
-.p-bucles { border-left: 6px solid var(--scratch-orange); }
-.p-bucles .prop-icon { background: #fff3e6; }
-.p-bucles:hover { border-color: var(--scratch-orange); }
+.p-c2 { border-left: 6px solid var(--scratch-orange); }
+.p-c2 .prop-icon { background: #fff3e6; }
 
-.p-variables { border-left: 6px solid var(--scratch-purple); }
-.p-variables .prop-icon { background: #f3e8ff; }
-.p-variables:hover { border-color: var(--scratch-purple); }
+.p-c3 { border-left: 6px solid var(--scratch-yellow); }
+.p-c3 .prop-icon { background: #fffbeb; }
 
-.p-condicionales { border-left: 6px solid var(--scratch-yellow); }
-.p-condicionales .prop-icon { background: #fffbeb; }
-.p-condicionales:hover { border-color: var(--scratch-yellow); }
+.p-c4 { border-left: 6px solid var(--scratch-purple); }
+.p-c4 .prop-icon { background: #f3e8ff; }
+
+.p-c5 { border-left: 6px solid var(--scratch-pink); }
+.p-c5 .prop-icon { background: #ffe4e6; }
+
+.p-c6 { border-left: 6px solid var(--scratch-orange); }
+.p-c6 .prop-icon { background: #fff3e6; }
+
+.p-c7 { border-left: 6px solid var(--scratch-yellow); }
+.p-c7 .prop-icon { background: #fffbeb; }
+
+.p-c8 { border-left: 6px solid var(--scratch-purple); }
+.p-c8 .prop-icon { background: #f3e8ff; }
+
+.p-c9 { border-left: 6px solid var(--scratch-green); }
+.p-c9 .prop-icon { background: #f0fdf4; }
+
+.p-c10 { border-left: 6px solid var(--scratch-teal); }
+.p-c10 .prop-icon { background: #e6fcf5; }
+
+.p-c11 { border-left: 6px solid var(--scratch-blue); }
+.p-c11 .prop-icon { background: #e0f2fe; }
 
 /* ── ACCESIBILIDAD ── */
-.btn-accessibility { position: fixed; bottom: 20px; right: 20px; background: var(--scratch-purple); color: white; border: none; padding: 12px 20px; border-radius: 30px; font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 800; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 1000; }
+.btn-accessibility { position: fixed; bottom: 20px; right: 20px; background: #2c1b4d; color: white; border: none; padding: 12px 20px; border-radius: 30px; font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 800; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 1000; }
 </style>
 </head>
 <body>
@@ -119,53 +142,126 @@ body.all-caps { text-transform: uppercase; }
 
 <main class="main">
 
-  <div class="section-label">Actividades Disponibles</div>
+  <div class="section-label">Secuencia Completa de Clases</div>
 
   <div class="proposals-grid">
 
-    <!-- CLASE 1 -->
-    <a href="scratch1.html" class="proposal-card p-secuencias">
+    <a href="scratch1.html" class="proposal-card p-c1">
       <div class="prop-content">
         <div class="prop-icon">👣</div>
         <div class="prop-details">
-          <h2>Clase 1: Secuencias en Scratch</h2>
-          <p>Pasos lógicos, orden secuencial de instrucciones, movimientos iniciales y uso del lápiz para trazos básicos.</p>
+          <h2>Clase 1: Secuencias básicas</h2>
+          <p>Pasos lógicos, estructuras condicionales (si/sino) y lectura de sensores básicos del entorno.</p>
         </div>
       </div>
       <div class="prop-arrow">→</div>
     </a>
 
-    <!-- CLASE 2 -->
-    <a href="scratch2.html" class="proposal-card p-bucles">
+    <a href="scratch2.html" class="proposal-card p-c2">
       <div class="prop-content">
         <div class="prop-icon">🔄</div>
         <div class="prop-details">
           <h2>Clase 2: Bucles Eficientes</h2>
-          <p>Estructuras de repetición, optimización de código y la regla de los 360° para figuras geométricas.</p>
+          <p>Optimización mediante estructuras de repetición (repetir, por siempre) y patrones geométricos.</p>
         </div>
       </div>
       <div class="prop-arrow">→</div>
     </a>
 
-    <!-- CLASE 3 -->
-    <a href="scratch3.html" class="proposal-card p-variables">
+    <a href="scratch3.html" class="proposal-card p-c3">
       <div class="prop-content">
         <div class="prop-icon">📦</div>
         <div class="prop-details">
-          <h2>Clase 3: Variables en Scratch</h2>
-          <p>Uso de variables para guardar información, crear contadores, puntajes, vidas y persistencia de datos.</p>
+          <h2>Clase 3: Variables de Control</h2>
+          <p>Uso de variables (fijar, cambiar, mostrar) para almacenar puntajes, estados y datos dinámicos.</p>
         </div>
       </div>
       <div class="prop-arrow">→</div>
     </a>
 
-    <!-- CLASE 4 -->
-    <a href="scratch4.html" class="proposal-card p-condicionales">
+    <a href="scratch4.html" class="proposal-card p-c4">
       <div class="prop-content">
-        <div class="prop-icon">🔀</div>
+        <div class="prop-icon">📢</div>
         <div class="prop-details">
-          <h2>Clase 4: Toma de Decisiones Inteligentes</h2>
-          <p>Uso de condicionales simples y dobles (si/sino), sensores de entorno y operadores lógicos binarios.</p>
+          <h2>Clase 4: Eventos, Mensajes y Sonido</h2>
+          <p>Coordinación de objetos en paralelo mediante el envío y recepción de mensajes integrando la extensión de música.</p>
+        </div>
+      </div>
+      <div class="prop-arrow">→</div>
+    </a>
+
+    <a href="scratch5.html" class="proposal-card p-c5">
+      <div class="prop-content">
+        <div class="prop-icon">⌨️</div>
+        <div class="prop-details">
+          <h2>Clase 5: Interactividad Avanzada</h2>
+          <p>Diseño de interfaces de usuario interactivas usando entradas por teclado, preguntas y respuestas.</p>
+        </div>
+      </div>
+      <div class="prop-arrow">→</div>
+    </a>
+
+    <a href="scratch6.html" class="proposal-card p-c6">
+      <div class="prop-content">
+        <div class="prop-icon">👥</div>
+        <div class="prop-details">
+          <h2>Clase 6: Clonación en Masa</h2>
+          <p>Optimización y generación dinámica de múltiples objetos independientes (crear clon, al comenzar como clon).</p>
+        </div>
+      </div>
+      <div class="prop-arrow">→</div>
+    </a>
+
+    <a href="scratch7.html" class="proposal-card p-c7">
+      <div class="prop-content">
+        <div class="prop-icon">📊</div>
+        <div class="prop-details">
+          <h2>Clase 7: Manejo de Listas</h2>
+          <p>Estructuras de datos complejas mediante el uso de arreglos (agregar ítem, longitud de lista, buscar).</p>
+        </div>
+      </div>
+      <div class="prop-arrow">→</div>
+    </a>
+
+    <a href="scratch8.html" class="proposal-card p-c8">
+      <div class="prop-content">
+        <div class="prop-icon">🎵</div>
+        <div class="prop-details">
+          <h2>Clase 8: Extensión de Música</h2>
+          <p>Composición y algoritmos avanzados aplicados a la creación y secuenciación musical programada.</p>
+        </div>
+      </div>
+      <div class="prop-arrow">→</div>
+    </a>
+
+    <a href="scratch9.html" class="proposal-card p-c9">
+      <div class="prop-content">
+        <div class="prop-icon">🤖</div>
+        <div class="prop-details">
+          <h2>Clase 9: Inteligencia Artificial Básica</h2>
+          <p>Integración de servicios cognitivos mediante las extensiones de Traducción (Translate) y Texto a Voz (Text to Speech).</p>
+        </div>
+      </div>
+      <div class="prop-arrow">→</div>
+    </a>
+
+    <a href="scratch10.html" class="proposal-card p-c10">
+      <div class="prop-content">
+        <div class="prop-icon">🧠</div>
+        <div class="prop-details">
+          <h2>Clase 10: Machine Learning práctico</h2>
+          <p>Conexión e implementación de modelos predictivos propios entrenados con la plataforma Machine Learning for Kids.</p>
+        </div>
+      </div>
+      <div class="prop-arrow">→</div>
+    </a>
+
+    <a href="scratch11.html" class="proposal-card p-c11">
+      <div class="prop-content">
+        <div class="prop-icon">👁️</div>
+        <div class="prop-details">
+          <h2>Clase 11: Visión Artificial computacional</h2>
+          <p>Creación de interacciones físicas en tiempo real empleando la extensión de detección de video (Video Sensing).</p>
         </div>
       </div>
       <div class="prop-arrow">→</div>
