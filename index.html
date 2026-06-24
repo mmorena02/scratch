@@ -13,6 +13,7 @@
   --text-muted: #6b7280;
   --scratch-purple: #9966FF;
   --scratch-orange: #FF8C00;
+  --scratch-blue: #4C97FF;
   --scratch-yellow: #FFB900;
   --radius: 14px;
   --shadow: 0 4px 16px rgba(0,0,0,0.06);
@@ -85,17 +86,21 @@ body.all-caps { text-transform: uppercase; }
 .proposal-card:hover .prop-arrow { transform: translateX(4px); color: var(--text); }
 
 /* VARIACIONES DE COLOR POR FICHA */
-.p-condicionales { border-left: 6px solid var(--scratch-yellow); }
-.p-condicionales .prop-icon { background: #fffbeb; }
-.p-condicionales:hover { border-color: var(--scratch-yellow); }
+.p-secuencias { border-left: 6px solid var(--scratch-blue); }
+.p-secuencias .prop-icon { background: #e0f2fe; }
+.p-secuencias:hover { border-color: var(--scratch-blue); }
 
 .p-bucles { border-left: 6px solid var(--scratch-orange); }
 .p-bucles .prop-icon { background: #fff3e6; }
 .p-bucles:hover { border-color: var(--scratch-orange); }
 
-/* CARD DESHABILITADA (FUTURAS PROPUESTAS) */
-.p-locked { border-left: 6px solid #cbd5e1; opacity: 0.7; pointer-events: none; }
-.p-locked .prop-icon { background: #f1f5f9; }
+.p-variables { border-left: 6px solid var(--scratch-purple); }
+.p-variables .prop-icon { background: #f3e8ff; }
+.p-variables:hover { border-color: var(--scratch-purple); }
+
+.p-condicionales { border-left: 6px solid var(--scratch-yellow); }
+.p-condicionales .prop-icon { background: #fffbeb; }
+.p-condicionales:hover { border-color: var(--scratch-yellow); }
 
 /* ── ACCESIBILIDAD ── */
 .btn-accessibility { position: fixed; bottom: 20px; right: 20px; background: var(--scratch-purple); color: white; border: none; padding: 12px 20px; border-radius: 30px; font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 800; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 1000; }
@@ -118,20 +123,20 @@ body.all-caps { text-transform: uppercase; }
 
   <div class="proposals-grid">
 
-    <!-- PROPUESTA 1: CONDICIONALES (Mapeada a Scratch1.html) -->
-    <a href="Scratch1.html" class="proposal-card p-condicionales">
+    <!-- CLASE 1 -->
+    <a href="scratch1.html" class="proposal-card p-secuencias">
       <div class="prop-content">
-        <div class="prop-icon">🔀</div>
+        <div class="prop-icon">👣</div>
         <div class="prop-details">
-          <h2>Clase 1: Toma de Decisiones</h2>
-          <p>Uso de condicionales simples y dobles (si/sino), sensores de entorno y operadores lógicos binarios.</p>
+          <h2>Clase 1: Secuencias en Scratch</h2>
+          <p>Pasos lógicos, orden secuencial de instrucciones, movimientos iniciales y uso del lápiz para trazos básicos.</p>
         </div>
       </div>
       <div class="prop-arrow">→</div>
     </a>
 
-    <!-- PROPUESTA 2: BUCLES (Mapeada a Scratch2.html) -->
-    <a href="Scratch2.html" class="proposal-card p-bucles">
+    <!-- CLASE 2 -->
+    <a href="scratch2.html" class="proposal-card p-bucles">
       <div class="prop-content">
         <div class="prop-icon">🔄</div>
         <div class="prop-details">
@@ -142,17 +147,29 @@ body.all-caps { text-transform: uppercase; }
       <div class="prop-arrow">→</div>
     </a>
 
-    <!-- COMODÍN PARA FUTURA PROPUESTA -->
-    <div class="proposal-card p-locked" style="display: none;">
+    <!-- CLASE 3 -->
+    <a href="scratch3.html" class="proposal-card p-variables">
       <div class="prop-content">
-        <div class="prop-icon">🚀</div>
+        <div class="prop-icon">📦</div>
         <div class="prop-details">
-          <h2>Clase 3: Próximamente</h2>
-          <p>Nueva actividad interactiva en desarrollo para seguir potenciando tus habilidades de programación.</p>
+          <h2>Clase 3: Variables en Scratch</h2>
+          <p>Uso de variables para guardar información, crear contadores, puntajes, vidas y persistencia de datos.</p>
         </div>
       </div>
-      <div class="prop-arrow" style="opacity: 0;">→</div>
-    </div>
+      <div class="prop-arrow">→</div>
+    </a>
+
+    <!-- CLASE 4 -->
+    <a href="scratch4.html" class="proposal-card p-condicionales">
+      <div class="prop-content">
+        <div class="prop-icon">🔀</div>
+        <div class="prop-details">
+          <h2>Clase 4: Toma de Decisiones Inteligentes</h2>
+          <p>Uso de condicionales simples y dobles (si/sino), sensores de entorno y operadores lógicos binarios.</p>
+        </div>
+      </div>
+      <div class="prop-arrow">→</div>
+    </a>
 
   </div>
 
