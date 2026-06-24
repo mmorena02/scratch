@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Actividad en Desarrollo — Portal de Programación</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #F7F4EF;
+  --card: #FFFFFF;
+  --text: #1a1a2e;
+  --text-muted: #6b7280;
+  --scratch-purple: #9966FF;
+  --scratch-orange: #FF8C00;
+  --radius: 14px;
+  --shadow: 0 4px 16px rgba(0,0,0,0.06);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-size: 17px;
+}
+
+body.all-caps { text-transform: uppercase; }
+
+/* ── HEADER EN SINTONÍA CON EL PORTAL ── */
+.portal-header {
+  background: #2c1b4d;
+  padding: 4rem 2rem 3.5rem;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+.portal-header::before {
+  content: ''; position: absolute; top: -50px; left: -50px; width: 180px; height: 180px; border-radius: 50%; background: rgba(255,140,0,0.1);
+}
+.portal-header::after {
+  content: ''; position: absolute; bottom: -50px; right: -50px; width: 220px; height: 220px; border-radius: 50%; background: rgba(153,102,255,0.12);
+}
+.header-inner { max-width: 800px; margin: 0 auto; position: relative; z-index: 1; }
+.portal-header h1 { font-size: 36px; font-weight: 800; color: #fff; margin-bottom: 12px; }
+
+/* ── CONTENEDOR CENTRAL DE AVISO ── */
+.main { 
+  max-width: 650px; 
+  margin: auto auto; 
+  padding: 2rem; 
+  width: 100%;
+}
+
+.maintenance-card {
+  background: var(--card);
+  border: 1px solid rgba(0,0,0,0.06);
+  border-top: 6px solid var(--scratch-orange);
+  border-radius: var(--radius);
+  padding: 3rem 2rem;
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+
+.icon-container {
+  width: 80px;
+  height: 80px;
+  background: #fff3e6;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  margin: 0 auto 1.5rem;
+  animation: pulse 2s infinite ease-in-out;
+}
+
+.maintenance-card h2 {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 12px;
+}
+
+.maintenance-card p {
+  font-size: 16px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+/* ── BOTÓN DE RETORNO ESTILIZADO ── */
+.btn-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--scratch-purple);
+  color: white;
+  text-decoration: none;
+  padding: 12px 28px;
+  border-radius: 30px;
+  font-weight: 700;
+  font-size: 16px;
+  box-shadow: 0 4px 12px rgba(153,102,255,0.25);
+  transition: transform 0.2s, background-color 0.2s;
+}
+.btn-back:hover {
+  background: #8552ee;
+  transform: translateY(-1px);
+}
+
+/* ── ACCESIBILIDAD ── */
+.btn-accessibility { position: fixed; bottom: 20px; right: 20px; background: #2c1b4d; color: white; border: none; padding: 12px 20px; border-radius: 30px; font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 800; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 1000; }
+
+@keyframes pulse {
+  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255,140,0,0.2); }
+  70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(255,140,0,0); }
+  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255,140,0,0); }
+}
+</style>
+</head>
+<body>
+
+<button class="btn-accessibility" onclick="toggleAllCaps()" id="capsBtn">Abc → ABC</button>
+
+<header class="portal-header">
+  <div class="header-inner">
+    <h1>Portal de Programación</h1>
+  </div>
+</header>
+
+<main class="main">
+  <div class="maintenance-card">
+    <div class="icon-container">🚀</div>
+    <h2>Desafío en Construcción</h2>
+    <p>Esta ficha interactiva se encuentra actualmente en desarrollo y revisión pedagógica para ofrecerte los mejores problemas y dinámicas de Scratch. ¡Muy pronto estará disponible para su uso!</p>
+    <a href="index.html" class="btn-back">
+      <span>← Volver al Inicio</span>
+    </a>
+  </div>
+</main>
+
+<script>
+function toggleAllCaps() {
+  document.body.classList.toggle('all-caps');
+  const btn = document.getElementById('capsBtn');
+  if (document.body.classList.contains('all-caps')) {
+    btn.textContent = "ABC → Abc";
+  } else {
+    btn.textContent = "Abc → ABC";
+  }
+}
+</script>
+
+</body>
+</html>
