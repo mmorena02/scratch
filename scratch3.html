@@ -272,7 +272,7 @@ body.all-caps, body.all-caps .block, body.all-caps textarea, body.all-caps input
   <div class="progress-container">
     <div class="progress-title">Progreso Total de la Clase</div>
     <div class="pbar-bg"><div class="pbar-fill" id="pbar"></div></div>
-    <div class="progress-txt" id="ptxt">0 de 9 desafíos guardados en memoria.</div>
+    <div class="progress-txt" id="ptxt">0 de 9 desafíos guardados.</div>
   </div>
 
   <div class="report-section" style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
@@ -307,6 +307,77 @@ body.all-caps, body.all-caps .block, body.all-caps textarea, body.all-caps input
 <script>
 const done = Array(9).fill(false);
 const imagenesBase64 = Array(9).fill("");
+
+function saveProgress() {
+  const state = {
+    nombre: document.getElementById('student-name').value,
+    done: done,
+    imagenes: imagenesBase64,
+    respuestas: []
+  };
+  for(let i=1; i<=9; i++) {
+    const ta = document.getElementById('sol-ch'+i);
+    state.respuestas.push(ta ? ta.value : "");
+  }
+  try {
+    localStorage.setItem('scratch_clase_3_state', JSON.stringify(state));
+  } catch (e) {
+    console.warn("Storage quota exceeded, trying to save text responses only.", e);
+    try {
+      state.imagenes = Array(9).fill("");
+      localStorage.setItem('scratch_clase_3_state', JSON.stringify(state));
+    } catch(err) {
+      console.error("Failed to save even basic text progress", err);
+    }
+  }
+}
+
+function loadProgress() {
+  try {
+    const data = localStorage.getItem('scratch_clase_3_state');
+    if (data) {
+      const state = JSON.parse(data);
+      if (state.nombre) {
+        document.getElementById('student-name').value = state.nombre;
+      }
+      if (state.done) {
+        for(let i=0; i<9; i++) {
+          done[i] = !!state.done[i];
+          if (done[i]) {
+            document.getElementById('ch'+(i+1)).classList.add('done');
+          }
+        }
+      }
+      if (state.respuestas) {
+        for(let i=0; i<9; i++) {
+          const ta = document.getElementById('sol-ch'+(i+1));
+          if (ta && state.respuestas[i] !== undefined) {
+            ta.value = state.respuestas[i];
+          }
+        }
+      }
+      if (state.imagenes) {
+        for(let i=0; i<9; i++) {
+          if (state.imagenes[i]) {
+            imagenesBase64[i] = state.imagenes[i];
+            const imgElement = document.getElementById('img-dz-'+(i+1));
+            const txtElement = document.getElementById('txt-dz-'+(i+1));
+            if (imgElement && txtElement) {
+              imgElement.src = state.imagenes[i];
+              imgElement.style.display = 'block';
+              txtElement.style.opacity = '0.1';
+            }
+          }
+        }
+      }
+      const count = done.filter(Boolean).length;
+      document.getElementById('pbar').style.width = (count/9*100)+'%';
+      document.getElementById('ptxt').textContent = `${count} de 9 desafíos guardados.`;
+    }
+  } catch(e) {
+    console.error("Error loading progress", e);
+  }
+}
 
 function switchTab(level) {
   document.querySelectorAll('.diff-btn').forEach(b => b.classList.remove('active'));
@@ -360,6 +431,7 @@ for(let i = 1; i <= 9; i++) {
     ta.addEventListener('focus', () => {
       activeChallengeIndex = i;
     });
+    ta.addEventListener('input', saveProgress);
   }
 
   if (fi) {
@@ -368,6 +440,9 @@ for(let i = 1; i <= 9; i++) {
     });
   }
 }
+
+document.getElementById('student-name').addEventListener('input', saveProgress);
+loadProgress();
 
 window.addEventListener('paste', (e) => {
   const items = e.clipboardData.items;
@@ -396,6 +471,7 @@ function cargarImagen(file, imgElement, txtElement, index) {
     imgElement.style.display = 'block';
     txtElement.style.opacity = '0.1';
     imagenesBase64[index - 1] = e.target.result;
+    saveProgress();
   };
   reader.readAsDataURL(file);
 }
@@ -410,7 +486,8 @@ function markDone(n) {
   document.getElementById('ch' + n).classList.add('done');
   const count = done.filter(Boolean).length;
   document.getElementById('pbar').style.width = (count / 9 * 100) + '%';
-  document.getElementById('ptxt').textContent = `${count} de 9 desafíos guardados en la entrega.`;
+  document.getElementById('ptxt').textContent = `${count} de 9 desafíos guardados.`;
+  saveProgress();
 }
 
 function generarReportePDF() {
