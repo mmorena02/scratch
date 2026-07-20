@@ -6,6 +6,7 @@
 <title>Bucles en Scratch — Repeticiones (Versión Completa 9 Ejercicios)</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 :root {
   --bg: #F7F4EF;
@@ -83,7 +84,7 @@ body.all-caps, body.all-caps .block, body.all-caps textarea, body.all-caps input
 .report-section { text-align: center; margin-bottom: 3rem; }
 .btn-generate-report { font-family: inherit; font-size: 18px; font-weight: 800; color: #fff; background: #f59e0b; border: none; padding: 14px 36px; border-radius: 30px; cursor: pointer; box-shadow: 0 10px 15px -3px rgba(245,158,11,0.2); }
 
-#reporte-pdf { display: none; font-family: 'Nunito', sans-serif; padding: 40px; color: #1e293b; background: #fff; }
+#reporte-pdf { position: absolute; left: -9999px; top: -9999px; width: 750px; font-family: 'Nunito', sans-serif; padding: 40px; color: #1e293b; background: #fff; box-sizing: border-box; }
 .page-footer { background: #2c1b4d; color: rgba(255,255,255,0.6); text-align: center; padding: 1.5rem; font-size: 14px; }
 </style>
 </head>
@@ -98,7 +99,8 @@ body.all-caps, body.all-caps .block, body.all-caps textarea, body.all-caps input
 </header>
 
 <main class="main">
-  <div class="acc-bar">
+  <div class="acc-bar" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+    <a href="index.html" class="btn-acc" style="text-decoration: none; background: #ffffff; border: 1.5px solid #cbd5e1; display: inline-flex; align-items: center; gap: 8px; color: var(--text); padding: 6px 16px; border-radius: 20px; font-weight: 700; font-size: 14px;">🏠 Volver al Portal</a>
     <button class="btn-acc" id="caps-btn" onclick="toggleAllCaps()">🗣️ TODO MAYÚSCULAS</button>
   </div>
 
@@ -240,8 +242,15 @@ body.all-caps, body.all-caps .block, body.all-caps textarea, body.all-caps input
     <div class="progress-txt" id="ptxt">0 de 9 desafíos guardados en la entrega.</div>
   </div>
 
-  <div class="report-section">
+  <div class="report-section" style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
     <button class="btn-generate-report" onclick="generarReportePDF()">📥 Descargar Reporte Completo (PDF)</button>
+    <button class="btn-generate-report" style="background: #475569; box-shadow: 0 10px 15px -3px rgba(71, 85, 105, 0.2);" onclick="descargarReporteTXT()">📄 Descargar Reporte Alternativo (TXT)</button>
+  </div>
+
+  <div class="concept-card" id="next-class-card" style="margin-top: 3rem; border: 2px solid var(--scratch-yellow); text-align: center; background: #fefdf0; display: none;">
+    <h3 style="font-size: 20px; font-weight: 800; color: #b45309; margin-bottom: 8px;">🚀 ¡Desafíos Completados!</h3>
+    <p style="font-size: 15px; color: var(--text-muted); margin-bottom: 16px;">Si ya guardaste todas tus respuestas y descargaste tu reporte, estás listo para dar el siguiente paso.</p>
+    <a href="scratch3.html" class="btn-generate-report" style="display: inline-block; text-decoration: none; background: var(--scratch-yellow); color: #1e293b; box-shadow: 0 10px 15px -3px rgba(255,185,0,0.3); font-size: 16px; padding: 12px 28px;">Siguiente Clase: Variables en Scratch ➡️</a>
   </div>
 </main>
 
@@ -275,19 +284,62 @@ function switchTab(level) {
   if(level === 'hard') { document.querySelector('.hard-tab').classList.add('active'); document.getElementById('sec-hard').classList.add('active'); }
 }
 
+let activeChallengeIndex = 1;
+
 for(let i=1; i<=9; i++) {
   const dz = document.getElementById('dz-'+i);
   const fi = document.getElementById('fi-'+i);
-  const img = document.getElementById('img-'+i);
+  const img = document.getElementById('img-dz-'+i);
   const txt = document.getElementById('txt-dz-'+i);
+  const ta = document.getElementById('sol-ch'+i);
 
-  dz.addEventListener('click', () => fi.click());
-  fi.addEventListener('change', (e) => { if(e.target.files[0]) cargarImagen(e.target.files[0], img, txt, i); });
+  if (dz) {
+    dz.setAttribute('tabindex', '0');
+    dz.addEventListener('click', () => {
+      activeChallengeIndex = i;
+      fi.click();
+    });
+    dz.addEventListener('focus', () => {
+      activeChallengeIndex = i;
+    });
+
+    // Drag & Drop
+    dz.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dz.style.borderColor = 'var(--scratch-orange)';
+      dz.style.background = '#fff3e6';
+    });
+    dz.addEventListener('dragleave', () => {
+      dz.style.borderColor = '#cbd5e1';
+      dz.style.background = '#ffffff';
+    });
+    dz.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dz.style.borderColor = '#cbd5e1';
+      dz.style.background = '#ffffff';
+      activeChallengeIndex = i;
+      if (e.dataTransfer.files[0]) {
+        cargarImagen(e.dataTransfer.files[0], img, txt, i);
+      }
+    });
+  }
+
+  if (ta) {
+    ta.addEventListener('focus', () => {
+      activeChallengeIndex = i;
+    });
+  }
+
+  if (fi) {
+    fi.addEventListener('change', (e) => {
+      if(e.target.files[0]) cargarImagen(e.target.files[0], img, txt, i);
+    });
+  }
 }
 
 window.addEventListener('paste', (e) => {
   const items = e.clipboardData.items;
-  let targetIndex = 1;
+  let targetIndex = activeChallengeIndex;
   if(document.activeElement && document.activeElement.id) {
     const num = document.activeElement.id.replace(/\D/g, '');
     if(num >= 1 && num <= 9) targetIndex = parseInt(num);
@@ -295,12 +347,17 @@ window.addEventListener('paste', (e) => {
   for (let i = 0; i < items.length; i++) {
     if (items[i].type.indexOf('image') !== -1) {
       const file = items[i].getAsFile();
-      cargarImagen(file, document.getElementById('img-'+targetIndex), document.getElementById('txt-dz-'+targetIndex), targetIndex);
+      const img = document.getElementById('img-dz-'+targetIndex);
+      const txt = document.getElementById('txt-dz-'+targetIndex);
+      if (img && txt) {
+        cargarImagen(file, img, txt, targetIndex);
+      }
     }
   }
 });
 
 function cargarImagen(file, imgElement, txtElement, index) {
+  if (!imgElement || !txtElement) return;
   const reader = new FileReader();
   reader.onload = function(e) {
     imgElement.src = e.target.result; imgElement.style.display = 'block';
@@ -326,31 +383,232 @@ function generarReportePDF() {
   const nombre = document.getElementById('student-name').value.trim();
   if(!nombre) { alert("⚠️ Escribí tu nombre antes de descargar el PDF."); return; }
 
-  document.getElementById('pdf-nombre-alumno').innerText = nombre;
-  let listadoHTML = "";
-  
-  for(let i=1; i<=9; i++) {
-    const resp = document.getElementById('sol-ch'+i).value || "Sin respuesta.";
-    const status = done[i-1] ? "✅ COMPLETADO" : "⏳ NO COMPLETADO";
-    const imgData = imagenesBase64[i-1];
-
-    listadoHTML += `
-      <div style="margin-bottom: 20px; border-bottom: 1px dashed #cbd5e1; padding-bottom: 15px; page-break-inside: avoid;">
-        <h3 style="margin:0; font-size:15px; color:#2c1b4d;">Desafío ${i} - [${status}]</h3>
-        <p style="background:#fdfbf7; padding:8px; border-radius:6px; font-size:13px; margin:5px 0;"><strong>Respuesta:</strong> ${resp}</p>
-        ${imgData ? `<div style="text-align:center;"><img src="${imgData}" style="max-height:180px; max-width:100%;" /></div>` : `<p style="color:red; font-size:12px;">Sin captura adjunta.</p>`}
-      </div>`;
+  // Detect jsPDF constructor
+  let jsPDFClass;
+  if (window.jspdf && window.jspdf.jsPDF) {
+    jsPDFClass = window.jspdf.jsPDF;
+  } else if (window.jsPDF) {
+    jsPDFClass = window.jsPDF;
+  } else {
+    alert("Error: La librería de PDF (jsPDF) no se pudo cargar. Intentá descargar la versión de Texto (TXT).");
+    return;
   }
 
-  document.getElementById('pdf-contenido-desafios').innerHTML = listadoHTML;
-  const elemento = document.getElementById('reporte-pdf');
-  elemento.style.display = 'block';
+  const doc = new jsPDFClass({
+    orientation: 'portrait',
+    unit: 'mm',
+    format: 'a4'
+  });
 
-  html2pdf().set({
-    margin: 15, filename: `Reporte_Bucles_${nombre.replace(/\s+/g, '_')}.pdf`,
-    image: { type: 'jpeg', quality: 0.95 }, html2canvas: { scale: 2 },
-    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-  }).from(elemento).save().then(() => elemento.style.display = 'none');
+  const titulos = [
+    "El Cuadrado Compacto", "Caminata con Aplausos", "Contador Visual",
+    "El Triángulo Equilátero", "El Octógono Misterioso", "La Caminata Infinita",
+    "El Bucle Roto", "El Círculo por Pasos", "Anidamiento de Estructuras"
+  ];
+  
+  const claseTitulo = "Reporte: Bucles en Scratch — Clase 2";
+
+  // --- HEADER OF FIRST PAGE ---
+  // Blue/Indigo accent banner
+  doc.setFillColor(37, 99, 235);
+  doc.rect(15, 15, 180, 24, 'F');
+  
+  // Banner Text
+  doc.setTextColor(255, 255, 255);
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(15);
+  doc.text(claseTitulo.toUpperCase(), 20, 24);
+  
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(10);
+  doc.text("PORTAL DE APRENDIZAJE SCRATCH — REPORTE DE ENTREGAS", 20, 31);
+
+  // Student Info Box (Light grey background, border)
+  doc.setDrawColor(203, 213, 225);
+  doc.setFillColor(248, 250, 252);
+  doc.rect(15, 44, 180, 22, 'FD');
+  
+  doc.setTextColor(30, 41, 59);
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(11);
+  doc.text("Estudiante:", 20, 51);
+  doc.setFont("helvetica", "normal");
+  doc.text(nombre, 45, 51);
+  
+  doc.setFont("helvetica", "bold");
+  doc.text("Docente:", 20, 59);
+  doc.setFont("helvetica", "normal");
+  doc.text("Profesor Mario Morena", 45, 59);
+  
+  doc.setFont("helvetica", "bold");
+  doc.text("Fecha:", 120, 51);
+  doc.setFont("helvetica", "normal");
+  doc.text(new Date().toLocaleDateString(), 138, 51);
+  
+  doc.setFont("helvetica", "bold");
+  doc.text("Clase:", 120, 59);
+  doc.setFont("helvetica", "normal");
+  doc.text("Bucles (Clase 2)", 138, 59);
+
+  // Start desafíos listing at Y=74
+  let currentY = 74;
+
+  for(let i=1; i<=9; i++) {
+    const rawResp = document.getElementById('sol-ch'+i).value.trim();
+    const resp = rawResp || "Sin respuesta escrita.";
+    const imgData = imagenesBase64[i-1];
+    const isCompleted = done[i-1] || rawResp.length > 0 || !!imgData;
+    const status = isCompleted ? "COMPLETADO" : "NO COMPLETADO";
+
+    // Split text into lines that fit in 170mm width
+    const splitResp = doc.splitTextToSize("Respuesta: " + resp, 170);
+    const textHeight = splitResp.length * 5;
+
+    // Estimate the height this challenge section will occupy
+    let sectionHeight = 8 + textHeight + 6; // header + text padding + gap
+    if (imgData) {
+      sectionHeight += 65; // image height (60) + spacing (5)
+    } else {
+      sectionHeight += 6; // "sin captura" notification spacing
+    }
+
+    // If it exceeds the available space on the page (A4 page height is 297mm, margin is 15mm, so max Y is ~275mm)
+    if (currentY + sectionHeight > 275) {
+      doc.addPage();
+      currentY = 20; // reset to top of new page
+      
+      // Page Header for secondary pages
+      doc.setDrawColor(37, 99, 235);
+      doc.setLineWidth(0.5);
+      doc.line(15, 12, 195, 12);
+      
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(9);
+      doc.setTextColor(100, 116, 139);
+      doc.text(`Reporte de Entregas Scratch — Estudiante: ${nombre}`, 15, 10);
+      doc.text(`Página ${doc.internal.getNumberOfPages()}`, 175, 10);
+      
+      currentY = 18; // start challenge printing below header line
+    }
+
+    // Section separator line
+    doc.setDrawColor(226, 232, 240);
+    doc.setLineWidth(0.3);
+    doc.line(15, currentY, 195, currentY);
+    currentY += 5;
+
+    // Challenge Header (Desafío X: Título)
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(11);
+    doc.setTextColor(30, 41, 59);
+    doc.text(`Desafío ${i}: ${titulos[i-1]}`, 15, currentY);
+
+    // Status Badge (Aligned to the right)
+    if (isCompleted) {
+      doc.setTextColor(22, 101, 52); // Dark green
+      doc.text("[COMPLETADO]", 155, currentY);
+    } else {
+      doc.setTextColor(185, 28, 28); // Dark red
+      doc.text("[NO COMPLETADO]", 150, currentY);
+    }
+    currentY += 6;
+
+    // Written Response Text
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(10);
+    doc.setTextColor(51, 65, 85);
+    
+    for (let line of splitResp) {
+      doc.text(line, 18, currentY);
+      currentY += 5;
+    }
+    currentY += 2;
+
+    // Screenshot handling
+    if (imgData) {
+      try {
+        const format = imgData.toLowerCase().includes('png') ? 'PNG' : 'JPEG';
+        // Image dimensions: width=110mm, height=58mm, centered
+        const imgW = 110;
+        const imgH = 58;
+        const imgX = 15 + (180 - imgW) / 2; // centered
+        
+        doc.addImage(imgData, format, imgX, currentY, imgW, imgH);
+        currentY += imgH + 5;
+      } catch (err) {
+        console.error("Error drawing image in PDF:", err);
+        doc.setTextColor(239, 68, 68);
+        doc.setFont("helvetica", "italic");
+        doc.setFontSize(9);
+        doc.text("(Error al insertar captura de pantalla en el reporte)", 18, currentY);
+        currentY += 6;
+      }
+    } else {
+      doc.setFont("helvetica", "italic");
+      doc.setFontSize(9);
+      doc.setTextColor(148, 163, 184);
+      doc.text("Sin captura de pantalla adjunta.", 18, currentY);
+      currentY += 6;
+    }
+
+    currentY += 2; // small spacer between sections
+  }
+
+  // Save the document directly
+  doc.save(`Reporte_Bucles_Scratch_de_${nombre.replace(/\s+/g, '_')}.pdf`);
+  mostrarSiguientePaso();
+}
+
+function mostrarSiguientePaso() {
+  const nextCard = document.getElementById('next-class-card');
+  if (nextCard) {
+    nextCard.style.display = 'block';
+    nextCard.scrollIntoView({ behavior: 'smooth' });
+  }
+}
+
+function descargarReporteTXT() {
+  const nombre = document.getElementById('student-name').value.trim();
+  if(!nombre) { alert("⚠️ Escribí tu nombre antes de descargar el reporte."); return; }
+
+  const titulos = [
+    "El Cuadrado Compacto", "Caminata con Aplausos", "Contador Visual",
+    "El Triángulo Equilátero", "El Octógono Misterioso", "La Caminata Infinita",
+    "El Bucle Roto", "El Círculo por Pasos", "Anidamiento de Estructuras"
+  ];
+  
+  let contenido = `======================================================================\n`;
+  contenido += `REPORTE: BUCLES EFICIENTES EN SCRATCH — CLASE 2\n`;
+  contenido += `======================================================================\n\n`;
+  contenido += `Estudiante: ${nombre}\n`;
+  contenido += `Profesor: Mario Morena\n`;
+  contenido += `Fecha de generación: ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\n\n`;
+  contenido += `----------------------------------------------------------------------\n\n`;
+  
+  for(let i=1; i<=9; i++) {
+    const rawResp = document.getElementById('sol-ch'+i).value.trim();
+    const resp = rawResp || "Sin respuesta escrita.";
+    const imgData = imagenesBase64[i-1] ? "Sí (Captura de pantalla adjunta en la entrega)" : "No adjuntada";
+    
+    const isCompleted = done[i-1] || rawResp.length > 0 || imagenesBase64[i-1];
+    const status = isCompleted ? "COMPLETADO" : "NO COMPLETADO";
+    
+    contenido += `Desafío ${i}: ${titulos[i-1]} — [${status}]\n`;
+    contenido += `Respuesta escrita: ${resp}\n`;
+    contenido += `Captura de pantalla: ${imgData}\n`;
+    contenido += `\n----------------------------------------------------------------------\n\n`;
+  }
+  
+  const blob = new Blob([contenido], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `Reporte_Bucles_Scratch_de_${nombre.replace(/\s+/g, '_')}.txt`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  mostrarSiguientePaso();
 }
 </script>
 </body>

@@ -1,0 +1,16 @@
+{
+  "name": "portal-de-programacion-scratch",
+  "version": "1.0.0",
+  "description": "Fichas Interactivas de Programación con Scratch",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "dev": "node server.js",
+    "build": "echo 'No build step required'",
+    "start": "node server.js",
+    "lint": "echo 'No linting required'"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
