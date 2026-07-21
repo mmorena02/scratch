@@ -412,6 +412,17 @@ function loadProgress() {
 
   if (!ci) {
     try {
+      const urlParams = new URLSearchParams(window.location.search);
+      const urlCI = urlParams.get('ci');
+      if (urlCI) {
+        ci = urlCI.trim().replace(/[^0-9a-zA-Z]/g, '');
+        if (ciInput) ciInput.value = ci;
+      }
+    } catch(e){}
+  }
+
+  if (!ci) {
+    try {
       const lastCI = localStorage.getItem('scratch_last_ci');
       if (lastCI) {
         ci = lastCI;

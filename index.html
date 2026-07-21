@@ -305,25 +305,27 @@ body.all-caps { text-transform: uppercase; }
     </div>
 
     <div id="admin-panel-screen" style="display: none;">
-      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #f1f5f9; padding-bottom: 14px; margin-bottom: 20px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #f1f5f9; padding-bottom: 14px; margin-bottom: 16px;">
         <div>
-          <h2 style="font-size: 20px; font-weight: 800; color: #1e293b;">🛠️ Panel de Control de Archivos Locales</h2>
-          <p style="font-size: 13px; color: #64748b;">Registros guardados en el almacenamiento de esta máquina</p>
+          <h2 style="font-size: 20px; font-weight: 800; color: #1e293b;">🛠️ Panel de Control y Recuperación de Archivos</h2>
+          <p style="font-size: 13px; color: #64748b;">Gestión de fichas guardadas, edición de Cédula y continuidad de trabajo</p>
         </div>
         <button onclick="logoutAdmin()" style="background: #f1f5f9; color: #475569; border: none; padding: 8px 14px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer;">Cerrar Sesión</button>
       </div>
 
-      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; margin-bottom: 20px;">
-        <h3 style="font-size: 15px; font-weight: 800; color: #334155; margin-bottom: 8px;">📊 Resumen de Almacenamiento</h3>
-        <div id="admin-stats" style="font-size: 14px; color: #475569; line-height: 1.6;">Cargando datos...</div>
+      <div id="admin-banner" style="display: none; padding: 10px 14px; border-radius: 8px; font-size: 13px; font-weight: 700; margin-bottom: 14px;"></div>
+
+      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px; margin-bottom: 16px;">
+        <h3 style="font-size: 14px; font-weight: 800; color: #334155; margin-bottom: 6px;">📊 Resumen de Almacenamiento del Equipo</h3>
+        <div id="admin-stats" style="font-size: 13px; color: #475569; line-height: 1.5;">Cargando datos...</div>
       </div>
 
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px;">
-        <h3 style="font-size: 16px; font-weight: 800; color: #1e293b;">👥 Alumnos Guardados</h3>
-        <button onclick="clearAllStudentData()" style="background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; padding: 8px 14px; border-radius: 8px; font-size: 13px; font-weight: 800; cursor: pointer;">🗑️ BORRAR TODOS LOS ARCHIVOS DEL EQUIPO</button>
+        <h3 style="font-size: 16px; font-weight: 800; color: #1e293b;">📁 Alumnos y Archivos Guardados</h3>
+        <button onclick="clearAllStudentData()" style="background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 800; cursor: pointer;">🗑️ BORRAR TODO EL EQUIPO</button>
       </div>
 
-      <div id="students-list" style="max-height: 320px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 12px; padding: 10px; background: #fff;">
+      <div id="students-list" style="display: flex; flex-direction: column; gap: 12px; max-height: 380px; overflow-y: auto; padding-right: 4px;">
         <!-- JS Populated -->
       </div>
     </div>
@@ -366,6 +368,23 @@ function logoutAdmin() {
   document.getElementById('admin-pin').value = '';
 }
 
+function showAdminBanner(message, type = 'success') {
+  const banner = document.getElementById('admin-banner');
+  if (!banner) return;
+  banner.style.display = 'block';
+  if (type === 'success') {
+    banner.style.background = '#dcfce7';
+    banner.style.color = '#15803d';
+    banner.style.border = '1px solid #86efac';
+  } else {
+    banner.style.background = '#fef3c7';
+    banner.style.color = '#b45309';
+    banner.style.border = '1px solid #fde047';
+  }
+  banner.textContent = message;
+  setTimeout(() => { banner.style.display = 'none'; }, 4000);
+}
+
 function verifyAdminPin() {
   const inputPin = document.getElementById('admin-pin').value.trim();
   if (inputPin === ADMIN_CODE) {
@@ -377,96 +396,161 @@ function verifyAdminPin() {
   }
 }
 
+function openWorksheet(page, ci) {
+  if (ci && ci !== 'general' && ci !== 'Sin CI registrado') {
+    try { localStorage.setItem('scratch_last_ci', ci); } catch(e){}
+    window.location.href = `${page}.html?ci=${encodeURIComponent(ci)}`;
+  } else {
+    window.location.href = `${page}.html`;
+  }
+}
+
+function toggleEditForm(idx) {
+  const form = document.getElementById('edit-form-' + idx);
+  if (form) {
+    form.style.display = form.style.display === 'none' ? 'block' : 'none';
+  }
+}
+
 function renderAdminData() {
   const listEl = document.getElementById('students-list');
   const statsEl = document.getElementById('admin-stats');
   
-  // Collect all scratch keys from localStorage
   const keys = [];
   for (let i = 0; i < localStorage.length; i++) {
     const k = localStorage.key(i);
-    if (k && k.startsWith('scratch_')) {
+    if (k && k.startsWith('scratch_') && k !== 'scratch_students_registry' && k !== 'scratch_last_ci') {
       keys.push(k);
     }
   }
 
-  // Parse registry
-  let registry = {};
-  try {
-    const regData = localStorage.getItem('scratch_students_registry');
-    if (regData) registry = JSON.parse(regData);
-  } catch(e){}
-
-  // Also collect students directly from individual keys
   const studentMap = {};
 
-  // First from registry
-  Object.keys(registry).forEach(regKey => {
-    const item = registry[regKey];
-    studentMap[regKey] = {
-      ci: item.ci || regKey.replace('ci_', ''),
-      name: item.name || 'Sin nombre',
-      lastUpdated: item.lastUpdated || 'Desconocido',
-      classes: item.classes || {}
-    };
-  });
-
-  // Second check loose keys
   keys.forEach(k => {
-    if (k === 'scratch_students_registry' || k === 'scratch_last_ci') return;
     try {
       const dataStr = localStorage.getItem(k);
       if (!dataStr) return;
       const parsed = JSON.parse(dataStr);
-      const ci = parsed.ci || (k.includes('_ci_') ? k.split('_ci_')[1] : 'general');
-      const studentKey = ci ? `ci_${ci}` : 'general';
+      
+      const rawCI = parsed.ci ? String(parsed.ci).trim() : (k.includes('_ci_') ? k.split('_ci_')[1] : '');
+      const ciClean = rawCI.replace(/[^0-9a-zA-Z]/g, '');
+      const studentKey = ciClean ? ciClean : 'general';
 
       if (!studentMap[studentKey]) {
         studentMap[studentKey] = {
-          ci: ci === 'general' ? 'Sin CI registrado' : ci,
-          name: parsed.nombre || 'Sin nombre',
-          lastUpdated: parsed.lastUpdated || 'Desconocido',
-          classes: {}
+          ciKey: studentKey,
+          ciDisplay: ciClean || 'Sin Cédula (CI)',
+          hasCi: !!ciClean,
+          name: parsed.nombre || 'Estudiante sin nombre',
+          files: []
         };
       }
-      if (parsed.claseId) {
-        studentMap[studentKey].classes[parsed.claseId] = {
-          className: parsed.clase || parsed.claseId,
-          storageKey: k,
-          updatedAt: parsed.lastUpdated || ''
-        };
+
+      if (parsed.nombre && (!studentMap[studentKey].name || studentMap[studentKey].name === 'Estudiante sin nombre')) {
+        studentMap[studentKey].name = parsed.nombre;
       }
-    } catch(e){}
+
+      const doneCount = parsed.done ? parsed.done.filter(Boolean).length : 0;
+
+      let defaultClaseName = 'Ficha de Scratch';
+      if (k.includes('clase_1') || parsed.claseId === 'scratch1') defaultClaseName = 'Clase 1: Secuencias + Condicionales';
+      if (k.includes('clase_2') || parsed.claseId === 'scratch2') defaultClaseName = 'Clase 2: Bucles Eficientes';
+      if (k.includes('clase_3') || parsed.claseId === 'scratch3') defaultClaseName = 'Clase 3: Variables de Control';
+
+      let pageFile = 'scratch1';
+      if (k.includes('clase_2') || parsed.claseId === 'scratch2') pageFile = 'scratch2';
+      if (k.includes('clase_3') || parsed.claseId === 'scratch3') pageFile = 'scratch3';
+
+      studentMap[studentKey].files.push({
+        key: k,
+        pageFile: pageFile,
+        claseName: parsed.clase || defaultClaseName,
+        doneCount: doneCount,
+        totalCount: 9,
+        lastUpdated: parsed.lastUpdated ? new Date(parsed.lastUpdated).toLocaleString() : 'Reciente'
+      });
+
+    } catch(e) {
+      console.error("Error reading localStorage key", k, e);
+    }
   });
 
   const studentsList = Object.values(studentMap);
 
   statsEl.innerHTML = `
-    <strong>🔑 Clave de Administración:</strong> <code>6709</code><br>
-    <strong>📦 Archivos persistentes guardados:</strong> ${keys.length} elemento(s) en localStorage.<br>
-    <strong>👥 Total de estudiantes identificados en este equipo:</strong> ${studentsList.length} alumno(s).
+    <strong>📦 Archivos de avance guardados:</strong> ${keys.length} archivo(s)<br>
+    <strong>👥 Estudiantes registrados en esta máquina:</strong> ${studentsList.length} alumno(s)
   `;
 
   if (studentsList.length === 0) {
-    listEl.innerHTML = '<div style="text-align:center; padding: 20px; color: #94a3b8; font-weight:700;">No hay archivos persistentes de estudiantes guardados en este equipo.</div>';
+    listEl.innerHTML = '<div style="text-align:center; padding: 20px; color: #94a3b8; font-weight:700;">No hay archivos persistentes guardados en este equipo.</div>';
     return;
   }
 
   let html = '';
-  studentsList.forEach(st => {
-    const classBadges = Object.keys(st.classes).length > 0
-      ? Object.values(st.classes).map(c => `<span style="background: #e0f2fe; color: #0369a1; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 700; margin-right: 4px;">${c.className || c.storageKey}</span>`).join('')
-      : '<span style="color:#94a3b8; font-size:12px;">Sin actividades registradas</span>';
+  studentsList.forEach((st, idx) => {
+    const ciBadge = st.hasCi
+      ? `<span style="background: #dcfce7; color: #15803d; padding: 2px 8px; border-radius: 6px; font-size: 12px; font-weight: 800;">CI: ${st.ciDisplay}</span>`
+      : `<span style="background: #fef3c7; color: #b45309; padding: 2px 8px; border-radius: 6px; font-size: 12px; font-weight: 800;">⚠️ Faltan datos (Sin CI)</span>`;
+
+    let filesHtml = '';
+    st.files.forEach(f => {
+      filesHtml += `
+        <div style="display: flex; justify-content: space-between; align-items: center; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 8px 12px; margin-top: 6px; flex-wrap: wrap; gap: 8px;">
+          <div>
+            <span style="font-weight: 800; color: #1e293b; font-size: 13px;">${f.claseName}</span>
+            <span style="font-size: 12px; color: #0284c7; font-weight: 700; margin-left: 6px;">(${f.doneCount}/9 desafíos)</span>
+            <div style="font-size: 11px; color: #94a3b8;">Guardado: ${f.lastUpdated}</div>
+          </div>
+          <button onclick="openWorksheet('${f.pageFile}', '${st.ciKey}')" style="background: #2563eb; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 4px;">
+            📂 Continuar Ficha →
+          </button>
+        </div>
+      `;
+    });
 
     html += `
-      <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid #f1f5f9; gap: 10px; flex-wrap: wrap;">
-        <div>
-          <div style="font-size: 15px; font-weight: 800; color: #1e293b;">
-            👤 ${st.name} <span style="font-size: 13px; font-weight: 700; color: #64748b;">(CI: ${st.ci})</span>
+      <div style="background: white; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; border-bottom: 1px solid #f1f5f9; padding-bottom: 10px;">
+          <div>
+            <div style="font-size: 15px; font-weight: 800; color: #0f172a; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+              👤 ${st.name} ${ciBadge}
+            </div>
           </div>
-          <div style="margin-top: 4px;">${classBadges}</div>
+          <div style="display: flex; gap: 6px;">
+            <button onclick="toggleEditForm('${idx}')" style="background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; padding: 5px 10px; border-radius: 6px; font-size: 12px; font-weight: 800; cursor: pointer;">
+              ✏️ ${st.hasCi ? 'Editar Datos' : '➕ Asignar Cédula'}
+            </button>
+            <button onclick="deleteStudentData('${st.ciKey}')" style="background: #fef2f2; color: #dc2626; border: 1px solid #fca5a5; padding: 5px 10px; border-radius: 6px; font-size: 12px; font-weight: 800; cursor: pointer;">
+              🗑️ Borrar
+            </button>
+          </div>
         </div>
-        <button onclick="deleteStudentData('${st.ci}')" style="background: #fef2f2; color: #dc2626; border: 1px solid #fca5a5; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 800; cursor: pointer;">🗑️ Borrar Ficha</button>
+
+        <!-- FORMULARIO INLINE EDICION -->
+        <div id="edit-form-${idx}" style="display: none; background: #fffbebfb; border: 1px solid #fde047; border-radius: 8px; padding: 12px; margin-top: 10px;">
+          <div style="font-size: 13px; font-weight: 800; color: #92400e; margin-bottom: 8px;">✏️ Asignar o Editar Cédula y Nombre</div>
+          <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <div style="flex: 1; min-width: 150px;">
+              <label style="font-size: 11px; font-weight: 700; color: #78350f; display: block; margin-bottom: 2px;">Cédula de Identidad (CI):</label>
+              <input type="text" id="edit-ci-${idx}" value="${st.hasCi ? st.ciKey : ''}" placeholder="Ej: 12345678" style="width: 100%; border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px 10px; font-size: 13px; font-weight: 700;">
+            </div>
+            <div style="flex: 2; min-width: 180px;">
+              <label style="font-size: 11px; font-weight: 700; color: #78350f; display: block; margin-bottom: 2px;">Nombre Completo:</label>
+              <input type="text" id="edit-name-${idx}" value="${st.name}" placeholder="Nombre del estudiante" style="width: 100%; border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px 10px; font-size: 13px;">
+            </div>
+          </div>
+          <div style="margin-top: 10px; display: flex; gap: 8px; justify-content: flex-end;">
+            <button onclick="toggleEditForm('${idx}')" style="background: #f1f5f9; color: #475569; border: none; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer;">Cancelar</button>
+            <button onclick="saveStudentEdit('${st.ciKey}', '${idx}')" style="background: #d97706; color: white; border: none; padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 800; cursor: pointer;">💾 Guardar Cambios</button>
+          </div>
+        </div>
+
+        <!-- LISTA DE FICHAS -->
+        <div style="margin-top: 8px;">
+          <div style="font-size: 12px; font-weight: 700; color: #64748b;">Fichas y Avances:</div>
+          ${filesHtml}
+        </div>
       </div>
     `;
   });
@@ -474,10 +558,82 @@ function renderAdminData() {
   listEl.innerHTML = html;
 }
 
-function deleteStudentData(ci) {
-  if (!confirm(`¿Confirmás borrar todos los archivos guardados para el alumno con CI / Identificador: "${ci}" en este equipo?`)) return;
+function saveStudentEdit(oldCiKey, idx) {
+  const rawCI = document.getElementById('edit-ci-' + idx).value;
+  const newCI = rawCI.trim().replace(/[^0-9a-zA-Z]/g, '');
+  const newName = document.getElementById('edit-name-' + idx).value.trim();
 
-  // Clean from registry
+  if (!newCI && !confirm("¿Querés guardar sin Cédula de Identidad? Se mantendrá como un registro general.")) {
+    return;
+  }
+
+  // Find all keys matching oldCiKey
+  const keysToUpdate = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const k = localStorage.key(i);
+    if (!k || !k.startsWith('scratch_') || k === 'scratch_students_registry' || k === 'scratch_last_ci') continue;
+    
+    if (oldCiKey === 'general') {
+      if (k.endsWith('_state')) keysToUpdate.push(k);
+    } else {
+      if (k.endsWith(`_ci_${oldCiKey}`)) keysToUpdate.push(k);
+    }
+  }
+
+  keysToUpdate.forEach(oldKey => {
+    try {
+      const dataStr = localStorage.getItem(oldKey);
+      if (!dataStr) return;
+      const parsed = JSON.parse(dataStr);
+
+      parsed.ci = newCI;
+      if (newName) parsed.nombre = newName;
+      parsed.lastUpdated = new Date().toISOString();
+
+      const claseId = parsed.claseId || (oldKey.includes('clase_1') ? 'scratch1' : oldKey.includes('clase_2') ? 'scratch2' : 'scratch3');
+      const numClase = claseId === 'scratch1' ? '1' : claseId === 'scratch2' ? '2' : '3';
+
+      const newKey = newCI ? `scratch_clase_${numClase}_ci_${newCI}` : `scratch_clase_${numClase}_state`;
+
+      localStorage.setItem(newKey, JSON.stringify(parsed));
+      if (newKey !== oldKey) {
+        localStorage.removeItem(oldKey);
+      }
+    } catch(e) {
+      console.error("Error migrating key", oldKey, e);
+    }
+  });
+
+  // Update Registry
+  try {
+    const regData = localStorage.getItem('scratch_students_registry');
+    if (regData) {
+      const registry = JSON.parse(regData);
+      delete registry[`ci_${oldCiKey}`];
+      delete registry[oldCiKey];
+
+      const newRegKey = newCI ? `ci_${newCI}` : 'general';
+      if (!registry[newRegKey]) {
+        registry[newRegKey] = { ci: newCI || 'Sin CI', name: newName || 'Estudiante', classes: {}, lastUpdated: new Date().toISOString() };
+      } else {
+        if (newName) registry[newRegKey].name = newName;
+        registry[newRegKey].lastUpdated = new Date().toISOString();
+      }
+      localStorage.setItem('scratch_students_registry', JSON.stringify(registry));
+    }
+  } catch(e){}
+
+  if (newCI) {
+    try { localStorage.setItem('scratch_last_ci', newCI); } catch(e){}
+  }
+
+  showAdminBanner("✅ Datos del estudiante actualizados correctamente.");
+  renderAdminData();
+}
+
+function deleteStudentData(ci) {
+  if (!confirm(`¿Confirmás borrar todos los archivos guardados para el alumno (CI: "${ci}") en este equipo?`)) return;
+
   try {
     const regData = localStorage.getItem('scratch_students_registry');
     if (regData) {
@@ -488,18 +644,17 @@ function deleteStudentData(ci) {
     }
   } catch(e){}
 
-  // Clean specific keys
   const keysToRemove = [];
   for (let i = 0; i < localStorage.length; i++) {
     const k = localStorage.key(i);
-    if (k && (k.endsWith(`_ci_${ci}`) || (ci === 'Sin CI registrado' && k.endsWith('_state')))) {
+    if (k && (k.endsWith(`_ci_${ci}`) || (ci === 'general' && k.endsWith('_state')))) {
       keysToRemove.push(k);
     }
   }
   keysToRemove.forEach(k => localStorage.removeItem(k));
 
+  showAdminBanner("🗑️ Registro de estudiante eliminado de este equipo.");
   renderAdminData();
-  alert(`✅ Se borraron los registros del estudiante CI ${ci}.`);
 }
 
 function clearAllStudentData() {
@@ -515,8 +670,8 @@ function clearAllStudentData() {
   }
   keysToRemove.forEach(k => localStorage.removeItem(k));
 
+  showAdminBanner("🧹 Todos los archivos guardados han sido borrados de este equipo.");
   renderAdminData();
-  alert("🧹 Se han borrado exitosamente todos los archivos persistentes de estudiantes en esta máquina.");
 }
 </script>
 
