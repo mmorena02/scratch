@@ -269,9 +269,73 @@ body.all-caps { text-transform: uppercase; }
 
   </div>
 
+  <div class="section-label" style="margin-top: 40px;">Administración Local del Equipo</div>
+
+  <div class="proposal-card" style="border-left: 6px solid #ef4444; background: #fff; cursor: pointer;" onclick="openAdminModal()">
+    <div class="prop-content">
+      <div class="prop-icon" style="background: #fef2f2; color: #dc2626;">⚙️</div>
+      <div class="prop-details">
+        <h2>Panel Docente / Administrador</h2>
+        <p>Gestioná o borrá los archivos locales persistentes de todos los estudiantes guardados en este equipo.</p>
+      </div>
+    </div>
+    <div class="prop-arrow">🔑</div>
+  </div>
+
+</main>
+
+<!-- MODAL ADMINISTRADOR -->
+<div id="admin-modal" style="display:none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15,23,42,0.75); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(4px); padding: 20px;">
+  <div style="background: white; border-radius: 16px; max-width: 650px; width: 100%; max-height: 90vh; overflow-y: auto; padding: 28px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3); position: relative;">
+    
+    <button onclick="closeAdminModal()" style="position: absolute; top: 18px; right: 20px; border: none; background: #f1f5f9; width: 36px; height: 36px; border-radius: 50%; font-size: 18px; font-weight: bold; cursor: pointer; color: #64748b;">✕</button>
+
+    <div id="admin-auth-screen">
+      <div style="text-align: center; margin-bottom: 20px;">
+        <span style="font-size: 44px;">🔒</span>
+        <h2 style="font-size: 22px; font-weight: 800; color: #1e293b; margin-top: 10px;">Acceso Administrador Docente</h2>
+        <p style="font-size: 14px; color: #64748b; margin-top: 6px;">Ingresá la clave docente para administrar o borrar los registros de este equipo.</p>
+      </div>
+
+      <div style="max-width: 280px; margin: 0 auto;">
+        <input type="password" id="admin-pin" placeholder="Clave Docente" maxlength="10" style="width: 100%; text-align: center; font-size: 24px; letter-spacing: 6px; padding: 12px; border: 2px solid #cbd5e1; border-radius: 12px; font-weight: 800; outline: none;" onkeyup="if(event.key==='Enter') verifyAdminPin()">
+        <button onclick="verifyAdminPin()" style="width: 100%; margin-top: 14px; background: #2c1b4d; color: white; border: none; padding: 12px; border-radius: 10px; font-weight: 800; font-size: 16px; cursor: pointer;">Ingresar al Panel</button>
+        <div id="pin-error" style="color: #ef4444; font-size: 13px; font-weight: 700; text-align: center; margin-top: 10px; display: none;">⚠️ Clave incorrecta. Intentá nuevamente.</div>
+      </div>
+    </div>
+
+    <div id="admin-panel-screen" style="display: none;">
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #f1f5f9; padding-bottom: 14px; margin-bottom: 20px;">
+        <div>
+          <h2 style="font-size: 20px; font-weight: 800; color: #1e293b;">🛠️ Panel de Control de Archivos Locales</h2>
+          <p style="font-size: 13px; color: #64748b;">Registros guardados en el almacenamiento de esta máquina</p>
+        </div>
+        <button onclick="logoutAdmin()" style="background: #f1f5f9; color: #475569; border: none; padding: 8px 14px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer;">Cerrar Sesión</button>
+      </div>
+
+      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; margin-bottom: 20px;">
+        <h3 style="font-size: 15px; font-weight: 800; color: #334155; margin-bottom: 8px;">📊 Resumen de Almacenamiento</h3>
+        <div id="admin-stats" style="font-size: 14px; color: #475569; line-height: 1.6;">Cargando datos...</div>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px;">
+        <h3 style="font-size: 16px; font-weight: 800; color: #1e293b;">👥 Alumnos Guardados</h3>
+        <button onclick="clearAllStudentData()" style="background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; padding: 8px 14px; border-radius: 8px; font-size: 13px; font-weight: 800; cursor: pointer;">🗑️ BORRAR TODOS LOS ARCHIVOS DEL EQUIPO</button>
+      </div>
+
+      <div id="students-list" style="max-height: 320px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 12px; padding: 10px; background: #fff;">
+        <!-- JS Populated -->
+      </div>
+    </div>
+
+  </div>
+</div>
+
 </main>
 
 <script>
+const ADMIN_CODE = "6709";
+
 function toggleAllCaps() {
   document.body.classList.toggle('all-caps');
   const btn = document.getElementById('capsBtn');
@@ -280,6 +344,179 @@ function toggleAllCaps() {
   } else {
     btn.textContent = "Abc → ABC";
   }
+}
+
+function openAdminModal() {
+  const modal = document.getElementById('admin-modal');
+  modal.style.display = 'flex';
+  document.getElementById('admin-auth-screen').style.display = 'block';
+  document.getElementById('admin-panel-screen').style.display = 'none';
+  document.getElementById('admin-pin').value = '';
+  document.getElementById('pin-error').style.display = 'none';
+  setTimeout(() => document.getElementById('admin-pin').focus(), 100);
+}
+
+function closeAdminModal() {
+  document.getElementById('admin-modal').style.display = 'none';
+}
+
+function logoutAdmin() {
+  document.getElementById('admin-auth-screen').style.display = 'block';
+  document.getElementById('admin-panel-screen').style.display = 'none';
+  document.getElementById('admin-pin').value = '';
+}
+
+function verifyAdminPin() {
+  const inputPin = document.getElementById('admin-pin').value.trim();
+  if (inputPin === ADMIN_CODE) {
+    document.getElementById('admin-auth-screen').style.display = 'none';
+    document.getElementById('admin-panel-screen').style.display = 'block';
+    renderAdminData();
+  } else {
+    document.getElementById('pin-error').style.display = 'block';
+  }
+}
+
+function renderAdminData() {
+  const listEl = document.getElementById('students-list');
+  const statsEl = document.getElementById('admin-stats');
+  
+  // Collect all scratch keys from localStorage
+  const keys = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const k = localStorage.key(i);
+    if (k && k.startsWith('scratch_')) {
+      keys.push(k);
+    }
+  }
+
+  // Parse registry
+  let registry = {};
+  try {
+    const regData = localStorage.getItem('scratch_students_registry');
+    if (regData) registry = JSON.parse(regData);
+  } catch(e){}
+
+  // Also collect students directly from individual keys
+  const studentMap = {};
+
+  // First from registry
+  Object.keys(registry).forEach(regKey => {
+    const item = registry[regKey];
+    studentMap[regKey] = {
+      ci: item.ci || regKey.replace('ci_', ''),
+      name: item.name || 'Sin nombre',
+      lastUpdated: item.lastUpdated || 'Desconocido',
+      classes: item.classes || {}
+    };
+  });
+
+  // Second check loose keys
+  keys.forEach(k => {
+    if (k === 'scratch_students_registry' || k === 'scratch_last_ci') return;
+    try {
+      const dataStr = localStorage.getItem(k);
+      if (!dataStr) return;
+      const parsed = JSON.parse(dataStr);
+      const ci = parsed.ci || (k.includes('_ci_') ? k.split('_ci_')[1] : 'general');
+      const studentKey = ci ? `ci_${ci}` : 'general';
+
+      if (!studentMap[studentKey]) {
+        studentMap[studentKey] = {
+          ci: ci === 'general' ? 'Sin CI registrado' : ci,
+          name: parsed.nombre || 'Sin nombre',
+          lastUpdated: parsed.lastUpdated || 'Desconocido',
+          classes: {}
+        };
+      }
+      if (parsed.claseId) {
+        studentMap[studentKey].classes[parsed.claseId] = {
+          className: parsed.clase || parsed.claseId,
+          storageKey: k,
+          updatedAt: parsed.lastUpdated || ''
+        };
+      }
+    } catch(e){}
+  });
+
+  const studentsList = Object.values(studentMap);
+
+  statsEl.innerHTML = `
+    <strong>🔑 Clave de Administración:</strong> <code>6709</code><br>
+    <strong>📦 Archivos persistentes guardados:</strong> ${keys.length} elemento(s) en localStorage.<br>
+    <strong>👥 Total de estudiantes identificados en este equipo:</strong> ${studentsList.length} alumno(s).
+  `;
+
+  if (studentsList.length === 0) {
+    listEl.innerHTML = '<div style="text-align:center; padding: 20px; color: #94a3b8; font-weight:700;">No hay archivos persistentes de estudiantes guardados en este equipo.</div>';
+    return;
+  }
+
+  let html = '';
+  studentsList.forEach(st => {
+    const classBadges = Object.keys(st.classes).length > 0
+      ? Object.values(st.classes).map(c => `<span style="background: #e0f2fe; color: #0369a1; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 700; margin-right: 4px;">${c.className || c.storageKey}</span>`).join('')
+      : '<span style="color:#94a3b8; font-size:12px;">Sin actividades registradas</span>';
+
+    html += `
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid #f1f5f9; gap: 10px; flex-wrap: wrap;">
+        <div>
+          <div style="font-size: 15px; font-weight: 800; color: #1e293b;">
+            👤 ${st.name} <span style="font-size: 13px; font-weight: 700; color: #64748b;">(CI: ${st.ci})</span>
+          </div>
+          <div style="margin-top: 4px;">${classBadges}</div>
+        </div>
+        <button onclick="deleteStudentData('${st.ci}')" style="background: #fef2f2; color: #dc2626; border: 1px solid #fca5a5; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 800; cursor: pointer;">🗑️ Borrar Ficha</button>
+      </div>
+    `;
+  });
+
+  listEl.innerHTML = html;
+}
+
+function deleteStudentData(ci) {
+  if (!confirm(`¿Confirmás borrar todos los archivos guardados para el alumno con CI / Identificador: "${ci}" en este equipo?`)) return;
+
+  // Clean from registry
+  try {
+    const regData = localStorage.getItem('scratch_students_registry');
+    if (regData) {
+      const registry = JSON.parse(regData);
+      delete registry[`ci_${ci}`];
+      delete registry[ci];
+      localStorage.setItem('scratch_students_registry', JSON.stringify(registry));
+    }
+  } catch(e){}
+
+  // Clean specific keys
+  const keysToRemove = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const k = localStorage.key(i);
+    if (k && (k.endsWith(`_ci_${ci}`) || (ci === 'Sin CI registrado' && k.endsWith('_state')))) {
+      keysToRemove.push(k);
+    }
+  }
+  keysToRemove.forEach(k => localStorage.removeItem(k));
+
+  renderAdminData();
+  alert(`✅ Se borraron los registros del estudiante CI ${ci}.`);
+}
+
+function clearAllStudentData() {
+  if (!confirm("⚠️ ¿ATENCIÓN: Estás seguro de borrar TODOS los archivos persistentes de TODOS los estudiantes en esta máquina?")) return;
+  if (!confirm("⚠️ Confirmación final: Esta acción eliminará permanentemente todos los progresos de Scratch guardados en este equipo.")) return;
+
+  const keysToRemove = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const k = localStorage.key(i);
+    if (k && k.startsWith('scratch_')) {
+      keysToRemove.push(k);
+    }
+  }
+  keysToRemove.forEach(k => localStorage.removeItem(k));
+
+  renderAdminData();
+  alert("🧹 Se han borrado exitosamente todos los archivos persistentes de estudiantes en esta máquina.");
 }
 </script>
 

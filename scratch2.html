@@ -106,9 +106,17 @@ body.all-caps, body.all-caps .block, body.all-caps textarea, body.all-caps input
 
   <div class="student-info-card">
     <h3>📝 Datos del Estudiante</h3>
-    <div class="student-fields">
-      <input type="text" id="student-name" placeholder="Escribí tu nombre y apellido completo acá...">
+    <div class="student-fields" style="display: flex; gap: 15px; flex-wrap: wrap; margin-top: 10px;">
+      <div style="flex: 1; min-width: 200px;">
+        <label for="student-ci" style="display: block; font-size: 13px; font-weight: 700; color: var(--text-muted); margin-bottom: 4px;">Cédula de Identidad (CI):</label>
+        <input type="text" id="student-ci" placeholder="Ej: 12345678 (sin puntos/guiones)" style="width: 100%; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 10px 14px; font-size: 15px; font-weight: 700;">
+      </div>
+      <div style="flex: 2; min-width: 240px;">
+        <label for="student-name" style="display: block; font-size: 13px; font-weight: 700; color: var(--text-muted); margin-bottom: 4px;">Nombre y Apellido:</label>
+        <input type="text" id="student-name" placeholder="Escribí tu nombre completo acá..." style="width: 100%; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 10px 14px; font-size: 15px;">
+      </div>
     </div>
+    <div id="save-status-badge" style="margin-top: 10px; padding: 8px 12px; border-radius: 8px; font-size: 13px; font-weight: 700; display: none;"></div>
   </div>
 
   <div class="section-label">Caja de Herramientas</div>
@@ -275,74 +283,201 @@ body.all-caps, body.all-caps .block, body.all-caps textarea, body.all-caps input
 const done = Array(9).fill(false);
 const imagenesBase64 = Array(9).fill("");
 
+function getCleanCI() {
+  const ciEl = document.getElementById('student-ci');
+  return ciEl ? ciEl.value.trim().replace(/[^0-9a-zA-Z]/g, '') : "";
+}
+
+function getStorageKey(ci) {
+  return ci ? `scratch_clase_2_ci_${ci}` : 'scratch_clase_2_state';
+}
+
+function updateStatusBadge(type, message) {
+  const badge = document.getElementById('save-status-badge');
+  if (!badge) return;
+  badge.style.display = 'block';
+  if (type === 'success') {
+    badge.style.background = '#dcfce7';
+    badge.style.color = '#15803d';
+    badge.style.border = '1px solid #86efac';
+  } else if (type === 'info') {
+    badge.style.background = '#e0f2fe';
+    badge.style.color = '#0369a1';
+    badge.style.border = '1px solid #7dd3fc';
+  } else {
+    badge.style.background = '#fef3c7';
+    badge.style.color = '#b45309';
+    badge.style.border = '1px solid #fde047';
+  }
+  badge.textContent = message;
+}
+
+function resetFormFields() {
+  document.getElementById('student-name').value = "";
+  for (let i = 0; i < 9; i++) {
+    done[i] = false;
+    imagenesBase64[i] = "";
+    const ch = document.getElementById('ch' + (i + 1));
+    if (ch) ch.classList.remove('done');
+    const ta = document.getElementById('sol-ch' + (i + 1));
+    if (ta) ta.value = "";
+    const imgElement = document.getElementById('img-dz-' + (i + 1));
+    const txtElement = document.getElementById('txt-dz-' + (i + 1));
+    if (imgElement && txtElement) {
+      imgElement.src = "";
+      imgElement.style.display = 'none';
+      txtElement.style.opacity = '1';
+    }
+  }
+  document.getElementById('pbar').style.width = '0%';
+  document.getElementById('ptxt').textContent = "0 de 9 desafíos guardados.";
+}
+
+function updateStudentRegistry(ci, name, classId, className, storageKey) {
+  try {
+    const regData = localStorage.getItem('scratch_students_registry');
+    const registry = regData ? JSON.parse(regData) : {};
+    const keyId = ci ? `ci_${ci}` : 'general';
+    if (!registry[keyId]) {
+      registry[keyId] = { ci: ci || "Sin CI", name: name || "Estudiante", classes: {}, lastUpdated: new Date().toISOString() };
+    }
+    registry[keyId].name = name || registry[keyId].name || "Sin Nombre";
+    registry[keyId].lastUpdated = new Date().toISOString();
+    registry[keyId].classes[classId] = {
+      className: className,
+      storageKey: storageKey,
+      updatedAt: new Date().toISOString()
+    };
+    localStorage.setItem('scratch_students_registry', JSON.stringify(registry));
+  } catch (e) {
+    console.error("Registry update error", e);
+  }
+}
+
 function saveProgress() {
+  const ci = getCleanCI();
+  const nombre = document.getElementById('student-name').value;
+
+  if (ci) {
+    try { localStorage.setItem('scratch_last_ci', ci); } catch(e){}
+  }
+
   const state = {
-    nombre: document.getElementById('student-name').value,
+    ci: ci,
+    nombre: nombre,
     done: done,
     imagenes: imagenesBase64,
-    respuestas: []
+    respuestas: [],
+    lastUpdated: new Date().toISOString(),
+    clase: "Clase 2: Bucles Eficientes",
+    claseId: "scratch2"
   };
-  for(let i=1; i<=9; i++) {
-    const ta = document.getElementById('sol-ch'+i);
+
+  for (let i = 1; i <= 9; i++) {
+    const ta = document.getElementById('sol-ch' + i);
     state.respuestas.push(ta ? ta.value : "");
   }
+
+  const key = getStorageKey(ci);
   try {
-    localStorage.setItem('scratch_clase_2_state', JSON.stringify(state));
+    localStorage.setItem(key, JSON.stringify(state));
+    updateStudentRegistry(ci, nombre, 'scratch2', 'Clase 2: Bucles Eficientes', key);
+    if (ci) {
+      updateStatusBadge('success', `✅ Progreso guardado automáticamente para CI: ${ci}`);
+    } else {
+      updateStatusBadge('info', `✅ Progreso guardado en este equipo.`);
+    }
   } catch (e) {
-    console.warn("Storage quota exceeded, trying to save text responses only.", e);
+    console.warn("Storage quota exceeded, trying text only.", e);
     try {
       state.imagenes = Array(9).fill("");
-      localStorage.setItem('scratch_clase_2_state', JSON.stringify(state));
-    } catch(err) {
-      console.error("Failed to save even basic text progress", err);
+      localStorage.setItem(key, JSON.stringify(state));
+    } catch (err) {
+      console.error("Failed to save progress", err);
     }
   }
 }
 
 function loadProgress() {
-  try {
-    const data = localStorage.getItem('scratch_clase_2_state');
-    if (data) {
+  const ciInput = document.getElementById('student-ci');
+  let ci = getCleanCI();
+
+  if (!ci) {
+    try {
+      const lastCI = localStorage.getItem('scratch_last_ci');
+      if (lastCI) {
+        ci = lastCI;
+        if (ciInput) ciInput.value = ci;
+      }
+    } catch(e){}
+  }
+
+  const key = getStorageKey(ci);
+  const data = localStorage.getItem(key);
+
+  if (data) {
+    try {
       const state = JSON.parse(data);
-      if (state.nombre) {
+      if (state.nombre !== undefined) {
         document.getElementById('student-name').value = state.nombre;
       }
       if (state.done) {
-        for(let i=0; i<9; i++) {
+        for (let i = 0; i < 9; i++) {
           done[i] = !!state.done[i];
+          const ch = document.getElementById('ch' + (i + 1));
           if (done[i]) {
-            document.getElementById('ch'+(i+1)).classList.add('done');
+            if (ch) ch.classList.add('done');
+          } else {
+            if (ch) ch.classList.remove('done');
           }
         }
       }
       if (state.respuestas) {
-        for(let i=0; i<9; i++) {
-          const ta = document.getElementById('sol-ch'+(i+1));
-          if (ta && state.respuestas[i] !== undefined) {
-            ta.value = state.respuestas[i];
-          }
+        for (let i = 0; i < 9; i++) {
+          const ta = document.getElementById('sol-ch' + (i + 1));
+          if (ta) ta.value = state.respuestas[i] || "";
         }
       }
       if (state.imagenes) {
-        for(let i=0; i<9; i++) {
+        for (let i = 0; i < 9; i++) {
+          const imgElement = document.getElementById('img-dz-' + (i + 1));
+          const txtElement = document.getElementById('txt-dz-' + (i + 1));
           if (state.imagenes[i]) {
             imagenesBase64[i] = state.imagenes[i];
-            const imgElement = document.getElementById('img-dz-'+(i+1));
-            const txtElement = document.getElementById('txt-dz-'+(i+1));
             if (imgElement && txtElement) {
               imgElement.src = state.imagenes[i];
               imgElement.style.display = 'block';
               txtElement.style.opacity = '0.1';
             }
+          } else {
+            imagenesBase64[i] = "";
+            if (imgElement && txtElement) {
+              imgElement.src = "";
+              imgElement.style.display = 'none';
+              txtElement.style.opacity = '1';
+            }
           }
         }
       }
       const count = done.filter(Boolean).length;
-      document.getElementById('pbar').style.width = (count/9*100)+'%';
+      document.getElementById('pbar').style.width = (count / 9 * 100) + '%';
       document.getElementById('ptxt').textContent = `${count} de 9 desafíos guardados.`;
+
+      if (ci) {
+        updateStatusBadge('success', `✅ Trabajo cargado para la Cédula: ${ci}`);
+      } else {
+        updateStatusBadge('info', `ℹ️ Se cargó el trabajo previo guardado en este equipo.`);
+      }
+    } catch (e) {
+      console.error("Error parsing load state", e);
     }
-  } catch(e) {
-    console.error("Error loading progress", e);
+  } else {
+    resetFormFields();
+    if (ci) {
+      updateStatusBadge('info', `📄 Ficha nueva iniciada para la Cédula: ${ci}`);
+    } else {
+      updateStatusBadge('warning', `⚠️ Ingresá tu Cédula de Identidad para guardar tu avance individual.`);
+    }
   }
 }
 
@@ -410,6 +545,13 @@ for(let i=1; i<=9; i++) {
 }
 
 document.getElementById('student-name').addEventListener('input', saveProgress);
+const ciInputEl = document.getElementById('student-ci');
+if (ciInputEl) {
+  ciInputEl.addEventListener('input', () => {
+    loadProgress();
+    saveProgress();
+  });
+}
 loadProgress();
 
 window.addEventListener('paste', (e) => {
@@ -458,7 +600,9 @@ function markDone(n) {
 
 function generarReportePDF() {
   const nombre = document.getElementById('student-name').value.trim();
+  const ci = getCleanCI();
   if(!nombre) { alert("⚠️ Escribí tu nombre antes de descargar el PDF."); return; }
+  if(!ci) { alert("⚠️ Escribí tu Cédula de Identidad (CI) antes de descargar el PDF."); return; }
 
   // Detect jsPDF constructor
   let jsPDFClass;
@@ -507,20 +651,25 @@ function generarReportePDF() {
   
   doc.setTextColor(30, 41, 59);
   doc.setFont("helvetica", "bold");
-  doc.setFontSize(11);
-  doc.text("Estudiante:", 20, 51);
+  doc.setFontSize(10);
+  doc.text("Estudiante:", 20, 50);
   doc.setFont("helvetica", "normal");
-  doc.text(nombre, 45, 51);
+  doc.text(nombre, 42, 50);
   
   doc.setFont("helvetica", "bold");
-  doc.text("Docente:", 20, 59);
+  doc.text("Cédula (CI):", 20, 58);
   doc.setFont("helvetica", "normal");
-  doc.text("Profesor Mario Morena", 45, 59);
+  doc.text(ci, 42, 58);
   
   doc.setFont("helvetica", "bold");
-  doc.text("Fecha:", 120, 51);
+  doc.text("Docente:", 115, 50);
   doc.setFont("helvetica", "normal");
-  doc.text(new Date().toLocaleDateString(), 138, 51);
+  doc.text("Profesor Mario Morena", 135, 50);
+  
+  doc.setFont("helvetica", "bold");
+  doc.text("Fecha:", 115, 58);
+  doc.setFont("helvetica", "normal");
+  doc.text(new Date().toLocaleDateString(), 135, 58);
   
   doc.setFont("helvetica", "bold");
   doc.text("Clase:", 120, 59);
@@ -646,7 +795,9 @@ function mostrarSiguientePaso() {
 
 function descargarReporteTXT() {
   const nombre = document.getElementById('student-name').value.trim();
+  const ci = getCleanCI();
   if(!nombre) { alert("⚠️ Escribí tu nombre antes de descargar el reporte."); return; }
+  if(!ci) { alert("⚠️ Escribí tu Cédula de Identidad (CI) antes de descargar el reporte."); return; }
 
   const titulos = [
     "El Cuadrado Compacto", "Caminata con Aplausos", "Contador Visual",
@@ -658,6 +809,7 @@ function descargarReporteTXT() {
   contenido += `REPORTE: BUCLES EFICIENTES EN SCRATCH — CLASE 2\n`;
   contenido += `======================================================================\n\n`;
   contenido += `Estudiante: ${nombre}\n`;
+  contenido += `Cédula (CI): ${ci}\n`;
   contenido += `Profesor: Mario Morena\n`;
   contenido += `Fecha de generación: ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\n\n`;
   contenido += `----------------------------------------------------------------------\n\n`;
