@@ -333,6 +333,19 @@ body.all-caps { text-transform: uppercase; }
   </div>
 </div>
 
+<!-- MODAL DE CONFIRMACIÓN PERSONALIZADO (Sin depender de window.confirm) -->
+<div id="custom-confirm-modal" style="display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.65); z-index: 10000; align-items: center; justify-content: center; padding: 20px;">
+  <div style="background: white; border-radius: 16px; padding: 24px; max-width: 420px; width: 100%; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.25); border: 1px solid #cbd5e1; text-align: center;">
+    <div id="confirm-modal-icon" style="font-size: 38px; margin-bottom: 10px;">⚠️</div>
+    <h3 id="confirm-modal-title" style="font-size: 18px; font-weight: 800; color: #0f172a; margin-bottom: 8px;">Confirmar acción</h3>
+    <p id="confirm-modal-msg" style="font-size: 14px; color: #475569; line-height: 1.5; margin-bottom: 20px;">¿Estás seguro de realizar esta acción?</p>
+    <div style="display: flex; gap: 10px; justify-content: center;">
+      <button id="confirm-modal-btn-cancel" onclick="closeConfirmModal(false)" style="flex: 1; padding: 10px; background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; border-radius: 8px; font-weight: 700; font-size: 14px; cursor: pointer;">Cancelar</button>
+      <button id="confirm-modal-btn-ok" onclick="closeConfirmModal(true)" style="flex: 1; padding: 10px; background: #dc2626; color: white; border: none; border-radius: 8px; font-weight: 800; font-size: 14px; cursor: pointer;">Sí, confirmar</button>
+    </div>
+  </div>
+</div>
+
 </main>
 
 <script>
@@ -375,14 +388,19 @@ function showAdminBanner(message, type = 'success') {
   if (type === 'success') {
     banner.style.background = '#dcfce7';
     banner.style.color = '#15803d';
-    banner.style.border = '1px solid #86efac';
+    banner.style.border = '1.5px solid #86efac';
+  } else if (type === 'error') {
+    banner.style.background = '#fee2e2';
+    banner.style.color = '#991b1b';
+    banner.style.border = '1.5px solid #fca5a5';
   } else {
-    banner.style.background = '#fef3c7';
-    banner.style.color = '#b45309';
-    banner.style.border = '1px solid #fde047';
+    banner.style.background = '#e0f2fe';
+    banner.style.color = '#0369a1';
+    banner.style.border = '1.5px solid #bae6fd';
   }
-  banner.textContent = message;
-  setTimeout(() => { banner.style.display = 'none'; }, 4000);
+  banner.innerHTML = `<div style="display:flex; justify-content:space-between; align-items:center; width:100%;"><span>${message}</span><button onclick="document.getElementById('admin-banner').style.display='none'" style="background:transparent; border:none; font-weight:800; cursor:pointer; font-size:14px; margin-left:10px; color:inherit;">✕</button></div>`;
+  banner.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  setTimeout(() => { if (banner) banner.style.display = 'none'; }, 6000);
 }
 
 function verifyAdminPin() {
@@ -391,6 +409,7 @@ function verifyAdminPin() {
     document.getElementById('admin-auth-screen').style.display = 'none';
     document.getElementById('admin-panel-screen').style.display = 'block';
     renderAdminData();
+    showAdminBanner("🔓 Sesión de Administrador iniciada correctamente.", "info");
   } else {
     document.getElementById('pin-error').style.display = 'block';
   }
@@ -558,120 +577,182 @@ function renderAdminData() {
   listEl.innerHTML = html;
 }
 
+let pendingConfirmCallback = null;
+let pendingCancelCallback = null;
+
+function showCustomConfirm(title, msg, onOk, onCancel = null, isDanger = true) {
+  const modal = document.getElementById('custom-confirm-modal');
+  if (!modal) return;
+  document.getElementById('confirm-modal-title').textContent = title;
+  document.getElementById('confirm-modal-msg').textContent = msg;
+  
+  const okBtn = document.getElementById('confirm-modal-btn-ok');
+  if (isDanger) {
+    okBtn.style.background = '#dc2626';
+    document.getElementById('confirm-modal-icon').textContent = '⚠️';
+  } else {
+    okBtn.style.background = '#d97706';
+    document.getElementById('confirm-modal-icon').textContent = '✏️';
+  }
+
+  pendingConfirmCallback = onOk;
+  pendingCancelCallback = onCancel;
+  modal.style.display = 'flex';
+}
+
+function closeConfirmModal(result) {
+  const modal = document.getElementById('custom-confirm-modal');
+  if (modal) modal.style.display = 'none';
+  if (result) {
+    if (pendingConfirmCallback) pendingConfirmCallback();
+  } else {
+    if (pendingCancelCallback) pendingCancelCallback();
+  }
+  pendingConfirmCallback = null;
+  pendingCancelCallback = null;
+}
+
 function saveStudentEdit(oldCiKey, idx) {
   const rawCI = document.getElementById('edit-ci-' + idx).value;
   const newCI = rawCI.trim().replace(/[^0-9a-zA-Z]/g, '');
   const newName = document.getElementById('edit-name-' + idx).value.trim();
 
-  if (!newCI && !confirm("¿Querés guardar sin Cédula de Identidad? Se mantendrá como un registro general.")) {
-    return;
-  }
-
-  // Find all keys matching oldCiKey
-  const keysToUpdate = [];
-  for (let i = 0; i < localStorage.length; i++) {
-    const k = localStorage.key(i);
-    if (!k || !k.startsWith('scratch_') || k === 'scratch_students_registry' || k === 'scratch_last_ci') continue;
-    
-    if (oldCiKey === 'general') {
-      if (k.endsWith('_state')) keysToUpdate.push(k);
-    } else {
-      if (k.endsWith(`_ci_${oldCiKey}`)) keysToUpdate.push(k);
-    }
-  }
-
-  keysToUpdate.forEach(oldKey => {
-    try {
-      const dataStr = localStorage.getItem(oldKey);
-      if (!dataStr) return;
-      const parsed = JSON.parse(dataStr);
-
-      parsed.ci = newCI;
-      if (newName) parsed.nombre = newName;
-      parsed.lastUpdated = new Date().toISOString();
-
-      const claseId = parsed.claseId || (oldKey.includes('clase_1') ? 'scratch1' : oldKey.includes('clase_2') ? 'scratch2' : 'scratch3');
-      const numClase = claseId === 'scratch1' ? '1' : claseId === 'scratch2' ? '2' : '3';
-
-      const newKey = newCI ? `scratch_clase_${numClase}_ci_${newCI}` : `scratch_clase_${numClase}_state`;
-
-      localStorage.setItem(newKey, JSON.stringify(parsed));
-      if (newKey !== oldKey) {
-        localStorage.removeItem(oldKey);
-      }
-    } catch(e) {
-      console.error("Error migrating key", oldKey, e);
-    }
-  });
-
-  // Update Registry
-  try {
-    const regData = localStorage.getItem('scratch_students_registry');
-    if (regData) {
-      const registry = JSON.parse(regData);
-      delete registry[`ci_${oldCiKey}`];
-      delete registry[oldCiKey];
-
-      const newRegKey = newCI ? `ci_${newCI}` : 'general';
-      if (!registry[newRegKey]) {
-        registry[newRegKey] = { ci: newCI || 'Sin CI', name: newName || 'Estudiante', classes: {}, lastUpdated: new Date().toISOString() };
+  const doSave = () => {
+    // Find all keys matching oldCiKey
+    const keysToUpdate = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (!k || !k.startsWith('scratch_') || k === 'scratch_students_registry' || k === 'scratch_last_ci') continue;
+      
+      if (oldCiKey === 'general') {
+        if (k.endsWith('_state')) keysToUpdate.push(k);
       } else {
-        if (newName) registry[newRegKey].name = newName;
-        registry[newRegKey].lastUpdated = new Date().toISOString();
+        if (k.endsWith(`_ci_${oldCiKey}`)) keysToUpdate.push(k);
       }
-      localStorage.setItem('scratch_students_registry', JSON.stringify(registry));
     }
-  } catch(e){}
 
-  if (newCI) {
-    try { localStorage.setItem('scratch_last_ci', newCI); } catch(e){}
+    keysToUpdate.forEach(oldKey => {
+      try {
+        const dataStr = localStorage.getItem(oldKey);
+        if (!dataStr) return;
+        const parsed = JSON.parse(dataStr);
+
+        parsed.ci = newCI;
+        if (newName) parsed.nombre = newName;
+        parsed.lastUpdated = new Date().toISOString();
+
+        const claseId = parsed.claseId || (oldKey.includes('clase_1') ? 'scratch1' : oldKey.includes('clase_2') ? 'scratch2' : 'scratch3');
+        const numClase = claseId === 'scratch1' ? '1' : claseId === 'scratch2' ? '2' : '3';
+
+        const newKey = newCI ? `scratch_clase_${numClase}_ci_${newCI}` : `scratch_clase_${numClase}_state`;
+
+        localStorage.setItem(newKey, JSON.stringify(parsed));
+        if (newKey !== oldKey) {
+          localStorage.removeItem(oldKey);
+        }
+      } catch(e) {
+        console.error("Error migrating key", oldKey, e);
+      }
+    });
+
+    // Update Registry
+    try {
+      const regData = localStorage.getItem('scratch_students_registry');
+      if (regData) {
+        const registry = JSON.parse(regData);
+        delete registry[`ci_${oldCiKey}`];
+        delete registry[oldCiKey];
+
+        const newRegKey = newCI ? `ci_${newCI}` : 'general';
+        if (!registry[newRegKey]) {
+          registry[newRegKey] = { ci: newCI || 'Sin CI', name: newName || 'Estudiante', classes: {}, lastUpdated: new Date().toISOString() };
+        } else {
+          if (newName) registry[newRegKey].name = newName;
+          registry[newRegKey].lastUpdated = new Date().toISOString();
+        }
+        localStorage.setItem('scratch_students_registry', JSON.stringify(registry));
+      }
+    } catch(e){}
+
+    if (newCI) {
+      try { localStorage.setItem('scratch_last_ci', newCI); } catch(e){}
+    }
+
+    showAdminBanner(`✅ Datos actualizados con éxito: ${newName || 'Estudiante'} ${newCI ? '(CI: ' + newCI + ')' : '(Sin Cédula)'}`, "success");
+    renderAdminData();
+  };
+
+  if (!newCI) {
+    showCustomConfirm(
+      "¿Guardar sin Cédula?",
+      "No ingresaste Cédula de Identidad para el estudiante. ¿Deseás guardar la ficha como registro general?",
+      doSave,
+      () => showAdminBanner("⚠️ Edición cancelada. No se modificó la Cédula.", "info"),
+      false
+    );
+  } else {
+    doSave();
   }
-
-  showAdminBanner("✅ Datos del estudiante actualizados correctamente.");
-  renderAdminData();
 }
 
 function deleteStudentData(ci) {
-  if (!confirm(`¿Confirmás borrar todos los archivos guardados para el alumno (CI: "${ci}") en este equipo?`)) return;
+  const displayCi = (ci && ci !== 'general') ? ci : 'Sin Cédula';
+  
+  showCustomConfirm(
+    "🗑️ Borrar Archivo de Estudiante",
+    `¿Confirmás eliminar todos los registros guardados para el estudiante (CI: "${displayCi}") en este equipo?`,
+    () => {
+      try {
+        const regData = localStorage.getItem('scratch_students_registry');
+        if (regData) {
+          const registry = JSON.parse(regData);
+          delete registry[`ci_${ci}`];
+          delete registry[ci];
+          localStorage.setItem('scratch_students_registry', JSON.stringify(registry));
+        }
+      } catch(e){}
 
-  try {
-    const regData = localStorage.getItem('scratch_students_registry');
-    if (regData) {
-      const registry = JSON.parse(regData);
-      delete registry[`ci_${ci}`];
-      delete registry[ci];
-      localStorage.setItem('scratch_students_registry', JSON.stringify(registry));
-    }
-  } catch(e){}
+      const keysToRemove = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (k && (k.endsWith(`_ci_${ci}`) || (ci === 'general' && k.endsWith('_state')))) {
+          keysToRemove.push(k);
+        }
+      }
+      keysToRemove.forEach(k => localStorage.removeItem(k));
 
-  const keysToRemove = [];
-  for (let i = 0; i < localStorage.length; i++) {
-    const k = localStorage.key(i);
-    if (k && (k.endsWith(`_ci_${ci}`) || (ci === 'general' && k.endsWith('_state')))) {
-      keysToRemove.push(k);
-    }
-  }
-  keysToRemove.forEach(k => localStorage.removeItem(k));
-
-  showAdminBanner("🗑️ Registro de estudiante eliminado de este equipo.");
-  renderAdminData();
+      showAdminBanner(`🗑️ Registro del estudiante (CI: "${displayCi}") eliminado de este equipo.`, "success");
+      renderAdminData();
+    },
+    () => {
+      showAdminBanner("ℹ️ Operación cancelada. Se conservaron los datos del estudiante.", "info");
+    },
+    true
+  );
 }
 
 function clearAllStudentData() {
-  if (!confirm("⚠️ ¿ATENCIÓN: Estás seguro de borrar TODOS los archivos persistentes de TODOS los estudiantes en esta máquina?")) return;
-  if (!confirm("⚠️ Confirmación final: Esta acción eliminará permanentemente todos los progresos de Scratch guardados en este equipo.")) return;
+  showCustomConfirm(
+    "⚠️ BORRAR TODO EL EQUIPO",
+    "¿Estás seguro de eliminar permanentemente TODOS los archivos e historiales de Scratch guardados en este equipo?",
+    () => {
+      const keysToRemove = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (k && k.startsWith('scratch_')) {
+          keysToRemove.push(k);
+        }
+      }
+      keysToRemove.forEach(k => localStorage.removeItem(k));
 
-  const keysToRemove = [];
-  for (let i = 0; i < localStorage.length; i++) {
-    const k = localStorage.key(i);
-    if (k && k.startsWith('scratch_')) {
-      keysToRemove.push(k);
-    }
-  }
-  keysToRemove.forEach(k => localStorage.removeItem(k));
-
-  showAdminBanner("🧹 Todos los archivos guardados han sido borrados de este equipo.");
-  renderAdminData();
+      showAdminBanner("🧹 Todos los archivos guardados han sido borrados de este equipo.", "success");
+      renderAdminData();
+    },
+    () => {
+      showAdminBanner("ℹ️ Operación cancelada. Se conservaron todos los archivos del equipo.", "info");
+    },
+    true
+  );
 }
 </script>
 

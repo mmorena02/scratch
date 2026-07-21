@@ -623,6 +623,12 @@ function generarReportePDF() {
   if(!nombre) { alert("⚠️ Escribí tu nombre antes de descargar el PDF."); return; }
   if(!ci) { alert("⚠️ Escribí tu Cédula de Identidad (CI) antes de descargar el PDF."); return; }
 
+  const completedCount = done.filter(Boolean).length;
+  if (completedCount < 9) {
+    alert(`⚠️ No se puede generar el reporte: Tenés ${completedCount} de 9 actividades guardadas.\n\nPara poder descargar tu reporte debés completar la consigna y hacer clic en "✓ Guardar" en los 9 desafíos de la clase.`);
+    return;
+  }
+
   // Detect jsPDF constructor
   let jsPDFClass;
   if (window.jspdf && window.jspdf.jsPDF) {
@@ -817,6 +823,12 @@ function descargarReporteTXT() {
   const ci = getCleanCI();
   if(!nombre) { alert("⚠️ Escribí tu nombre antes de descargar el reporte."); return; }
   if(!ci) { alert("⚠️ Escribí tu Cédula de Identidad (CI) antes de descargar el reporte."); return; }
+
+  const completedCount = done.filter(Boolean).length;
+  if (completedCount < 9) {
+    alert(`⚠️ No se puede generar el reporte: Tenés ${completedCount} de 9 actividades guardadas.\n\nPara poder descargar tu reporte debés completar la consigna y hacer clic en "✓ Guardar" en los 9 desafíos de la clase.`);
+    return;
+  }
 
   const titulos = [
     "El Primer Paso", "Salto de Fe", "Giro Equivocado",
