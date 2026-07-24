@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Condicionales en Scratch — Clase 4 (Versión Completa 9 Ejercicios)</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+:root {
+  --bg: #F0F4F8;
+  --card: #FFFFFF;
+  --text: #1a1a2e;
+  --text-muted: #555e6d;
+  --scratch-orange: #FF8C00;
+  --scratch-blue: #4C97FF;
+  --scratch-purple: #9966FF;
+  --scratch-green: #59C059;
+  --scratch-red: #EF4444;
+  --scratch-yellow: #FFAB19;
+  --radius: 16px;
+  --shadow: 0 4px 16px rgba(0,0,0,0.06);
+  --easy-bg: #E0F2FE; --easy-text: #0369a1;
+  --med-bg: #FEF3C7;  --med-text: #b45309;
+  --hard-bg: #FEE2E2; --hard-text: #b91c1c;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 0; font-size: 17px; }
+body.all-caps, body.all-caps .block, body.all-caps textarea, body.all-caps input, body.all-caps .check { text-transform: uppercase; }
+
+.page-header { background: #1e293b; padding: 3rem 2rem 2.5rem; position: relative; overflow: hidden; }
+.header-inner { max-width: 800px; margin: 0 auto; position: relative; z-index: 1; }
+.header-tag { display: inline-block; background: #eab308; color: #1e293b; font-size: 13px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; padding: 6px 14px; border-radius: 20px; margin-bottom: 16px; }
+.page-header h1 { font-size: 34px; font-weight: 800; color: #fff; margin-bottom: 12px; }
+.page-header p { font-size: 18px; color: rgba(255,255,255,0.85); line-height: 1.6; max-width: 650px; }
+
+.main { max-width: 800px; margin: 0 auto; padding: 2.5rem 2rem; }
+.acc-bar { display: flex; gap: 10px; justify-content: flex-end; margin-bottom: 1.5rem; }
+.btn-acc { background: #ffffff; border: 1.5px solid #cbd5e1; font-family: inherit; font-size: 14px; font-weight: 700; padding: 6px 14px; border-radius: 20px; cursor: pointer; }
+.btn-acc.active { background: #e0f2fe; border-color: var(--scratch-blue); color: #0369a1; }
+
+.student-info-card { background: var(--card); border: 2px dashed #eab308; border-radius: var(--radius); padding: 1.5rem; margin-bottom: 2rem; box-shadow: var(--shadow); }
+.student-info-card h3 { font-size: 18px; font-weight: 800; margin-bottom: 12px; color: #854d0e; }
+.student-fields input { width: 100%; padding: 10px 14px; font-size: 16px; font-weight: 600; border: 2px solid #cbd5e1; border-radius: 8px; font-family: inherit; }
+
+.section-label { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--text-muted); margin: 2rem 0 16px; display: flex; align-items: center; gap: 10px; }
+.section-label::after { content: ''; flex: 1; height: 2px; background: rgba(0,0,0,0.06); }
+
+.concept-card { background: var(--card); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: var(--shadow); }
+.scratch-blocks { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+.block { font-family: 'Space Mono', monospace; font-size: 13px; font-weight: 700; padding: 6px 12px; border-radius: 6px; color: #fff; }
+.block-events  { background: #FFBF00; color: #1a1a2e; }
+.block-move    { background: var(--scratch-blue); }
+.block-control { background: #FFAB19; color: #1a1a2e; }
+.block-data    { background: #FF8C1A; }
+.block-looks   { background: var(--scratch-purple); }
+.block-sound   { background: #CF63CF; }
+.block-ops     { background: #59C059; }
+.block-sensing { background: #4CBFE6; }
+
+/* Selector de Dificultad */
+.difficulty-selector { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 2rem; }
+.diff-btn { font-family: inherit; font-size: 15px; font-weight: 800; padding: 12px; border-radius: 12px; border: 2px solid #cbd5e1; background: #fff; cursor: pointer; text-align: center; }
+.diff-btn.easy-tab.active { background: var(--easy-bg); border-color: var(--easy-text); color: var(--easy-text); }
+.diff-btn.med-tab.active  { background: var(--med-bg);  border-color: var(--med-text);  color: var(--med-text);  }
+.diff-btn.hard-tab.active { background: var(--hard-bg); border-color: var(--hard-text); color: var(--hard-text); }
+
+/* Bloques de Desafíos */
+.challenges-grid { display: none; flex-direction: column; gap: 1.5rem; margin-bottom: 2.5rem; }
+.challenges-grid.active { display: flex; }
+.ch-card { background: var(--card); border: 1.5px solid rgba(0,0,0,0.06); border-radius: var(--radius); padding: 1.5rem; box-shadow: var(--shadow); }
+.ch-card.done { border-color: #6ee7b7 !important; background: #f0fdf4; }
+.ch-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+.ch-num { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; background: #e2e8f0; }
+.ch-title { font-size: 18px; font-weight: 800; }
+.ch-desc { font-size: 15px; color: var(--text-muted); margin-bottom: 12px; line-height: 1.5; }
+.ch-hint { font-family: 'Space Mono', monospace; font-size: 13px; color: #475569; background: #f1f5f9; padding: 6px 12px; border-radius: 6px; display: inline-block; margin-bottom: 12px; }
+
+.evidence-container { margin-top: 12px; background: #f8fafc; padding: 12px; border-radius: 10px; border: 2px dashed #93c5fd; }
+.ch-card.done .evidence-container { border-color: #a7f3d0; background: #f4fbf7; }
+.drop-zone { height: 110px; border: 2px dashed #cbd5e1; border-radius: 8px; display: flex; align-items: center; justify-content: center; background: #ffffff; cursor: pointer; color: #64748b; font-size: 13px; position: relative; overflow: hidden; text-align: center; padding: 5px; }
+.drop-zone img { max-height: 100%; max-width: 100%; object-fit: contain; }
+
+.ch-solution-area { margin: 10px 0; }
+.ch-solution-area label { font-size: 14px; font-weight: 700; display: block; margin-bottom: 4px; }
+.ch-solution-area textarea { width: 100%; height: 65px; padding: 8px; font-size: 15px; font-family: inherit; border: 1.5px solid #cbd5e1; border-radius: 8px; resize: none; }
+
+.ch-footer { display: flex; align-items: center; gap: 12px; margin-top: 10px; }
+.btn-done { font-family: inherit; font-size: 14px; font-weight: 700; padding: 6px 16px; border-radius: 20px; border: none; background: #1e293b; color: #fff; cursor: pointer; }
+.done-msg { font-size: 14px; font-weight: 700; color: #16a34a; display: none; }
+.ch-card.done .btn-done { display: none; }
+.ch-card.done .done-msg { display: block; }
+
+.progress-container { background: var(--card); padding: 1.5rem; border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 2.5rem; text-align: center; }
+.pbar-bg { width: 100%; height: 12px; background: #e2e8f0; border-radius: 6px; overflow: hidden; margin: 10px 0; }
+.pbar-fill { width: 0%; height: 100%; background: #eab308; transition: width .3s; }
+
+.report-section { text-align: center; margin-bottom: 3rem; }
+.btn-generate-report { font-family: inherit; font-size: 18px; font-weight: 800; color: #fff; background: #d97706; border: none; padding: 14px 36px; border-radius: 30px; cursor: pointer; box-shadow: 0 10px 15px -3px rgba(217,119,6,0.25); }
+
+/* Rubrica */
+.rubric-card { background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: var(--radius); padding: 1.5rem; margin-top: 2rem; }
+.rubric-table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 14px; }
+.rubric-table th, .rubric-table td { padding: 10px; border: 1px solid #cbd5e1; text-align: left; }
+.rubric-table th { background: #e2e8f0; font-weight: 800; }
+
+/* REPORTE DE EVALUACIÓN OCULTO */
+#report-view { display: none; background: white; padding: 30px; font-family: 'Nunito', sans-serif; color: #1e293b; }
+.report-header { border-bottom: 3px solid #eab308; padding-bottom: 15px; margin-bottom: 20px; }
+.report-item { margin-bottom: 20px; page-break-inside: avoid; border-bottom: 1px solid #e2e8f0; padding-bottom: 15px; }
+.report-img { max-width: 100%; max-height: 250px; border: 1px solid #cbd5e1; border-radius: 8px; margin-top: 10px; display: block; }
+
+@media (max-width: 600px) {
+  .difficulty-selector { grid-template-columns: 1fr; }
+  .page-header h1 { font-size: 26px; }
+}
+</style>
+</head>
+<body>
+
+<header class="page-header">
+  <div class="header-inner">
+    <a href="index.html" style="color: #cbd5e1; text-decoration: none; font-size: 14px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; margin-bottom: 12px;">← Volver al Portal de Clases</a>
+    <span class="header-tag">Clase 4 · Condicionales y Toma de Decisiones</span>
+    <h1>Condicionales en Scratch</h1>
+    <p>Aprende a programar decisiones lógicas en tus objetos usando bloques "si ... entonces", "si ... si no" y sensores interactivos para responder al usuario y al entorno.</p>
+  </div>
+</header>
+
+<main class="main">
+  
+  <div class="acc-bar">
+    <button class="btn-acc" onclick="toggleCaps()">Abc → ABC</button>
+  </div>
+
+  <div class="student-info-card">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 12px;">
+      <h3 style="margin: 0; font-size: 18px; font-weight: 800; color: #854d0e;">📝 Datos del Estudiante</h3>
+      <button type="button" onclick="openFileSelectionModal()" style="background: #2563eb; color: white; border: none; padding: 8px 16px; border-radius: 20px; font-weight: 800; font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 8px rgba(37,99,235,0.25);">
+        ✨ Cambiar / Nuevo Estudiante
+      </button>
+    </div>
+    <div class="student-fields" style="display: flex; gap: 15px; flex-wrap: wrap; margin-top: 10px;">
+      <div style="flex: 1; min-width: 200px;">
+        <label for="student-ci" style="display: block; font-size: 13px; font-weight: 700; color: var(--text-muted); margin-bottom: 4px;">Cédula de Identidad (CI):</label>
+        <input type="text" id="student-ci" placeholder="Ej: 12345678" style="border-color: #cbd5e1;">
+      </div>
+      <div style="flex: 2; min-width: 250px;">
+        <label for="student-name" style="display: block; font-size: 13px; font-weight: 700; color: var(--text-muted); margin-bottom: 4px;">Nombre Completo:</label>
+        <input type="text" id="student-name" placeholder="Tu nombre y apellido..." style="border-color: #cbd5e1;">
+      </div>
+    </div>
+    <div id="save-status-badge" style="margin-top: 12px; font-size: 13px; font-weight: 800; color: #475569; display: flex; align-items: center; gap: 6px;">
+      ℹ️ Los cambios que realices se guardarán automáticamente en este equipo.
+    </div>
+  </div>
+
+  <div class="concept-card">
+    <h3 style="font-size: 18px; font-weight: 800; margin-bottom: 10px; color: #eab308;">💡 ¿Qué son las estructuras condicionales?</h3>
+    <p style="font-size: 15px; color: var(--text-muted); line-height: 1.6;">
+      Las <strong>estructuras condicionales</strong> permiten que un programa evalúe si algo es verdadero o falso, y tome una decisión en consecuencia. Son la base de la inteligencia lógica de cualquier software o juego.
+    </p>
+    <div class="scratch-blocks">
+      <span class="block block-control">si &lt;condición&gt; entonces</span>
+      <span class="block block-control">si &lt;condición&gt; si no</span>
+      <span class="block block-sensing">¿tocando [objeto / color]?</span>
+      <span class="block block-sensing">¿tecla [espacio] presionada?</span>
+      <span class="block block-ops">( [puntos] &gt; [50] )</span>
+      <span class="block block-ops">( &lt;condición 1&gt; y &lt;condición 2&gt; )</span>
+    </div>
+  </div>
+
+  <div class="section-label">Seleccioná el Nivel de Desafío</div>
+
+  <div class="difficulty-selector">
+    <button class="diff-btn easy-tab active" onclick="switchTab('easy')">🟢 FÁCIL (1 a 3)</button>
+    <button class="diff-btn med-tab" onclick="switchTab('med')">🟡 MEDIO (4 a 6)</button>
+    <button class="diff-btn hard-tab" onclick="switchTab('hard')">🔴 DIFÍCIL (7 a 9)</button>
+  </div>
+
+  <!-- CONTENEDOR FÁCIL -->
+  <div id="grid-easy" class="challenges-grid active">
+    
+    <!-- DESAFÍO 1 -->
+    <div class="ch-card" id="ch1">
+      <div class="ch-header">
+        <div class="ch-num">1</div>
+        <div class="ch-title">Detección de Teclas con Bloque "Si"</div>
+      </div>
+      <div class="ch-desc">
+        Programa a un personaje para que, cuando se presione la <strong>Flecha Derecha</strong>, el programa evalúe mediante un bloque <code>si &lt;¿tecla flecha derecha presionada?&gt; entonces</code> para cambiar de disfraz y mover el objeto 10 pasos a la derecha.
+      </div>
+      <div class="ch-hint">💡 Pista: Colocá el bloque "si" dentro de un bucle "por siempre" conectado a la Bandera Verde.</div>
+      <div class="evidence-container">
+        <label style="font-size: 13px; font-weight: 700; display: block; margin-bottom: 6px;">📸 Captura de bloques (Mover con si + sensor):</label>
+        <div class="drop-zone" onclick="triggerUpload(1)" id="drop1">
+          <span>Hacé clic aquí para cargar la imagen del código en Scratch</span>
+          <input type="file" id="file1" accept="image/*" style="display:none" onchange="handleFile(1, this.files[0])">
+        </div>
+      </div>
+      <div class="ch-solution-area">
+        <label for="ans1">✍️ Pregunta: ¿Por qué es necesario envolver el bloque "si" dentro de un bucle "por siempre"?</label>
+        <textarea id="ans1" placeholder="Escribí tu respuesta aquí..."></textarea>
+      </div>
+      <div class="ch-footer">
+        <button class="btn-done" onclick="markDone(1)">Marcar como Completado</button>
+        <span class="done-msg">✓ ¡Desafío 1 Guardado!</span>
+      </div>
+    </div>
+
+    <!-- DESAFÍO 2 -->
+    <div class="ch-card" id="ch2">
+      <div class="ch-header">
+        <div class="ch-num">2</div>
+        <div class="ch-title">Aviso de Límite al Tocar el Borde</div>
+      </div>
+      <div class="ch-desc">
+        Haz que un personaje avance continuamente por la pantalla. Utiliza un condicional <code>si &lt;¿tocando el borde?&gt; entonces</code> para que al llegar a la orilla diga <em>"¡Alcancé el límite!"</em> durante 2 segundos y luego rebote.
+      </div>
+      <div class="ch-hint">💡 Pista: Bloque de Apariencia "decir [¡Alcancé el límite!] por 2 segundos" dentro del bloque "si".</div>
+      <div class="evidence-container">
+        <label style="font-size: 13px; font-weight: 700; display: block; margin-bottom: 6px;">📸 Captura del código condicional de borde:</label>
+        <div class="drop-zone" onclick="triggerUpload(2)" id="drop2">
+          <span>Hacé clic aquí para cargar la imagen del código</span>
+          <input type="file" id="file2" accept="image/*" style="display:none" onchange="handleFile(2, this.files[0])">
+        </div>
+      </div>
+      <div class="ch-solution-area">
+        <label for="ans2">✍️ Pregunta: ¿Qué ocurre si eliminas la condición "si tocando el borde"?</label>
+        <textarea id="ans2" placeholder="Explicá lo que sucedería sin el condicional..."></textarea>
+      </div>
+      <div class="ch-footer">
+        <button class="btn-done" onclick="markDone(2)">Marcar como Completado</button>
+        <span class="done-msg">✓ ¡Desafío 2 Guardado!</span>
+      </div>
+    </div>
+
+    <!-- DESAFÍO 3 -->
+    <div class="ch-card" id="ch3">
+      <div class="ch-header">
+        <div class="ch-num">3</div>
+        <div class="ch-title">Detector de Peligro / Color Rojo</div>
+      </div>
+      <div class="ch-desc">
+        Dibuja una zona o línea de color rojo (lava o peligro) en el escenario. Configura al personaje para que al tocar ese color (<code>si &lt;¿tocando el color rojo?&gt; entonces</code>) diga <em>"¡Cuidado, es peligroso!"</em> y vuelva a la posición inicial <code>x: -180, y: 0</code>.
+      </div>
+      <div class="ch-hint">💡 Pista: Usá el cuentagotas en el sensor de color para seleccionar el rojo exacto.</div>
+      <div class="evidence-container">
+        <label style="font-size: 13px; font-weight: 700; display: block; margin-bottom: 6px;">📸 Captura del programa con sensor de color:</label>
+        <div class="drop-zone" onclick="triggerUpload(3)" id="drop3">
+          <span>Hacé clic aquí para cargar la imagen del programa</span>
+          <input type="file" id="file3" accept="image/*" style="display:none" onchange="handleFile(3, this.files[0])">
+        </div>
+      </div>
+      <div class="ch-solution-area">
+        <label for="ans3">✍️ Pregunta: ¿Para qué sirve reubicar al personaje a las coordenadas (x: -180, y: 0) al detectar la condición?</label>
+        <textarea id="ans3" placeholder="Escribí tu explicación..."></textarea>
+      </div>
+      <div class="ch-footer">
+        <button class="btn-done" onclick="markDone(3)">Marcar como Completado</button>
+        <span class="done-msg">✓ ¡Desafío 3 Guardado!</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- CONTENEDOR MEDIO -->
+  <div id="grid-med" class="challenges-grid">
+    
+    <!-- DESAFÍO 4 -->
+    <div class="ch-card" id="ch4">
+      <div class="ch-header">
+        <div class="ch-num">4</div>
+        <div class="ch-title">Semáforo Inteligente con "Si ... Si No"</div>
+      </div>
+      <div class="ch-desc">
+        Crea una variable llamada <code>EstadoSemaforo</code>. Utiliza la estructura doble <code>si &lt;EstadoSemaforo = Verde&gt; entonces ... si no ...</code> para que el auto avance si la variable es "Verde", o de lo contrario se detenga y diga <em>"Detenido por semáforo en rojo"</em>.
+      </div>
+      <div class="ch-hint">💡 Pista: El bloque "si / si no" permite manejar dos caminos alternativos en un solo bloque.</div>
+      <div class="evidence-container">
+        <label style="font-size: 13px; font-weight: 700; display: block; margin-bottom: 6px;">📸 Captura de la estructura Si / Si No:</label>
+        <div class="drop-zone" onclick="triggerUpload(4)" id="drop4">
+          <span>Hacé clic aquí para cargar la imagen</span>
+          <input type="file" id="file4" accept="image/*" style="display:none" onchange="handleFile(4, this.files[0])">
+        </div>
+      </div>
+      <div class="ch-solution-area">
+        <label for="ans4">✍️ Pregunta: ¿Qué ventaja tiene usar "si ... si no" en lugar de dos bloques "si" separados?</label>
+        <textarea id="ans4" placeholder="Compará ambas opciones..."></textarea>
+      </div>
+      <div class="ch-footer">
+        <button class="btn-done" onclick="markDone(4)">Marcar como Completado</button>
+        <span class="done-msg">✓ ¡Desafío 4 Guardado!</span>
+      </div>
+    </div>
+
+    <!-- DESAFÍO 5 -->
+    <div class="ch-card" id="ch5">
+      <div class="ch-header">
+        <div class="ch-num">5</div>
+        <div class="ch-title">Evaluador de Puntajes (&gt; 50)</div>
+      </div>
+      <div class="ch-desc">
+        Crea una variable <code>Puntaje</code>. Programa al personaje para evaluar: <code>si &lt;Puntaje &gt; 50&gt; entonces</code> celebrar diciendo <em>"¡Nivel superado con Medalla de Oro!"</em>. <code>Si no</code>, alentar con <em>"Sigue jugando para alcanzar 50 puntos"</em>.
+      </div>
+      <div class="ch-hint">💡 Pista: Usa el operador verde de comparación &gt; (mayor que) de la categoría Operadores.</div>
+      <div class="evidence-container">
+        <label style="font-size: 13px; font-weight: 700; display: block; margin-bottom: 6px;">📸 Captura del código con comparador numérico:</label>
+        <div class="drop-zone" onclick="triggerUpload(5)" id="drop5">
+          <span>Hacé clic aquí para cargar la imagen</span>
+          <input type="file" id="file5" accept="image/*" style="display:none" onchange="handleFile(5, this.files[0])">
+        </div>
+      </div>
+      <div class="ch-solution-area">
+        <label for="ans5">✍️ Pregunta: Si el Puntaje es exactamente igual a 50, ¿qué camino ejecutará el programa y por qué?</label>
+        <textarea id="ans5" placeholder="Analizá qué sucede con 50 puntos exactamente..."></textarea>
+      </div>
+      <div class="ch-footer">
+        <button class="btn-done" onclick="markDone(5)">Marcar como Completado</button>
+        <span class="done-msg">✓ ¡Desafío 5 Guardado!</span>
+      </div>
+    </div>
+
+    <!-- DESAFÍO 6 -->
+    <div class="ch-card" id="ch6">
+      <div class="ch-header">
+        <div class="ch-num">6</div>
+        <div class="ch-title">Pregunta y Control de Entrada de Usuario</div>
+      </div>
+      <div class="ch-desc">
+        Haz que un personaje pregunte <em>"¿Cuántos años tienes?"</em> con el bloque <code>preguntar [...] y esperar</code>. Luego evalúa con un condicional: <code>si &lt;respuesta &gt; 11&gt; entonces</code> dar la bienvenida, <code>si no</code> pedir autorización de un adulto.
+      </div>
+      <div class="ch-hint">💡 Pista: Insertá el bloque "respuesta" (de Sensores) dentro de la comparación del condicional.</div>
+      <div class="evidence-container">
+        <label style="font-size: 13px; font-weight: 700; display: block; margin-bottom: 6px;">📸 Captura del programa con pregunta y respuesta:</label>
+        <div class="drop-zone" onclick="triggerUpload(6)" id="drop6">
+          <span>Hacé clic aquí para cargar la imagen</span>
+          <input type="file" id="file6" accept="image/*" style="display:none" onchange="handleFile(6, this.files[0])">
+        </div>
+      </div>
+      <div class="ch-solution-area">
+        <label for="ans6">✍️ Pregunta: ¿Cómo guarda Scratch la información que escribe el usuario cuando se usa el bloque "preguntar"?</label>
+        <textarea id="ans6" placeholder="Explicá el funcionamiento del bloque 'respuesta'..."></textarea>
+      </div>
+      <div class="ch-footer">
+        <button class="btn-done" onclick="markDone(6)">Marcar como Completado</button>
+        <span class="done-msg">✓ ¡Desafío 6 Guardado!</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- CONTENEDOR DIFÍCIL -->
+  <div id="grid-hard" class="challenges-grid">
+    
+    <!-- DESAFÍO 7 -->
+    <div class="ch-card" id="ch7">
+      <div class="ch-header">
+        <div class="ch-num">7</div>
+        <div class="ch-title">La Llave y el Cofre (Condición Compuesta con "Y")</div>
+      </div>
+      <div class="ch-desc">
+        Para abrir un cofre se deben cumplir DOS condiciones al mismo tiempo: estar <code>¿tocando cofre?</code> <strong>Y</strong> que la variable <code>tengo_llave = 1</code>. Utiliza el operador verde <code>&lt;... y ...&gt;</code> dentro de la estructura condicional para abrir el cofre.
+      </div>
+      <div class="ch-hint">💡 Pista: Anidá ambos sensores dentro del bloque operador "y" (AND).</div>
+      <div class="evidence-container">
+        <label style="font-size: 13px; font-weight: 700; display: block; margin-bottom: 6px;">📸 Captura del condicional compuesto con operador Y:</label>
+        <div class="drop-zone" onclick="triggerUpload(7)" id="drop7">
+          <span>Hacé clic aquí para cargar la imagen</span>
+          <input type="file" id="file7" accept="image/*" style="display:none" onchange="handleFile(7, this.files[0])">
+        </div>
+      </div>
+      <div class="ch-solution-area">
+        <label for="ans7">✍️ Pregunta: ¿Qué sucede si el personaje toca el cofre pero no posee la llave (tengo_llave = 0)?</label>
+        <textarea id="ans7" placeholder="Escribí tu deducción lógica..."></textarea>
+      </div>
+      <div class="ch-footer">
+        <button class="btn-done" onclick="markDone(7)">Marcar como Completado</button>
+        <span class="done-msg">✓ ¡Desafío 7 Guardado!</span>
+      </div>
+    </div>
+
+    <!-- DESAFÍO 8 -->
+    <div class="ch-card" id="ch8">
+      <div class="ch-header">
+        <div class="ch-num">8</div>
+        <div class="ch-title">Control de Vidas y Game Over</div>
+      </div>
+      <div class="ch-desc">
+        Crea un juego donde al tocar un enemigo se resta 1 a la variable <code>Vidas</code>. Agrega un condicional evaluando continuamente: <code>si &lt;Vidas &lt; 1&gt; entonces</code> decir <em>"¡GAME OVER!"</em> por 2 segundos y ejecutar el bloque <code>detener [todos]</code>.
+      </div>
+      <div class="ch-hint">💡 Pista: Detener el juego evita que el jugador siga moviéndose cuando ya no le quedan vidas.</div>
+      <div class="evidence-container">
+        <label style="font-size: 13px; font-weight: 700; display: block; margin-bottom: 6px;">📸 Captura del sistema de Game Over:</label>
+        <div class="drop-zone" onclick="triggerUpload(8)" id="drop8">
+          <span>Hacé clic aquí para cargar la imagen</span>
+          <input type="file" id="file8" accept="image/*" style="display:none" onchange="handleFile(8, this.files[0])">
+        </div>
+      </div>
+      <div class="ch-solution-area">
+        <label for="ans8">✍️ Pregunta: ¿Por qué es fundamental congelar o detener el programa cuando la condición de Vidas llega a cero?</label>
+        <textarea id="ans8" placeholder="Explicá la importancia en la jugabilidad..."></textarea>
+      </div>
+      <div class="ch-footer">
+        <button class="btn-done" onclick="markDone(8)">Marcar como Completado</button>
+        <span class="done-msg">✓ ¡Desafío 8 Guardado!</span>
+      </div>
+    </div>
+
+    <!-- DESAFÍO 9 -->
+    <div class="ch-card" id="ch9">
+      <div class="ch-header">
+        <div class="ch-num">9</div>
+        <div class="ch-title">Proyecto Integrador: Laberinto Inteligente</div>
+      </div>
+      <div class="ch-desc">
+        Crea un minijuego de laberinto integrando condicionales múltiples: controles de movimiento con teclas, condicional si toca paredes (<code>si &lt;tocando color negro&gt; entonces rebotar/retroceder</code>) y condicional si llega a la meta para celebrar la victoria.
+      </div>
+      <div class="ch-hint">💡 Pista: Combina bucle "por siempre", varios bloques "si" independientes y sensores de color.</div>
+      <div class="evidence-container">
+        <label style="font-size: 13px; font-weight: 700; display: block; margin-bottom: 6px;">📸 Captura del Proyecto Integrador completo:</label>
+        <div class="drop-zone" onclick="triggerUpload(9)" id="drop9">
+          <span>Hacé clic aquí para cargar la imagen final del proyecto</span>
+          <input type="file" id="file9" accept="image/*" style="display:none" onchange="handleFile(9, this.files[0])">
+        </div>
+      </div>
+      <div class="ch-solution-area">
+        <label for="ans9">✍️ Pregunta: Reflexión final: ¿Por qué consideras que los condicionales son esenciales para que los videojuegos sean interactivos?</label>
+        <textarea id="ans9" placeholder="Escribí tu conclusión general de la clase..."></textarea>
+      </div>
+      <div class="ch-footer">
+        <button class="btn-done" onclick="markDone(9)">Marcar como Completado</button>
+        <span class="done-msg">✓ ¡Desafío 9 Guardado!</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- BARRA DE PROGRESO -->
+  <div class="progress-container">
+    <h3 style="font-size: 16px; font-weight: 800; color: var(--text-muted);">Progreso de la Ficha</h3>
+    <div class="pbar-bg">
+      <div class="pbar-fill" id="pbar"></div>
+    </div>
+    <span id="ptxt" style="font-size: 14px; font-weight: 800; color: var(--text);">0 de 9 desafíos guardados.</span>
+  </div>
+
+  <!-- BOTÓN GENERAR REPORTE -->
+  <div class="report-section">
+    <button class="btn-generate-report" onclick="generatePDF()">📄 Guardar y Generar Reporte PDF</button>
+  </div>
+
+  <!-- RÚBRICA DE EVALUACIÓN DOCENTE -->
+  <div class="rubric-card">
+    <h3 style="font-size: 16px; font-weight: 800; color: #1e293b; margin-bottom: 8px;">📋 Rúbrica de Evaluación Docente</h3>
+    <p style="font-size: 13px; color: var(--text-muted);">Esta ficha evalúa el desarrollo de competencias en pensamiento computacional y condicionales en Scratch:</p>
+    <table class="rubric-table">
+      <thead>
+        <tr>
+          <th>Criterio</th>
+          <th>Inicial</th>
+          <th>Desarrollo</th>
+          <th>Excelente</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Lógica Condicional</strong></td>
+          <td>Reconoce bloques "si" básicos sin bucles.</td>
+          <td>Aplica "si" y "si/sino" correctamente con sensores.</td>
+          <td>Combina condiciones compuestas (Y/O) y decisiones avanzadas.</td>
+        </tr>
+        <tr>
+          <td><strong>Uso de Sensores</strong></td>
+          <td>Usa teclas fijas sin condicionales.</td>
+          <td>Integra sensores de teclas y bordes en estructuras.</td>
+          <td>Sincroniza sensores de color, preguntas y variables compuestas.</td>
+        </tr>
+        <tr>
+          <td><strong>Justificación Escrita</strong></td>
+          <td>Respuestas breves o incompletas.</td>
+          <td>Explica adecuadamente el funcionamiento.</td>
+          <td>Argumenta con rigor conceptual la toma de decisiones del programa.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</main>
+
+<footer style="text-align: center; padding: 2rem; color: var(--text-muted); font-size: 14px; border-top: 1px solid rgba(0,0,0,0.06); margin-top: 2rem;">
+  Ficha Práctica Automatizada · Creado por <strong>Mario Morena</strong>
+</footer>
+
+<!-- MODAL SELECCIÓN DE ARCHIVOS DE ESTUDIANTES -->
+<div id="file-select-modal" style="display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.75); z-index: 9000; align-items: center; justify-content: center; backdrop-filter: blur(4px); padding: 20px;">
+  <div style="background: white; border-radius: 20px; max-width: 520px; width: 100%; max-height: 85vh; overflow-y: auto; padding: 28px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3); border: 1px solid #cbd5e1; position: relative;">
+    
+    <button onclick="closeFileSelectModal()" style="position: absolute; top: 18px; right: 20px; border: none; background: #f1f5f9; width: 34px; height: 34px; border-radius: 50%; font-size: 16px; font-weight: bold; cursor: pointer; color: #64748b;">✕</button>
+
+    <div style="text-align: center; margin-bottom: 20px;">
+      <div style="font-size: 40px; margin-bottom: 6px;">📂</div>
+      <h3 style="font-size: 20px; font-weight: 800; color: #0f172a;">Archivos en este equipo</h3>
+      <p style="font-size: 14px; color: #64748b; margin-top: 4px;" id="file-modal-subtitle">Se encontraron varios registros de estudiantes en esta máquina. Seleccioná tu trabajo o creá uno nuevo:</p>
+    </div>
+
+    <!-- Opción de Crear Nuevo Archivo -->
+    <button onclick="createNewStudentFile()" style="width: 100%; padding: 14px 18px; background: #f0fdf4; border: 2px dashed #22c55e; border-radius: 12px; font-size: 15px; font-weight: 800; color: #15803d; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 16px;">
+      <span style="font-size: 20px;">➕</span>
+      <span>Comenzar una FICHA NUEVA (Otro Estudiante)</span>
+    </button>
+
+    <div style="font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #94a3b8; margin-bottom: 10px; text-align: left;">Archivos guardados anteriormente:</div>
+
+    <div id="file-modal-list" style="display: flex; flex-direction: column; gap: 10px;">
+      <!-- Se puebla dinámicamente -->
+    </div>
+  </div>
+</div>
+
+<!-- VISTA PARA IMPRESIÓN / PDF OCULTA -->
+<div id="report-view">
+  <div class="report-header">
+    <h1 style="font-size: 24px; font-weight: 800; color: #0f172a;">Reporte de Evaluación de Programación</h1>
+    <h2 style="font-size: 18px; font-weight: 700; color: #eab308; margin-top: 4px;">Clase 4: Condicionales y Toma de Decisiones en Scratch</h2>
+    <div style="margin-top: 15px; font-size: 14px; line-height: 1.6; background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0;">
+      <div><strong>Estudiante:</strong> <span id="rep-name">---</span></div>
+      <div><strong>Cédula (CI):</strong> <span id="rep-ci">---</span></div>
+      <div><strong>Fecha de Entrega:</strong> <span id="rep-date">---</span></div>
+      <div><strong>Avance Total:</strong> <span id="rep-progress">0 de 9 Desafíos</span></div>
+    </div>
+  </div>
+  <div id="report-content"></div>
+</div>
+
+<script>
+const NUM_CLASE = '4';
+let activeSelectedCI = null;
+const done = Array(9).fill(false);
+const imagenesBase64 = Array(9).fill("");
+
+function getCleanCI() {
+  const input = document.getElementById('student-ci');
+  return input ? input.value.trim().replace(/[^0-9a-zA-Z]/g, '') : '';
+}
+
+function getStorageKey(ci) {
+  return ci ? `scratch_clase_4_ci_${ci}` : 'scratch_clase_4_state';
+}
+
+function getSavedFilesForClass(numClase) {
+  const prefix = `scratch_clase_${numClase}_`;
+  const filesMap = new Map();
+
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (!key || !key.startsWith(prefix)) continue;
+
+    try {
+      const dataStr = localStorage.getItem(key);
+      if (!dataStr) continue;
+      const parsed = JSON.parse(dataStr);
+
+      const ci = parsed.ci || (key.includes('_ci_') ? key.split('_ci_')[1] : '');
+      const name = parsed.nombre || 'Estudiante';
+      const lastUpdated = parsed.lastUpdated || '';
+
+      filesMap.set(key, {
+        key: key,
+        ci: ci,
+        name: name,
+        lastUpdated: lastUpdated,
+        data: parsed
+      });
+    } catch(e){}
+  }
+
+  return Array.from(filesMap.values());
+}
+
+function updateStatusBadge(type, message) {
+  const badge = document.getElementById('save-status-badge');
+  if (!badge) return;
+  if (type === 'success') {
+    badge.style.color = '#15803d';
+    badge.innerHTML = `✅ ${message}`;
+  } else if (type === 'info') {
+    badge.style.color = '#0369a1';
+    badge.innerHTML = `ℹ️ ${message}`;
+  } else {
+    badge.style.color = '#475569';
+    badge.innerHTML = `💾 ${message}`;
+  }
+}
+
+function toggleCaps() {
+  document.body.classList.toggle('all-caps');
+}
+
+function triggerUpload(n) {
+  document.getElementById(`file${n}`).click();
+}
+
+function handleFile(n, file) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    imagenesBase64[n-1] = e.target.result;
+    const drop = document.getElementById(`drop${n}`);
+    drop.innerHTML = `<img src="${e.target.result}" alt="Evidencia ${n}">`;
+    saveProgress();
+  };
+  reader.readAsDataURL(file);
+}
+
+function markDone(n) {
+  done[n-1] = true;
+  document.getElementById(`ch${n}`).classList.add('done');
+  updateProgress();
+  saveProgress();
+}
+
+function updateProgress() {
+  const count = done.filter(Boolean).length;
+  const pct = Math.round((count / 9) * 100);
+  document.getElementById('pbar').style.width = `${pct}%`;
+  document.getElementById('ptxt').textContent = `${count} de 9 desafíos guardados.`;
+}
+
+function saveProgress() {
+  const ci = getCleanCI();
+  const name = document.getElementById('student-name').value.trim();
+
+  const answers = [];
+  for (let i = 1; i <= 9; i++) {
+    answers.push(document.getElementById(`ans${i}`).value);
+  }
+
+  const state = {
+    ci: ci,
+    nombre: name,
+    claseId: 'scratch4',
+    clase: 'Clase 4: Condicionales y Toma de Decisiones',
+    done: done,
+    answers: answers,
+    images: imagenesBase64,
+    lastUpdated: new Date().toISOString()
+  };
+
+  const key = getStorageKey(ci);
+  try {
+    localStorage.setItem(key, JSON.stringify(state));
+
+    if (ci) {
+      try {
+        localStorage.setItem('scratch_last_ci', ci);
+        const regData = localStorage.getItem('scratch_students_registry');
+        const registry = regData ? JSON.parse(regData) : {};
+        registry[`ci_${ci}`] = {
+          ci: ci,
+          name: name || 'Estudiante',
+          lastUpdated: new Date().toISOString()
+        };
+        localStorage.setItem('scratch_students_registry', JSON.stringify(registry));
+      } catch(e){}
+    }
+    updateStatusBadge('success', `Avance guardado automáticamente (${new Date().toLocaleTimeString('es-UY', {hour:'2-digit', minute:'2-digit'})})`);
+  } catch(e) {
+    console.error("Error guardando avance local", e);
+  }
+}
+
+function loadProgress() {
+  const urlParams = new URLSearchParams(window.location.search);
+  let ci = urlParams.get('ci');
+  const ciInput = document.getElementById('student-ci');
+
+  if (ci && ciInput) {
+    ciInput.value = ci;
+  } else if (ciInput && ciInput.value.trim()) {
+    ci = ciInput.value.trim();
+  }
+
+  if (ci) {
+    try {
+      const regData = localStorage.getItem('scratch_students_registry');
+      if (regData) {
+        const registry = JSON.parse(regData);
+        const stData = registry[`ci_${ci}`] || registry[ci];
+        if (stData && stData.name && document.getElementById('student-name')) {
+          document.getElementById('student-name').value = stData.name;
+        }
+      }
+    } catch(e){}
+  }
+
+  const savedFiles = getSavedFilesForClass(NUM_CLASE);
+
+  if (!ci && activeSelectedCI === null) {
+    if (savedFiles.length === 1) {
+      ci = savedFiles[0].ci;
+      if (ciInput) ciInput.value = ci;
+    } else if (savedFiles.length > 1) {
+      openFileSelectionModal(savedFiles);
+      updateStatusBadge('info', `👥 Se encontraron ${savedFiles.length} archivos en este equipo. Seleccioná el tuyo o creá uno nuevo.`);
+      return;
+    }
+  }
+
+  loadStateForCI(ci);
+}
+
+function loadStateForCI(ci) {
+  const key = getStorageKey(ci);
+  const data = localStorage.getItem(key);
+
+  if (data) {
+    try {
+      const state = JSON.parse(data);
+      if (state.nombre && document.getElementById('student-name')) {
+        document.getElementById('student-name').value = state.nombre;
+      }
+      if (state.done) {
+        state.done.forEach((d, i) => {
+          done[i] = d;
+          if (d) document.getElementById(`ch${i+1}`).classList.add('done');
+        });
+      }
+      if (state.answers) {
+        state.answers.forEach((ans, i) => {
+          const el = document.getElementById(`ans${i+1}`);
+          if (el) el.value = ans;
+        });
+      }
+      if (state.images) {
+        state.images.forEach((img, i) => {
+          if (img) {
+            imagenesBase64[i] = img;
+            const drop = document.getElementById(`drop${i+1}`);
+            if (drop) drop.innerHTML = `<img src="${img}" alt="Evidencia ${i+1}">`;
+          }
+        });
+      }
+      updateProgress();
+      
+      const count = done.filter(Boolean).length;
+      document.getElementById('ptxt').textContent = `${count} de 9 desafíos guardados.`;
+
+      if (ci) {
+        updateStatusBadge('success', `✅ Trabajo cargado para: ${state.nombre || 'Estudiante'} (CI: ${ci})`);
+      } else {
+        updateStatusBadge('info', `ℹ️ Se cargó el trabajo previo guardado en este equipo.`);
+      }
+    } catch(e) {
+      console.error("Error al cargar avance", e);
+    }
+  } else {
+    resetFormFields();
+    updateStatusBadge('info', `ℹ️ Archivo listo para nuevo estudiante. Ingresá tu Cédula.`);
+  }
+}
+
+function resetFormFields() {
+  for (let i = 1; i <= 9; i++) {
+    done[i-1] = false;
+    imagenesBase64[i-1] = "";
+    const card = document.getElementById(`ch${i}`);
+    if (card) card.classList.remove('done');
+    const ans = document.getElementById(`ans${i}`);
+    if (ans) ans.value = "";
+    const drop = document.getElementById(`drop${i}`);
+    if (drop) drop.innerHTML = `<span>Hacé clic aquí para cargar la imagen del programa</span><input type="file" id="file${i}" accept="image/*" style="display:none" onchange="handleFile(${i}, this.files[0])">`;
+  }
+  updateProgress();
+}
+
+function openFileSelectionModal(customFilesList = null) {
+  const modal = document.getElementById('file-select-modal');
+  if (!modal) return;
+  const listEl = document.getElementById('file-modal-list');
+  const files = customFilesList || getSavedFilesForClass(NUM_CLASE);
+
+  if (files.length === 0) {
+    listEl.innerHTML = `<div style="text-align:center; padding: 20px; color: #64748b; font-size:14px;">No hay otros archivos guardados en este equipo para esta clase.</div>`;
+  } else {
+    let html = "";
+    files.forEach((f) => {
+      const dateStr = f.lastUpdated ? new Date(f.lastUpdated).toLocaleString('es-UY') : 'Fecha no registrada';
+      html += `
+        <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 14px; display: flex; justify-content: space-between; align-items: center; gap: 10px;">
+          <div>
+            <div style="font-weight: 800; font-size: 15px; color: #0f172a;">👤 ${f.name || 'Estudiante'}</div>
+            <div style="font-size: 13px; color: #475569; font-weight: 700; margin-top: 2px;">🔑 CI: ${f.ci || 'Sin Cédula'}</div>
+            <div style="font-size: 11px; color: #94a3b8; margin-top: 2px;">🕒 Última modificación: ${dateStr}</div>
+          </div>
+          <button onclick="selectStudentFile('${f.ci}')" style="background: #2563eb; color: white; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 800; font-size: 13px; cursor: pointer; flex-shrink: 0; box-shadow: 0 2px 6px rgba(37,99,235,0.2);">
+            📂 Abrir
+          </button>
+        </div>
+      `;
+    });
+    listEl.innerHTML = html;
+  }
+
+  modal.style.display = 'flex';
+}
+
+function closeFileSelectModal() {
+  const modal = document.getElementById('file-select-modal');
+  if (modal) modal.style.display = 'none';
+}
+
+function selectStudentFile(ci) {
+  activeSelectedCI = ci;
+  const ciInput = document.getElementById('student-ci');
+  if (ciInput) ciInput.value = ci;
+  loadStateForCI(ci);
+  closeFileSelectModal();
+}
+
+function createNewStudentFile() {
+  activeSelectedCI = "";
+  const ciInput = document.getElementById('student-ci');
+  if (ciInput) ciInput.value = "";
+  document.getElementById('student-name').value = "";
+  resetFormFields();
+  updateStatusBadge('info', `📄 Ficha NUEVA iniciada. Ingresá tu Cédula y Nombre completo para guardar.`);
+  closeFileSelectModal();
+}
+
+function switchTab(level) {
+  document.querySelectorAll('.diff-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.challenges-grid').forEach(g => g.classList.remove('active'));
+  
+  if (level === 'easy') {
+    document.querySelector('.easy-tab').classList.add('active');
+    document.getElementById('grid-easy').classList.add('active');
+  } else if (level === 'med') {
+    document.querySelector('.med-tab').classList.add('active');
+    document.getElementById('grid-med').classList.add('active');
+  } else {
+    document.querySelector('.hard-tab').classList.add('active');
+    document.getElementById('grid-hard').classList.add('active');
+  }
+}
+
+function generatePDF() {
+  saveProgress();
+  const name = document.getElementById('student-name').value.trim() || 'Estudiante';
+  const ci = document.getElementById('student-ci').value.trim() || 'Sin registrar';
+  const count = done.filter(Boolean).length;
+
+  document.getElementById('rep-name').textContent = name;
+  document.getElementById('rep-ci').textContent = ci;
+  document.getElementById('rep-date').textContent = new Date().toLocaleDateString('es-UY', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+  document.getElementById('rep-progress').textContent = `${count} de 9 Desafíos Completados`;
+
+  let contentHtml = '';
+  for (let i = 1; i <= 9; i++) {
+    const isDone = done[i-1];
+    const ans = document.getElementById(`ans${i}`).value.trim() || 'Sin respuesta escrita.';
+    const img = imagenesBase64[i-1];
+
+    contentHtml += `
+      <div class="report-item">
+        <h3 style="font-size: 16px; font-weight: 800; color: #0f172a;">Desafío ${i}: ${isDone ? '✅ Completado' : '⏳ En Progreso'}</h3>
+        <p style="font-size: 14px; margin-top: 6px;"><strong>Respuesta/Explicación:</strong> ${ans}</p>
+        ${img ? `<img src="${img}" class="report-img" alt="Evidencia ${i}">` : '<p style="font-size: 12px; color: #94a3b8; margin-top: 4px;"><i>No se adjuntó captura de código.</i></p>'}
+      </div>
+    `;
+  }
+
+  document.getElementById('report-content').innerHTML = contentHtml;
+
+  const element = document.getElementById('report-view');
+  element.style.display = 'block';
+
+  const opt = {
+    margin:       10,
+    filename:     `Reporte_Scratch_Clase4_${name.replace(/\s+/g, '_')}.pdf`,
+    image:        { type: 'jpeg', quality: 0.98 },
+    html2canvas:  { scale: 2 },
+    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+  };
+
+  html2pdf().set(opt).from(element).save().then(() => {
+    element.style.display = 'none';
+  });
+}
+
+// Auto-guardado al modificar inputs
+const ciInputEl = document.getElementById('student-ci');
+if (ciInputEl) {
+  ciInputEl.addEventListener('input', () => {
+    activeSelectedCI = getCleanCI();
+    loadStateForCI(activeSelectedCI);
+    saveProgress();
+  });
+}
+
+const nameInputEl = document.getElementById('student-name');
+if (nameInputEl) {
+  nameInputEl.addEventListener('input', () => {
+    saveProgress();
+  });
+}
+
+for (let i = 1; i <= 9; i++) {
+  const ansEl = document.getElementById(`ans${i}`);
+  if (ansEl) {
+    ansEl.addEventListener('input', () => {
+      saveProgress();
+    });
+  }
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  loadProgress();
+});
+</script>
+
+</body>
+</html>

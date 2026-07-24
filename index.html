@@ -179,12 +179,12 @@ body.all-caps { text-transform: uppercase; }
       <div class="prop-arrow">→</div>
     </a>
 
-    <a href="err404.html" class="proposal-card p-c4">
+    <a href="scratch4.html" class="proposal-card p-c4">
       <div class="prop-content">
-        <div class="prop-icon">📢</div>
+        <div class="prop-icon">🔀</div>
         <div class="prop-details">
-          <h2>Clase 4: Eventos, Mensajes y Sonido</h2>
-          <p>Coordinación de objetos en paralelo mediante el envío y recepción de mensajes integrando la extensión de música.</p>
+          <h2>Clase 4: Condicionales y Toma de Decisiones</h2>
+          <p>Estructuras condicionales (si ... entonces, si ... si no), sensores y toma de decisiones lógicas en Scratch.</p>
         </div>
       </div>
       <div class="prop-arrow">→</div>
@@ -475,10 +475,12 @@ function renderAdminData() {
       if (k.includes('clase_1') || parsed.claseId === 'scratch1') defaultClaseName = 'Clase 1: Secuencias + Condicionales';
       if (k.includes('clase_2') || parsed.claseId === 'scratch2') defaultClaseName = 'Clase 2: Bucles Eficientes';
       if (k.includes('clase_3') || parsed.claseId === 'scratch3') defaultClaseName = 'Clase 3: Variables de Control';
+      if (k.includes('clase_4') || parsed.claseId === 'scratch4') defaultClaseName = 'Clase 4: Condicionales y Toma de Decisiones';
 
       let pageFile = 'scratch1';
       if (k.includes('clase_2') || parsed.claseId === 'scratch2') pageFile = 'scratch2';
       if (k.includes('clase_3') || parsed.claseId === 'scratch3') pageFile = 'scratch3';
+      if (k.includes('clase_4') || parsed.claseId === 'scratch4') pageFile = 'scratch4';
 
       studentMap[studentKey].files.push({
         key: k,
