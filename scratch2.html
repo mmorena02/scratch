@@ -105,7 +105,12 @@ body.all-caps, body.all-caps .block, body.all-caps textarea, body.all-caps input
   </div>
 
   <div class="student-info-card">
-    <h3>📝 Datos del Estudiante</h3>
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 12px;">
+      <h3 style="margin: 0; font-size: 18px; font-weight: 800; color: #1e3a8a;">📝 Datos del Estudiante</h3>
+      <button type="button" onclick="openFileSelectionModal()" style="background: #2563eb; color: white; border: none; padding: 8px 16px; border-radius: 20px; font-weight: 800; font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 8px rgba(37,99,235,0.25);">
+        ✨ Cambiar / Nuevo Estudiante
+      </button>
+    </div>
     <div class="student-fields" style="display: flex; gap: 15px; flex-wrap: wrap; margin-top: 10px;">
       <div style="flex: 1; min-width: 200px;">
         <label for="student-ci" style="display: block; font-size: 13px; font-weight: 700; color: var(--text-muted); margin-bottom: 4px;">Cédula de Identidad (CI):</label>
@@ -279,7 +284,35 @@ body.all-caps, body.all-caps .block, body.all-caps textarea, body.all-caps input
   Ficha Práctica Automatizada · Creado por <strong>Mario Morena</strong>
 </footer>
 
+<!-- MODAL SELECCIÓN DE ARCHIVOS DE ESTUDIANTES -->
+<div id="file-select-modal" style="display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.75); z-index: 9000; align-items: center; justify-content: center; backdrop-filter: blur(4px); padding: 20px;">
+  <div style="background: white; border-radius: 20px; max-width: 520px; width: 100%; max-height: 85vh; overflow-y: auto; padding: 28px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3); border: 1px solid #cbd5e1; position: relative;">
+    
+    <button onclick="closeFileSelectModal()" style="position: absolute; top: 18px; right: 20px; border: none; background: #f1f5f9; width: 34px; height: 34px; border-radius: 50%; font-size: 16px; font-weight: bold; cursor: pointer; color: #64748b;">✕</button>
+
+    <div style="text-align: center; margin-bottom: 20px;">
+      <div style="font-size: 40px; margin-bottom: 6px;">📂</div>
+      <h3 style="font-size: 20px; font-weight: 800; color: #0f172a;">Archivos en este equipo</h3>
+      <p style="font-size: 14px; color: #64748b; margin-top: 4px;" id="file-modal-subtitle">Se encontraron varios registros de estudiantes en esta máquina. Seleccioná tu trabajo o creá uno nuevo:</p>
+    </div>
+
+    <!-- Opción de Crear Nuevo Archivo -->
+    <button onclick="createNewStudentFile()" style="width: 100%; padding: 14px 18px; background: #f0fdf4; border: 2px dashed #22c55e; border-radius: 12px; font-size: 15px; font-weight: 800; color: #15803d; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 16px;">
+      <span style="font-size: 20px;">➕</span>
+      <span>Comenzar una FICHA NUEVA (Otro Estudiante)</span>
+    </button>
+
+    <div style="font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #94a3b8; margin-bottom: 10px; text-align: left;">Archivos guardados anteriormente:</div>
+
+    <div id="file-modal-list" style="display: flex; flex-direction: column; gap: 10px;">
+      <!-- Se puebla dinámicamente -->
+    </div>
+  </div>
+</div>
+
 <script>
+const NUM_CLASE = '2';
+let activeSelectedCI = null;
 const done = Array(9).fill(false);
 const imagenesBase64 = Array(9).fill("");
 
@@ -290,6 +323,36 @@ function getCleanCI() {
 
 function getStorageKey(ci) {
   return ci ? `scratch_clase_2_ci_${ci}` : 'scratch_clase_2_state';
+}
+
+function getSavedFilesForClass(numClase) {
+  const prefix = `scratch_clase_${numClase}_`;
+  const filesMap = new Map();
+
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (!key || !key.startsWith(prefix)) continue;
+
+    try {
+      const dataStr = localStorage.getItem(key);
+      if (!dataStr) continue;
+      const parsed = JSON.parse(dataStr);
+
+      const ci = parsed.ci || (key.includes('_ci_') ? key.split('_ci_')[1] : '');
+      const name = parsed.nombre || 'Estudiante';
+      const lastUpdated = parsed.lastUpdated || '';
+
+      filesMap.set(key, {
+        key: key,
+        ci: ci,
+        name: name,
+        lastUpdated: lastUpdated,
+        data: parsed
+      });
+    } catch(e){}
+  }
+
+  return Array.from(filesMap.values());
 }
 
 function updateStatusBadge(type, message) {
@@ -413,16 +476,23 @@ function loadProgress() {
     } catch(e){}
   }
 
-  if (!ci) {
-    try {
-      const lastCI = localStorage.getItem('scratch_last_ci');
-      if (lastCI) {
-        ci = lastCI;
-        if (ciInput) ciInput.value = ci;
-      }
-    } catch(e){}
+  const savedFiles = getSavedFilesForClass(NUM_CLASE);
+
+  if (!ci && activeSelectedCI === null) {
+    if (savedFiles.length === 1) {
+      ci = savedFiles[0].ci;
+      if (ciInput) ciInput.value = ci;
+    } else if (savedFiles.length > 1) {
+      openFileSelectionModal(savedFiles);
+      updateStatusBadge('info', `👥 Se encontraron ${savedFiles.length} archivos en este equipo. Seleccioná el tuyo o creá uno nuevo.`);
+      return;
+    }
   }
 
+  loadStateForCI(ci);
+}
+
+function loadStateForCI(ci) {
   const key = getStorageKey(ci);
   const data = localStorage.getItem(key);
 
@@ -475,7 +545,7 @@ function loadProgress() {
       document.getElementById('ptxt').textContent = `${count} de 9 desafíos guardados.`;
 
       if (ci) {
-        updateStatusBadge('success', `✅ Trabajo cargado para la Cédula: ${ci}`);
+        updateStatusBadge('success', `✅ Trabajo cargado para: ${state.nombre || 'Estudiante'} (CI: ${ci})`);
       } else {
         updateStatusBadge('info', `ℹ️ Se cargó el trabajo previo guardado en este equipo.`);
       }
@@ -490,6 +560,60 @@ function loadProgress() {
       updateStatusBadge('warning', `⚠️ Ingresá tu Cédula de Identidad para guardar tu avance individual.`);
     }
   }
+}
+
+function openFileSelectionModal(customFilesList = null) {
+  const modal = document.getElementById('file-select-modal');
+  if (!modal) return;
+  const listEl = document.getElementById('file-modal-list');
+  const files = customFilesList || getSavedFilesForClass(NUM_CLASE);
+
+  if (files.length === 0) {
+    listEl.innerHTML = `<div style="text-align:center; padding: 20px; color: #64748b; font-size:14px;">No hay otros archivos guardados en este equipo para esta clase.</div>`;
+  } else {
+    let html = "";
+    files.forEach((f) => {
+      const dateStr = f.lastUpdated ? new Date(f.lastUpdated).toLocaleString('es-UY') : 'Fecha no registrada';
+      html += `
+        <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 14px; display: flex; justify-content: space-between; align-items: center; gap: 10px;">
+          <div>
+            <div style="font-weight: 800; font-size: 15px; color: #0f172a;">👤 ${f.name || 'Estudiante'}</div>
+            <div style="font-size: 13px; color: #475569; font-weight: 700; margin-top: 2px;">🔑 CI: ${f.ci || 'Sin Cédula'}</div>
+            <div style="font-size: 11px; color: #94a3b8; margin-top: 2px;">🕒 Última modificación: ${dateStr}</div>
+          </div>
+          <button onclick="selectStudentFile('${f.ci}')" style="background: #2563eb; color: white; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 800; font-size: 13px; cursor: pointer; flex-shrink: 0; box-shadow: 0 2px 6px rgba(37,99,235,0.2);">
+            📂 Abrir
+          </button>
+        </div>
+      `;
+    });
+    listEl.innerHTML = html;
+  }
+
+  modal.style.display = 'flex';
+}
+
+function closeFileSelectModal() {
+  const modal = document.getElementById('file-select-modal');
+  if (modal) modal.style.display = 'none';
+}
+
+function selectStudentFile(ci) {
+  activeSelectedCI = ci;
+  const ciInput = document.getElementById('student-ci');
+  if (ciInput) ciInput.value = ci;
+  loadStateForCI(ci);
+  closeFileSelectModal();
+}
+
+function createNewStudentFile() {
+  activeSelectedCI = "";
+  const ciInput = document.getElementById('student-ci');
+  if (ciInput) ciInput.value = "";
+  document.getElementById('student-name').value = "";
+  resetFormFields();
+  updateStatusBadge('info', `📄 Ficha NUEVA iniciada. Ingresá tu Cédula y Nombre completo para guardar.`);
+  closeFileSelectModal();
 }
 
 function switchTab(level) {
@@ -559,7 +683,8 @@ document.getElementById('student-name').addEventListener('input', saveProgress);
 const ciInputEl = document.getElementById('student-ci');
 if (ciInputEl) {
   ciInputEl.addEventListener('input', () => {
-    loadProgress();
+    activeSelectedCI = getCleanCI();
+    loadStateForCI(activeSelectedCI);
     saveProgress();
   });
 }
