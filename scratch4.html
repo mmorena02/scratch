@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Condicionales en Scratch — Clase 4 (Versión Completa 9 Ejercicios)</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 :root {
@@ -56,7 +55,6 @@ body.all-caps, body.all-caps .block, body.all-caps textarea, body.all-caps input
 .block-control { background: #FFAB19; color: #1a1a2e; }
 .block-data    { background: #FF8C1A; }
 .block-looks   { background: var(--scratch-purple); }
-.block-sound   { background: #CF63CF; }
 .block-ops     { background: #59C059; }
 .block-sensing { background: #4CBFE6; }
 
@@ -94,45 +92,33 @@ body.all-caps, body.all-caps .block, body.all-caps textarea, body.all-caps input
 .ch-card.done .done-msg { display: block; }
 
 .progress-container { background: var(--card); padding: 1.5rem; border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 2.5rem; text-align: center; }
+.progress-title { font-size: 16px; font-weight: 800; color: var(--text-muted); }
 .pbar-bg { width: 100%; height: 12px; background: #e2e8f0; border-radius: 6px; overflow: hidden; margin: 10px 0; }
 .pbar-fill { width: 0%; height: 100%; background: #eab308; transition: width .3s; }
+.progress-txt { font-size: 14px; font-weight: 800; color: var(--text); }
 
 .report-section { text-align: center; margin-bottom: 3rem; }
 .btn-generate-report { font-family: inherit; font-size: 18px; font-weight: 800; color: #fff; background: #d97706; border: none; padding: 14px 36px; border-radius: 30px; cursor: pointer; box-shadow: 0 10px 15px -3px rgba(217,119,6,0.25); }
 
-/* Rubrica */
-.rubric-card { background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: var(--radius); padding: 1.5rem; margin-top: 2rem; }
-.rubric-table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 14px; }
-.rubric-table th, .rubric-table td { padding: 10px; border: 1px solid #cbd5e1; text-align: left; }
-.rubric-table th { background: #e2e8f0; font-weight: 800; }
-
-/* REPORTE DE EVALUACIÓN OCULTO */
-#report-view { display: none; background: white; padding: 30px; font-family: 'Nunito', sans-serif; color: #1e293b; }
-.report-header { border-bottom: 3px solid #eab308; padding-bottom: 15px; margin-bottom: 20px; }
-.report-item { margin-bottom: 20px; page-break-inside: avoid; border-bottom: 1px solid #e2e8f0; padding-bottom: 15px; }
-.report-img { max-width: 100%; max-height: 250px; border: 1px solid #cbd5e1; border-radius: 8px; margin-top: 10px; display: block; }
-
-@media (max-width: 600px) {
-  .difficulty-selector { grid-template-columns: 1fr; }
-  .page-header h1 { font-size: 26px; }
-}
+#reporte-pdf { position: absolute; left: -9999px; top: -9999px; width: 750px; font-family: 'Nunito', sans-serif; padding: 40px; color: #1e293b; background: #fff; box-sizing: border-box; }
+.page-footer { background: #1e293b; color: rgba(255,255,255,0.6); text-align: center; padding: 1.5rem; font-size: 14px; }
 </style>
 </head>
 <body>
 
 <header class="page-header">
   <div class="header-inner">
-    <a href="index.html" style="color: #cbd5e1; text-decoration: none; font-size: 14px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; margin-bottom: 12px;">← Volver al Portal de Clases</a>
-    <span class="header-tag">Clase 4 · Condicionales y Toma de Decisiones</span>
+    <span class="header-tag">Ficha Oficial Completa</span>
     <h1>Condicionales en Scratch</h1>
-    <p>Aprende a programar decisiones lógicas en tus objetos usando bloques "si ... entonces", "si ... si no" y sensores interactivos para responder al usuario y al entorno.</p>
+    <p>Clase 4: Aprende a programar decisiones lógicas en tus objetos usando bloques "si ... entonces", "si ... si no" y sensores interactivos para responder al usuario y al entorno.</p>
   </div>
 </header>
 
 <main class="main">
   
-  <div class="acc-bar">
-    <button class="btn-acc" onclick="toggleCaps()">Abc → ABC</button>
+  <div class="acc-bar" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+    <a href="index.html" class="btn-acc" style="text-decoration: none; background: #ffffff; border: 1.5px solid #cbd5e1; display: inline-flex; align-items: center; gap: 8px; color: var(--text); padding: 6px 16px; border-radius: 20px; font-weight: 700; font-size: 14px;">🏠 Volver al Portal</a>
+    <button class="btn-acc" id="caps-btn" onclick="toggleAllCaps()">🗣️ TODO MAYÚSCULAS</button>
   </div>
 
   <div class="student-info-card">
@@ -145,24 +131,23 @@ body.all-caps, body.all-caps .block, body.all-caps textarea, body.all-caps input
     <div class="student-fields" style="display: flex; gap: 15px; flex-wrap: wrap; margin-top: 10px;">
       <div style="flex: 1; min-width: 200px;">
         <label for="student-ci" style="display: block; font-size: 13px; font-weight: 700; color: var(--text-muted); margin-bottom: 4px;">Cédula de Identidad (CI):</label>
-        <input type="text" id="student-ci" placeholder="Ej: 12345678" style="border-color: #cbd5e1;">
+        <input type="text" id="student-ci" placeholder="Ej: 12345678 (sin puntos/guiones)" style="width: 100%; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 10px 14px; font-size: 15px; font-weight: 700;">
       </div>
-      <div style="flex: 2; min-width: 250px;">
-        <label for="student-name" style="display: block; font-size: 13px; font-weight: 700; color: var(--text-muted); margin-bottom: 4px;">Nombre Completo:</label>
-        <input type="text" id="student-name" placeholder="Tu nombre y apellido..." style="border-color: #cbd5e1;">
+      <div style="flex: 2; min-width: 240px;">
+        <label for="student-name" style="display: block; font-size: 13px; font-weight: 700; color: var(--text-muted); margin-bottom: 4px;">Nombre y Apellido:</label>
+        <input type="text" id="student-name" placeholder="Escribí tu nombre completo acá..." style="width: 100%; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 10px 14px; font-size: 15px;">
       </div>
     </div>
-    <div id="save-status-badge" style="margin-top: 12px; font-size: 13px; font-weight: 800; color: #475569; display: flex; align-items: center; gap: 6px;">
-      ℹ️ Los cambios que realices se guardarán automáticamente en este equipo.
-    </div>
+    <div id="save-status-badge" style="margin-top: 10px; padding: 8px 12px; border-radius: 8px; font-size: 13px; font-weight: 700; display: none;"></div>
   </div>
 
+  <div class="section-label">Caja de Herramientas</div>
   <div class="concept-card">
-    <h3 style="font-size: 18px; font-weight: 800; margin-bottom: 10px; color: #eab308;">💡 ¿Qué son las estructuras condicionales?</h3>
+    <h3 style="font-size: 18px; font-weight: 800; margin-bottom: 8px; color: #eab308;">💡 ¿Qué son las estructuras condicionales?</h3>
     <p style="font-size: 15px; color: var(--text-muted); line-height: 1.6;">
       Las <strong>estructuras condicionales</strong> permiten que un programa evalúe si algo es verdadero o falso, y tome una decisión en consecuencia. Son la base de la inteligencia lógica de cualquier software o juego.
     </p>
-    <div class="scratch-blocks">
+    <div class="scratch-blocks" style="margin-top: 12px;">
       <span class="block block-control">si &lt;condición&gt; entonces</span>
       <span class="block block-control">si &lt;condición&gt; si no</span>
       <span class="block block-sensing">¿tocando [objeto / color]?</span>
@@ -172,12 +157,12 @@ body.all-caps, body.all-caps .block, body.all-caps textarea, body.all-caps input
     </div>
   </div>
 
-  <div class="section-label">Seleccioná el Nivel de Desafío</div>
+  <div class="section-label">Elegí un Nivel de Desafío</div>
 
   <div class="difficulty-selector">
-    <button class="diff-btn easy-tab active" onclick="switchTab('easy')">🟢 FÁCIL (1 a 3)</button>
-    <button class="diff-btn med-tab" onclick="switchTab('med')">🟡 MEDIO (4 a 6)</button>
-    <button class="diff-btn hard-tab" onclick="switchTab('hard')">🔴 DIFÍCIL (7 a 9)</button>
+    <button class="diff-btn easy-tab active" onclick="switchTab('easy')">🟢 Nivel Inicial (1 - 3)</button>
+    <button class="diff-btn med-tab" onclick="switchTab('med')">🟡 Nivel Medio (4 - 6)</button>
+    <button class="diff-btn hard-tab" onclick="switchTab('hard')">🔴 Nivel Avanzado (7 - 9)</button>
   </div>
 
   <!-- CONTENEDOR FÁCIL -->
@@ -193,20 +178,16 @@ body.all-caps, body.all-caps .block, body.all-caps textarea, body.all-caps input
         Programa a un personaje para que, cuando se presione la <strong>Flecha Derecha</strong>, el programa evalúe mediante un bloque <code>si &lt;¿tecla flecha derecha presionada?&gt; entonces</code> para cambiar de disfraz y mover el objeto 10 pasos a la derecha.
       </div>
       <div class="ch-hint">💡 Pista: Colocá el bloque "si" dentro de un bucle "por siempre" conectado a la Bandera Verde.</div>
-      <div class="evidence-container">
-        <label style="font-size: 13px; font-weight: 700; display: block; margin-bottom: 6px;">📸 Captura de bloques (Mover con si + sensor):</label>
-        <div class="drop-zone" onclick="triggerUpload(1)" id="drop1">
-          <span>Hacé clic aquí para cargar la imagen del código en Scratch</span>
-          <input type="file" id="file1" accept="image/*" style="display:none" onchange="handleFile(1, this.files[0])">
-        </div>
-      </div>
       <div class="ch-solution-area">
-        <label for="ans1">✍️ Pregunta: ¿Por qué es necesario envolver el bloque "si" dentro de un bucle "por siempre"?</label>
-        <textarea id="ans1" placeholder="Escribí tu respuesta aquí..."></textarea>
+        <textarea id="sol-ch1" placeholder="Explica cómo organizaste el bucle por siempre y el bloque si..."></textarea>
+      </div>
+      <div class="evidence-container">
+        <div class="drop-zone" id="dz-1"><span id="txt-dz-1">📋 Clic acá y presioná Ctrl+V para pegar captura</span><img id="img-dz-1" style="display:none;"></div>
+        <input type="file" id="fi-1" accept="image/*" style="display:none;">
       </div>
       <div class="ch-footer">
-        <button class="btn-done" onclick="markDone(1)">Marcar como Completado</button>
-        <span class="done-msg">✓ ¡Desafío 1 Guardado!</span>
+        <button class="btn-done" onclick="markDone(1)">✓ Guardar</button>
+        <span class="done-msg">✅ Guardado</span>
       </div>
     </div>
 
@@ -220,20 +201,16 @@ body.all-caps, body.all-caps .block, body.all-caps textarea, body.all-caps input
         Haz que un personaje avance continuamente por la pantalla. Utiliza un condicional <code>si &lt;¿tocando el borde?&gt; entonces</code> para que al llegar a la orilla diga <em>"¡Alcancé el límite!"</em> durante 2 segundos y luego rebote.
       </div>
       <div class="ch-hint">💡 Pista: Bloque de Apariencia "decir [¡Alcancé el límite!] por 2 segundos" dentro del bloque "si".</div>
-      <div class="evidence-container">
-        <label style="font-size: 13px; font-weight: 700; display: block; margin-bottom: 6px;">📸 Captura del código condicional de borde:</label>
-        <div class="drop-zone" onclick="triggerUpload(2)" id="drop2">
-          <span>Hacé clic aquí para cargar la imagen del código</span>
-          <input type="file" id="file2" accept="image/*" style="display:none" onchange="handleFile(2, this.files[0])">
-        </div>
-      </div>
       <div class="ch-solution-area">
-        <label for="ans2">✍️ Pregunta: ¿Qué ocurre si eliminas la condición "si tocando el borde"?</label>
-        <textarea id="ans2" placeholder="Explicá lo que sucedería sin el condicional..."></textarea>
+        <textarea id="sol-ch2" placeholder="Explicá lo que sucedería si eliminas la condición 'si tocando el borde'..."></textarea>
+      </div>
+      <div class="evidence-container">
+        <div class="drop-zone" id="dz-2"><span id="txt-dz-2">📋 Clic acá y presioná Ctrl+V para pegar captura</span><img id="img-dz-2" style="display:none;"></div>
+        <input type="file" id="fi-2" accept="image/*" style="display:none;">
       </div>
       <div class="ch-footer">
-        <button class="btn-done" onclick="markDone(2)">Marcar como Completado</button>
-        <span class="done-msg">✓ ¡Desafío 2 Guardado!</span>
+        <button class="btn-done" onclick="markDone(2)">✓ Guardar</button>
+        <span class="done-msg">✅ Guardado</span>
       </div>
     </div>
 
@@ -247,20 +224,16 @@ body.all-caps, body.all-caps .block, body.all-caps textarea, body.all-caps input
         Dibuja una zona o línea de color rojo (lava o peligro) en el escenario. Configura al personaje para que al tocar ese color (<code>si &lt;¿tocando el color rojo?&gt; entonces</code>) diga <em>"¡Cuidado, es peligroso!"</em> y vuelva a la posición inicial <code>x: -180, y: 0</code>.
       </div>
       <div class="ch-hint">💡 Pista: Usá el cuentagotas en el sensor de color para seleccionar el rojo exacto.</div>
-      <div class="evidence-container">
-        <label style="font-size: 13px; font-weight: 700; display: block; margin-bottom: 6px;">📸 Captura del programa con sensor de color:</label>
-        <div class="drop-zone" onclick="triggerUpload(3)" id="drop3">
-          <span>Hacé clic aquí para cargar la imagen del programa</span>
-          <input type="file" id="file3" accept="image/*" style="display:none" onchange="handleFile(3, this.files[0])">
-        </div>
-      </div>
       <div class="ch-solution-area">
-        <label for="ans3">✍️ Pregunta: ¿Para qué sirve reubicar al personaje a las coordenadas (x: -180, y: 0) al detectar la condición?</label>
-        <textarea id="ans3" placeholder="Escribí tu explicación..."></textarea>
+        <textarea id="sol-ch3" placeholder="Explicá para qué sirve reubicar al personaje a las coordenadas iniciales al detectar el peligro..."></textarea>
+      </div>
+      <div class="evidence-container">
+        <div class="drop-zone" id="dz-3"><span id="txt-dz-3">📋 Clic acá y presioná Ctrl+V para pegar captura</span><img id="img-dz-3" style="display:none;"></div>
+        <input type="file" id="fi-3" accept="image/*" style="display:none;">
       </div>
       <div class="ch-footer">
-        <button class="btn-done" onclick="markDone(3)">Marcar como Completado</button>
-        <span class="done-msg">✓ ¡Desafío 3 Guardado!</span>
+        <button class="btn-done" onclick="markDone(3)">✓ Guardar</button>
+        <span class="done-msg">✅ Guardado</span>
       </div>
     </div>
 
@@ -279,20 +252,16 @@ body.all-caps, body.all-caps .block, body.all-caps textarea, body.all-caps input
         Crea una variable llamada <code>EstadoSemaforo</code>. Utiliza la estructura doble <code>si &lt;EstadoSemaforo = Verde&gt; entonces ... si no ...</code> para que el auto avance si la variable es "Verde", o de lo contrario se detenga y diga <em>"Detenido por semáforo en rojo"</em>.
       </div>
       <div class="ch-hint">💡 Pista: El bloque "si / si no" permite manejar dos caminos alternativos en un solo bloque.</div>
-      <div class="evidence-container">
-        <label style="font-size: 13px; font-weight: 700; display: block; margin-bottom: 6px;">📸 Captura de la estructura Si / Si No:</label>
-        <div class="drop-zone" onclick="triggerUpload(4)" id="drop4">
-          <span>Hacé clic aquí para cargar la imagen</span>
-          <input type="file" id="file4" accept="image/*" style="display:none" onchange="handleFile(4, this.files[0])">
-        </div>
-      </div>
       <div class="ch-solution-area">
-        <label for="ans4">✍️ Pregunta: ¿Qué ventaja tiene usar "si ... si no" en lugar de dos bloques "si" separados?</label>
-        <textarea id="ans4" placeholder="Compará ambas opciones..."></textarea>
+        <textarea id="sol-ch4" placeholder="Compará la ventaja de usar 'si ... si no' en lugar de dos bloques 'si' separados..."></textarea>
+      </div>
+      <div class="evidence-container">
+        <div class="drop-zone" id="dz-4"><span id="txt-dz-4">📋 Clic acá y presioná Ctrl+V para pegar captura</span><img id="img-dz-4" style="display:none;"></div>
+        <input type="file" id="fi-4" accept="image/*" style="display:none;">
       </div>
       <div class="ch-footer">
-        <button class="btn-done" onclick="markDone(4)">Marcar como Completado</button>
-        <span class="done-msg">✓ ¡Desafío 4 Guardado!</span>
+        <button class="btn-done" onclick="markDone(4)">✓ Guardar</button>
+        <span class="done-msg">✅ Guardado</span>
       </div>
     </div>
 
@@ -306,20 +275,16 @@ body.all-caps, body.all-caps .block, body.all-caps textarea, body.all-caps input
         Crea una variable <code>Puntaje</code>. Programa al personaje para evaluar: <code>si &lt;Puntaje &gt; 50&gt; entonces</code> celebrar diciendo <em>"¡Nivel superado con Medalla de Oro!"</em>. <code>Si no</code>, alentar con <em>"Sigue jugando para alcanzar 50 puntos"</em>.
       </div>
       <div class="ch-hint">💡 Pista: Usa el operador verde de comparación &gt; (mayor que) de la categoría Operadores.</div>
-      <div class="evidence-container">
-        <label style="font-size: 13px; font-weight: 700; display: block; margin-bottom: 6px;">📸 Captura del código con comparador numérico:</label>
-        <div class="drop-zone" onclick="triggerUpload(5)" id="drop5">
-          <span>Hacé clic aquí para cargar la imagen</span>
-          <input type="file" id="file5" accept="image/*" style="display:none" onchange="handleFile(5, this.files[0])">
-        </div>
-      </div>
       <div class="ch-solution-area">
-        <label for="ans5">✍️ Pregunta: Si el Puntaje es exactamente igual a 50, ¿qué camino ejecutará el programa y por qué?</label>
-        <textarea id="ans5" placeholder="Analizá qué sucede con 50 puntos exactamente..."></textarea>
+        <textarea id="sol-ch5" placeholder="Analizá qué sucede si el Puntaje es exactamente igual a 50 puntos..."></textarea>
+      </div>
+      <div class="evidence-container">
+        <div class="drop-zone" id="dz-5"><span id="txt-dz-5">📋 Clic acá y presioná Ctrl+V para pegar captura</span><img id="img-dz-5" style="display:none;"></div>
+        <input type="file" id="fi-5" accept="image/*" style="display:none;">
       </div>
       <div class="ch-footer">
-        <button class="btn-done" onclick="markDone(5)">Marcar como Completado</button>
-        <span class="done-msg">✓ ¡Desafío 5 Guardado!</span>
+        <button class="btn-done" onclick="markDone(5)">✓ Guardar</button>
+        <span class="done-msg">✅ Guardado</span>
       </div>
     </div>
 
@@ -333,20 +298,16 @@ body.all-caps, body.all-caps .block, body.all-caps textarea, body.all-caps input
         Haz que un personaje pregunte <em>"¿Cuántos años tienes?"</em> con el bloque <code>preguntar [...] y esperar</code>. Luego evalúa con un condicional: <code>si &lt;respuesta &gt; 11&gt; entonces</code> dar la bienvenida, <code>si no</code> pedir autorización de un adulto.
       </div>
       <div class="ch-hint">💡 Pista: Insertá el bloque "respuesta" (de Sensores) dentro de la comparación del condicional.</div>
-      <div class="evidence-container">
-        <label style="font-size: 13px; font-weight: 700; display: block; margin-bottom: 6px;">📸 Captura del programa con pregunta y respuesta:</label>
-        <div class="drop-zone" onclick="triggerUpload(6)" id="drop6">
-          <span>Hacé clic aquí para cargar la imagen</span>
-          <input type="file" id="file6" accept="image/*" style="display:none" onchange="handleFile(6, this.files[0])">
-        </div>
-      </div>
       <div class="ch-solution-area">
-        <label for="ans6">✍️ Pregunta: ¿Cómo guarda Scratch la información que escribe el usuario cuando se usa el bloque "preguntar"?</label>
-        <textarea id="ans6" placeholder="Explicá el funcionamiento del bloque 'respuesta'..."></textarea>
+        <textarea id="sol-ch6" placeholder="Explicá cómo guarda Scratch la información escrita cuando se usa el bloque 'preguntar'..."></textarea>
+      </div>
+      <div class="evidence-container">
+        <div class="drop-zone" id="dz-6"><span id="txt-dz-6">📋 Clic acá y presioná Ctrl+V para pegar captura</span><img id="img-dz-6" style="display:none;"></div>
+        <input type="file" id="fi-6" accept="image/*" style="display:none;">
       </div>
       <div class="ch-footer">
-        <button class="btn-done" onclick="markDone(6)">Marcar como Completado</button>
-        <span class="done-msg">✓ ¡Desafío 6 Guardado!</span>
+        <button class="btn-done" onclick="markDone(6)">✓ Guardar</button>
+        <span class="done-msg">✅ Guardado</span>
       </div>
     </div>
 
@@ -365,20 +326,16 @@ body.all-caps, body.all-caps .block, body.all-caps textarea, body.all-caps input
         Para abrir un cofre se deben cumplir DOS condiciones al mismo tiempo: estar <code>¿tocando cofre?</code> <strong>Y</strong> que la variable <code>tengo_llave = 1</code>. Utiliza el operador verde <code>&lt;... y ...&gt;</code> dentro de la estructura condicional para abrir el cofre.
       </div>
       <div class="ch-hint">💡 Pista: Anidá ambos sensores dentro del bloque operador "y" (AND).</div>
-      <div class="evidence-container">
-        <label style="font-size: 13px; font-weight: 700; display: block; margin-bottom: 6px;">📸 Captura del condicional compuesto con operador Y:</label>
-        <div class="drop-zone" onclick="triggerUpload(7)" id="drop7">
-          <span>Hacé clic aquí para cargar la imagen</span>
-          <input type="file" id="file7" accept="image/*" style="display:none" onchange="handleFile(7, this.files[0])">
-        </div>
-      </div>
       <div class="ch-solution-area">
-        <label for="ans7">✍️ Pregunta: ¿Qué sucede si el personaje toca el cofre pero no posee la llave (tengo_llave = 0)?</label>
-        <textarea id="ans7" placeholder="Escribí tu deducción lógica..."></textarea>
+        <textarea id="sol-ch7" placeholder="Escribí qué sucede si el personaje toca el cofre pero no posee la llave (tengo_llave = 0)..."></textarea>
+      </div>
+      <div class="evidence-container">
+        <div class="drop-zone" id="dz-7"><span id="txt-dz-7">📋 Clic acá y presioná Ctrl+V para pegar captura</span><img id="img-dz-7" style="display:none;"></div>
+        <input type="file" id="fi-7" accept="image/*" style="display:none;">
       </div>
       <div class="ch-footer">
-        <button class="btn-done" onclick="markDone(7)">Marcar como Completado</button>
-        <span class="done-msg">✓ ¡Desafío 7 Guardado!</span>
+        <button class="btn-done" onclick="markDone(7)">✓ Guardar</button>
+        <span class="done-msg">✅ Guardado</span>
       </div>
     </div>
 
@@ -392,20 +349,16 @@ body.all-caps, body.all-caps .block, body.all-caps textarea, body.all-caps input
         Crea un juego donde al tocar un enemigo se resta 1 a la variable <code>Vidas</code>. Agrega un condicional evaluando continuamente: <code>si &lt;Vidas &lt; 1&gt; entonces</code> decir <em>"¡GAME OVER!"</em> por 2 segundos y ejecutar el bloque <code>detener [todos]</code>.
       </div>
       <div class="ch-hint">💡 Pista: Detener el juego evita que el jugador siga moviéndose cuando ya no le quedan vidas.</div>
-      <div class="evidence-container">
-        <label style="font-size: 13px; font-weight: 700; display: block; margin-bottom: 6px;">📸 Captura del sistema de Game Over:</label>
-        <div class="drop-zone" onclick="triggerUpload(8)" id="drop8">
-          <span>Hacé clic aquí para cargar la imagen</span>
-          <input type="file" id="file8" accept="image/*" style="display:none" onchange="handleFile(8, this.files[0])">
-        </div>
-      </div>
       <div class="ch-solution-area">
-        <label for="ans8">✍️ Pregunta: ¿Por qué es fundamental congelar o detener el programa cuando la condición de Vidas llega a cero?</label>
-        <textarea id="ans8" placeholder="Explicá la importancia en la jugabilidad..."></textarea>
+        <textarea id="sol-ch8" placeholder="Explicá por qué es fundamental congelar o detener el programa al llegar a 0 vidas..."></textarea>
+      </div>
+      <div class="evidence-container">
+        <div class="drop-zone" id="dz-8"><span id="txt-dz-8">📋 Clic acá y presioná Ctrl+V para pegar captura</span><img id="img-dz-8" style="display:none;"></div>
+        <input type="file" id="fi-8" accept="image/*" style="display:none;">
       </div>
       <div class="ch-footer">
-        <button class="btn-done" onclick="markDone(8)">Marcar como Completado</button>
-        <span class="done-msg">✓ ¡Desafío 8 Guardado!</span>
+        <button class="btn-done" onclick="markDone(8)">✓ Guardar</button>
+        <span class="done-msg">✅ Guardado</span>
       </div>
     </div>
 
@@ -419,20 +372,16 @@ body.all-caps, body.all-caps .block, body.all-caps textarea, body.all-caps input
         Crea un minijuego de laberinto integrando condicionales múltiples: controles de movimiento con teclas, condicional si toca paredes (<code>si &lt;tocando color negro&gt; entonces rebotar/retroceder</code>) y condicional si llega a la meta para celebrar la victoria.
       </div>
       <div class="ch-hint">💡 Pista: Combina bucle "por siempre", varios bloques "si" independientes y sensores de color.</div>
-      <div class="evidence-container">
-        <label style="font-size: 13px; font-weight: 700; display: block; margin-bottom: 6px;">📸 Captura del Proyecto Integrador completo:</label>
-        <div class="drop-zone" onclick="triggerUpload(9)" id="drop9">
-          <span>Hacé clic aquí para cargar la imagen final del proyecto</span>
-          <input type="file" id="file9" accept="image/*" style="display:none" onchange="handleFile(9, this.files[0])">
-        </div>
-      </div>
       <div class="ch-solution-area">
-        <label for="ans9">✍️ Pregunta: Reflexión final: ¿Por qué consideras que los condicionales son esenciales para que los videojuegos sean interactivos?</label>
-        <textarea id="ans9" placeholder="Escribí tu conclusión general de la clase..."></textarea>
+        <textarea id="sol-ch9" placeholder="Escribí tu reflexión final sobre la importancia de los condicionales en los videojuegos..."></textarea>
+      </div>
+      <div class="evidence-container">
+        <div class="drop-zone" id="dz-9"><span id="txt-dz-9">📋 Clic acá y presioná Ctrl+V para pegar captura</span><img id="img-dz-9" style="display:none;"></div>
+        <input type="file" id="fi-9" accept="image/*" style="display:none;">
       </div>
       <div class="ch-footer">
-        <button class="btn-done" onclick="markDone(9)">Marcar como Completado</button>
-        <span class="done-msg">✓ ¡Desafío 9 Guardado!</span>
+        <button class="btn-done" onclick="markDone(9)">✓ Guardar</button>
+        <span class="done-msg">✅ Guardado</span>
       </div>
     </div>
 
@@ -440,57 +389,39 @@ body.all-caps, body.all-caps .block, body.all-caps textarea, body.all-caps input
 
   <!-- BARRA DE PROGRESO -->
   <div class="progress-container">
-    <h3 style="font-size: 16px; font-weight: 800; color: var(--text-muted);">Progreso de la Ficha</h3>
-    <div class="pbar-bg">
-      <div class="pbar-fill" id="pbar"></div>
-    </div>
-    <span id="ptxt" style="font-size: 14px; font-weight: 800; color: var(--text);">0 de 9 desafíos guardados.</span>
+    <div class="progress-title">Progreso Total de la Clase</div>
+    <div class="pbar-bg"><div class="pbar-fill" id="pbar"></div></div>
+    <div class="progress-txt" id="ptxt">0 de 9 desafíos guardados.</div>
   </div>
 
-  <!-- BOTÓN GENERAR REPORTE -->
-  <div class="report-section">
-    <button class="btn-generate-report" onclick="generatePDF()">📄 Guardar y Generar Reporte PDF</button>
+  <!-- BOTONES DE REPORTE -->
+  <div class="report-section" style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+    <button class="btn-generate-report" onclick="generarReportePDF()">📥 Descargar Reporte Completo (PDF)</button>
+    <button class="btn-generate-report" style="background: #475569; box-shadow: 0 10px 15px -3px rgba(71, 85, 105, 0.2);" onclick="descargarReporteTXT()">📄 Descargar Reporte Alternativo (TXT)</button>
   </div>
 
-  <!-- RÚBRICA DE EVALUACIÓN DOCENTE -->
-  <div class="rubric-card">
-    <h3 style="font-size: 16px; font-weight: 800; color: #1e293b; margin-bottom: 8px;">📋 Rúbrica de Evaluación Docente</h3>
-    <p style="font-size: 13px; color: var(--text-muted);">Esta ficha evalúa el desarrollo de competencias en pensamiento computacional y condicionales en Scratch:</p>
-    <table class="rubric-table">
-      <thead>
-        <tr>
-          <th>Criterio</th>
-          <th>Inicial</th>
-          <th>Desarrollo</th>
-          <th>Excelente</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong>Lógica Condicional</strong></td>
-          <td>Reconoce bloques "si" básicos sin bucles.</td>
-          <td>Aplica "si" y "si/sino" correctamente con sensores.</td>
-          <td>Combina condiciones compuestas (Y/O) y decisiones avanzadas.</td>
-        </tr>
-        <tr>
-          <td><strong>Uso de Sensores</strong></td>
-          <td>Usa teclas fijas sin condicionales.</td>
-          <td>Integra sensores de teclas y bordes en estructuras.</td>
-          <td>Sincroniza sensores de color, preguntas y variables compuestas.</td>
-        </tr>
-        <tr>
-          <td><strong>Justificación Escrita</strong></td>
-          <td>Respuestas breves o incompletas.</td>
-          <td>Explica adecuadamente el funcionamiento.</td>
-          <td>Argumenta con rigor conceptual la toma de decisiones del programa.</td>
-        </tr>
-      </tbody>
-    </table>
+  <div class="concept-card" id="next-class-card" style="margin-top: 3rem; border: 2px solid #eab308; text-align: center; background: #fefce8; display: none;">
+    <h3 style="font-size: 20px; font-weight: 800; color: #854d0e; margin-bottom: 8px;">🚀 ¡Desafíos Completados!</h3>
+    <p style="font-size: 15px; color: var(--text-muted); margin-bottom: 16px;">Si ya guardaste todas tus respuestas y descargaste tu reporte, podés regresar al portal de clases.</p>
+    <a href="index.html" class="btn-generate-report" style="display: inline-block; text-decoration: none; background: #d97706; box-shadow: 0 10px 15px -3px rgba(217,119,6,0.25); font-size: 16px; padding: 12px 28px;">🏠 Volver al Portal de Clases</a>
   </div>
 
 </main>
 
-<footer style="text-align: center; padding: 2rem; color: var(--text-muted); font-size: 14px; border-top: 1px solid rgba(0,0,0,0.06); margin-top: 2rem;">
+<div id="reporte-pdf">
+  <div style="border-bottom: 3px solid #1e293b; padding-bottom: 12px; margin-bottom: 20px; display:flex; justify-content:space-between; align-items:center;">
+    <div>
+      <h1 style="font-size: 24px; color: #1e293b; margin: 0;">📋 Reporte: Condicionales en Scratch</h1>
+      <p style="margin: 5px 0 0 0; font-size:14px; color:#555e6d;">Profesor: <strong>Mario Morena</strong></p>
+    </div>
+    <div style="text-align: right;">
+      <p style="margin:0; font-size:16px;"><strong>Estudiante:</strong> <span id="pdf-nombre-alumno" style="color:#eab308; font-weight:bold;">-</span></p>
+    </div>
+  </div>
+  <div id="pdf-contenido-desafios"></div>
+</div>
+
+<footer class="page-footer">
   Ficha Práctica Automatizada · Creado por <strong>Mario Morena</strong>
 </footer>
 
@@ -520,30 +451,16 @@ body.all-caps, body.all-caps .block, body.all-caps textarea, body.all-caps input
   </div>
 </div>
 
-<!-- VISTA PARA IMPRESIÓN / PDF OCULTA -->
-<div id="report-view">
-  <div class="report-header">
-    <h1 style="font-size: 24px; font-weight: 800; color: #0f172a;">Reporte de Evaluación de Programación</h1>
-    <h2 style="font-size: 18px; font-weight: 700; color: #eab308; margin-top: 4px;">Clase 4: Condicionales y Toma de Decisiones en Scratch</h2>
-    <div style="margin-top: 15px; font-size: 14px; line-height: 1.6; background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0;">
-      <div><strong>Estudiante:</strong> <span id="rep-name">---</span></div>
-      <div><strong>Cédula (CI):</strong> <span id="rep-ci">---</span></div>
-      <div><strong>Fecha de Entrega:</strong> <span id="rep-date">---</span></div>
-      <div><strong>Avance Total:</strong> <span id="rep-progress">0 de 9 Desafíos</span></div>
-    </div>
-  </div>
-  <div id="report-content"></div>
-</div>
-
 <script>
 const NUM_CLASE = '4';
 let activeSelectedCI = null;
+let activeChallengeIndex = 1;
 const done = Array(9).fill(false);
 const imagenesBase64 = Array(9).fill("");
 
 function getCleanCI() {
-  const input = document.getElementById('student-ci');
-  return input ? input.value.trim().replace(/[^0-9a-zA-Z]/g, '') : '';
+  const ciEl = document.getElementById('student-ci');
+  return ciEl ? ciEl.value.trim().replace(/[^0-9a-zA-Z]/g, '') : "";
 }
 
 function getStorageKey(ci) {
@@ -583,92 +500,96 @@ function getSavedFilesForClass(numClase) {
 function updateStatusBadge(type, message) {
   const badge = document.getElementById('save-status-badge');
   if (!badge) return;
+  badge.style.display = 'block';
   if (type === 'success') {
+    badge.style.background = '#dcfce7';
     badge.style.color = '#15803d';
-    badge.innerHTML = `✅ ${message}`;
+    badge.style.border = '1px solid #86efac';
   } else if (type === 'info') {
+    badge.style.background = '#e0f2fe';
     badge.style.color = '#0369a1';
-    badge.innerHTML = `ℹ️ ${message}`;
+    badge.style.border = '1px solid #7dd3fc';
   } else {
-    badge.style.color = '#475569';
-    badge.innerHTML = `💾 ${message}`;
+    badge.style.background = '#fef3c7';
+    badge.style.color = '#b45309';
+    badge.style.border = '1px solid #fde047';
   }
+  badge.textContent = message;
 }
 
-function toggleCaps() {
-  document.body.classList.toggle('all-caps');
+function resetFormFields() {
+  document.getElementById('student-name').value = "";
+  for (let i = 0; i < 9; i++) {
+    done[i] = false;
+    imagenesBase64[i] = "";
+    const ch = document.getElementById('ch' + (i + 1));
+    if (ch) ch.classList.remove('done');
+    const ta = document.getElementById('sol-ch' + (i + 1));
+    if (ta) ta.value = "";
+    const imgElement = document.getElementById('img-dz-' + (i + 1));
+    const txtElement = document.getElementById('txt-dz-' + (i + 1));
+    if (imgElement && txtElement) {
+      imgElement.src = "";
+      imgElement.style.display = 'none';
+      txtElement.style.opacity = '1';
+    }
+  }
+  document.getElementById('pbar').style.width = '0%';
+  document.getElementById('ptxt').textContent = "0 de 9 desafíos guardados.";
 }
 
-function triggerUpload(n) {
-  document.getElementById(`file${n}`).click();
-}
-
-function handleFile(n, file) {
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    imagenesBase64[n-1] = e.target.result;
-    const drop = document.getElementById(`drop${n}`);
-    drop.innerHTML = `<img src="${e.target.result}" alt="Evidencia ${n}">`;
-    saveProgress();
-  };
-  reader.readAsDataURL(file);
-}
-
-function markDone(n) {
-  done[n-1] = true;
-  document.getElementById(`ch${n}`).classList.add('done');
-  updateProgress();
-  saveProgress();
-}
-
-function updateProgress() {
-  const count = done.filter(Boolean).length;
-  const pct = Math.round((count / 9) * 100);
-  document.getElementById('pbar').style.width = `${pct}%`;
-  document.getElementById('ptxt').textContent = `${count} de 9 desafíos guardados.`;
+function updateStudentRegistry(ci, name, classId, className, storageKey) {
+  try {
+    const regData = localStorage.getItem('scratch_students_registry');
+    const registry = regData ? JSON.parse(regData) : {};
+    const keyId = ci ? `ci_${ci}` : 'general';
+    if (!registry[keyId]) {
+      registry[keyId] = { ci: ci || "Sin CI", name: name || "Estudiante", classes: {}, lastUpdated: new Date().toISOString() };
+    }
+    registry[keyId].name = name || registry[keyId].name || "Sin Nombre";
+    registry[keyId].lastUpdated = new Date().toISOString();
+    registry[keyId].classes[classId] = {
+      className: className,
+      storageKey: storageKey,
+      updatedAt: new Date().toISOString()
+    };
+    localStorage.setItem('scratch_students_registry', JSON.stringify(registry));
+  } catch (e) {
+    console.error("Registry update error", e);
+  }
 }
 
 function saveProgress() {
   const ci = getCleanCI();
-  const name = document.getElementById('student-name').value.trim();
+  const nombre = document.getElementById('student-name').value;
 
-  const answers = [];
-  for (let i = 1; i <= 9; i++) {
-    answers.push(document.getElementById(`ans${i}`).value);
+  if (ci) {
+    try { localStorage.setItem('scratch_last_ci', ci); } catch(e){}
   }
 
   const state = {
     ci: ci,
-    nombre: name,
-    claseId: 'scratch4',
-    clase: 'Clase 4: Condicionales y Toma de Decisiones',
+    nombre: nombre,
     done: done,
-    answers: answers,
-    images: imagenesBase64,
-    lastUpdated: new Date().toISOString()
+    imagenes: imagenesBase64,
+    respuestas: [],
+    lastUpdated: new Date().toISOString(),
+    clase: "Clase 4: Condicionales y Toma de Decisiones",
+    claseId: "scratch4"
   };
 
-  const key = getStorageKey(ci);
-  try {
-    localStorage.setItem(key, JSON.stringify(state));
+  for (let i = 1; i <= 9; i++) {
+    const ta = document.getElementById('sol-ch' + i);
+    state.respuestas.push(ta ? ta.value : "");
+  }
 
-    if (ci) {
-      try {
-        localStorage.setItem('scratch_last_ci', ci);
-        const regData = localStorage.getItem('scratch_students_registry');
-        const registry = regData ? JSON.parse(regData) : {};
-        registry[`ci_${ci}`] = {
-          ci: ci,
-          name: name || 'Estudiante',
-          lastUpdated: new Date().toISOString()
-        };
-        localStorage.setItem('scratch_students_registry', JSON.stringify(registry));
-      } catch(e){}
-    }
+  const storageKey = getStorageKey(ci);
+  try {
+    localStorage.setItem(storageKey, JSON.stringify(state));
+    updateStudentRegistry(ci, nombre, "scratch4", "Clase 4: Condicionales y Toma de Decisiones", storageKey);
     updateStatusBadge('success', `Avance guardado automáticamente (${new Date().toLocaleTimeString('es-UY', {hour:'2-digit', minute:'2-digit'})})`);
   } catch(e) {
-    console.error("Error guardando avance local", e);
+    console.error("Save error", e);
   }
 }
 
@@ -719,33 +640,36 @@ function loadStateForCI(ci) {
   if (data) {
     try {
       const state = JSON.parse(data);
-      if (state.nombre && document.getElementById('student-name')) {
-        document.getElementById('student-name').value = state.nombre;
-      }
+      if (state.nombre) document.getElementById('student-name').value = state.nombre;
       if (state.done) {
-        state.done.forEach((d, i) => {
-          done[i] = d;
-          if (d) document.getElementById(`ch${i+1}`).classList.add('done');
+        state.done.forEach((val, i) => {
+          done[i] = val;
+          const ch = document.getElementById('ch' + (i + 1));
+          if (val && ch) ch.classList.add('done');
         });
       }
-      if (state.answers) {
-        state.answers.forEach((ans, i) => {
-          const el = document.getElementById(`ans${i+1}`);
-          if (el) el.value = ans;
+      if (state.respuestas) {
+        state.respuestas.forEach((val, i) => {
+          const ta = document.getElementById('sol-ch' + (i + 1));
+          if (ta) ta.value = val;
         });
       }
-      if (state.images) {
-        state.images.forEach((img, i) => {
-          if (img) {
-            imagenesBase64[i] = img;
-            const drop = document.getElementById(`drop${i+1}`);
-            if (drop) drop.innerHTML = `<img src="${img}" alt="Evidencia ${i+1}">`;
+      if (state.imagenes) {
+        state.imagenes.forEach((val, i) => {
+          if (val) {
+            imagenesBase64[i] = val;
+            const imgElement = document.getElementById('img-dz-' + (i + 1));
+            const txtElement = document.getElementById('txt-dz-' + (i + 1));
+            if (imgElement && txtElement) {
+              imgElement.src = val;
+              imgElement.style.display = 'block';
+              txtElement.style.opacity = '0.1';
+            }
           }
         });
       }
-      updateProgress();
-      
       const count = done.filter(Boolean).length;
+      document.getElementById('pbar').style.width = (count / 9 * 100) + '%';
       document.getElementById('ptxt').textContent = `${count} de 9 desafíos guardados.`;
 
       if (ci) {
@@ -754,26 +678,12 @@ function loadStateForCI(ci) {
         updateStatusBadge('info', `ℹ️ Se cargó el trabajo previo guardado en este equipo.`);
       }
     } catch(e) {
-      console.error("Error al cargar avance", e);
+      console.error("Load error", e);
     }
   } else {
     resetFormFields();
     updateStatusBadge('info', `ℹ️ Archivo listo para nuevo estudiante. Ingresá tu Cédula.`);
   }
-}
-
-function resetFormFields() {
-  for (let i = 1; i <= 9; i++) {
-    done[i-1] = false;
-    imagenesBase64[i-1] = "";
-    const card = document.getElementById(`ch${i}`);
-    if (card) card.classList.remove('done');
-    const ans = document.getElementById(`ans${i}`);
-    if (ans) ans.value = "";
-    const drop = document.getElementById(`drop${i}`);
-    if (drop) drop.innerHTML = `<span>Hacé clic aquí para cargar la imagen del programa</span><input type="file" id="file${i}" accept="image/*" style="display:none" onchange="handleFile(${i}, this.files[0])">`;
-  }
-  updateProgress();
 }
 
 function openFileSelectionModal(customFilesList = null) {
@@ -846,51 +756,306 @@ function switchTab(level) {
   }
 }
 
-function generatePDF() {
-  saveProgress();
-  const name = document.getElementById('student-name').value.trim() || 'Estudiante';
-  const ci = document.getElementById('student-ci').value.trim() || 'Sin registrar';
-  const count = done.filter(Boolean).length;
+// Configuración de Dropzones y Carga de Imágenes
+for (let i = 1; i <= 9; i++) {
+  const dz = document.getElementById('dz-' + i);
+  const fi = document.getElementById('fi-' + i);
+  const img = document.getElementById('img-dz-' + i);
+  const txt = document.getElementById('txt-dz-' + i);
 
-  document.getElementById('rep-name').textContent = name;
-  document.getElementById('rep-ci').textContent = ci;
-  document.getElementById('rep-date').textContent = new Date().toLocaleDateString('es-UY', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-  document.getElementById('rep-progress').textContent = `${count} de 9 Desafíos Completados`;
+  if (dz && fi) {
+    dz.addEventListener('click', () => {
+      activeChallengeIndex = i;
+      fi.click();
+    });
+    fi.addEventListener('change', (e) => {
+      if (e.target.files && e.target.files[0]) {
+        cargarImagen(e.target.files[0], img, txt, i);
+      }
+    });
 
-  let contentHtml = '';
-  for (let i = 1; i <= 9; i++) {
-    const isDone = done[i-1];
-    const ans = document.getElementById(`ans${i}`).value.trim() || 'Sin respuesta escrita.';
-    const img = imagenesBase64[i-1];
-
-    contentHtml += `
-      <div class="report-item">
-        <h3 style="font-size: 16px; font-weight: 800; color: #0f172a;">Desafío ${i}: ${isDone ? '✅ Completado' : '⏳ En Progreso'}</h3>
-        <p style="font-size: 14px; margin-top: 6px;"><strong>Respuesta/Explicación:</strong> ${ans}</p>
-        ${img ? `<img src="${img}" class="report-img" alt="Evidencia ${i}">` : '<p style="font-size: 12px; color: #94a3b8; margin-top: 4px;"><i>No se adjuntó captura de código.</i></p>'}
-      </div>
-    `;
+    dz.addEventListener('dragover', (e) => { e.preventDefault(); dz.style.borderColor = '#2563eb'; });
+    dz.addEventListener('dragleave', (e) => { e.preventDefault(); dz.style.borderColor = '#cbd5e1'; });
+    dz.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dz.style.borderColor = '#cbd5e1';
+      if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+        cargarImagen(e.dataTransfer.files[0], img, txt, i);
+      }
+    });
   }
-
-  document.getElementById('report-content').innerHTML = contentHtml;
-
-  const element = document.getElementById('report-view');
-  element.style.display = 'block';
-
-  const opt = {
-    margin:       10,
-    filename:     `Reporte_Scratch_Clase4_${name.replace(/\s+/g, '_')}.pdf`,
-    image:        { type: 'jpeg', quality: 0.98 },
-    html2canvas:  { scale: 2 },
-    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-  };
-
-  html2pdf().set(opt).from(element).save().then(() => {
-    element.style.display = 'none';
-  });
 }
 
-// Auto-guardado al modificar inputs
+window.addEventListener('paste', (e) => {
+  const items = e.clipboardData.items;
+  let targetIndex = activeChallengeIndex;
+  if(document.activeElement && document.activeElement.id) {
+    const num = document.activeElement.id.replace(/\D/g, '');
+    if(num >= 1 && num <= 9) targetIndex = parseInt(num);
+  }
+  for (let i = 0; i < items.length; i++) {
+    if (items[i].type.indexOf('image') !== -1) {
+      const file = items[i].getAsFile();
+      const img = document.getElementById('img-dz-'+targetIndex);
+      const txt = document.getElementById('txt-dz-'+targetIndex);
+      if (img && txt) {
+        cargarImagen(file, img, txt, targetIndex);
+      }
+    }
+  }
+});
+
+function cargarImagen(file, imgElement, txtElement, index) {
+  if (!imgElement || !txtElement) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    imgElement.src = e.target.result; imgElement.style.display = 'block';
+    txtElement.style.opacity = '0.1'; imagenesBase64[index-1] = e.target.result;
+    saveProgress();
+  };
+  reader.readAsDataURL(file);
+}
+
+function toggleAllCaps() {
+  document.body.classList.toggle('all-caps');
+  document.getElementById('caps-btn').classList.toggle('active');
+}
+
+function markDone(n) {
+  done[n-1] = true;
+  document.getElementById('ch'+n).classList.add('done');
+  const count = done.filter(Boolean).length;
+  document.getElementById('pbar').style.width = (count/9*100)+'%';
+  document.getElementById('ptxt').textContent = `${count} de 9 desafíos guardados.`;
+  saveProgress();
+}
+
+function generarReportePDF() {
+  const nombre = document.getElementById('student-name').value.trim();
+  const ci = getCleanCI();
+  if(!nombre) { alert("⚠️ Escribí tu nombre antes de descargar el PDF."); return; }
+  if(!ci) { alert("⚠️ Escribí tu Cédula de Identidad (CI) antes de descargar el PDF."); return; }
+
+  const completedCount = done.filter(Boolean).length;
+  if (completedCount < 9) {
+    alert(`⚠️ No se puede generar el reporte: Tenés ${completedCount} de 9 actividades guardadas.\n\nPara poder descargar tu reporte debés completar la consigna y hacer clic en "✓ Guardar" en los 9 desafíos de la clase.`);
+    return;
+  }
+
+  let jsPDFClass;
+  if (window.jspdf && window.jspdf.jsPDF) {
+    jsPDFClass = window.jspdf.jsPDF;
+  } else if (window.jsPDF) {
+    jsPDFClass = window.jsPDF;
+  } else {
+    alert("Error: La librería jsPDF no se ha cargado correctamente.");
+    return;
+  }
+
+  const doc = new jsPDFClass({
+    orientation: 'portrait',
+    unit: 'mm',
+    format: 'a4'
+  });
+
+  const titulos = [
+    "Detección de Teclas con Bloque 'Si'",
+    "Aviso de Límite al Tocar el Borde",
+    "Detector de Peligro / Color Rojo",
+    "Semáforo Inteligente con 'Si ... Si No'",
+    "Evaluador de Puntajes (> 50)",
+    "Pregunta y Control de Entrada de Usuario",
+    "La Llave y el Cofre (Condición Compuesta con 'Y')",
+    "Control de Vidas y Game Over",
+    "Proyecto Integrador: Laberinto Inteligente"
+  ];
+
+  // Title & Header (Page 1)
+  doc.setFillColor(30, 41, 59); // Slate Dark
+  doc.rect(0, 0, 210, 32, 'F');
+  
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(16);
+  doc.setTextColor(255, 255, 255);
+  doc.text("REPORTE DE ENTREGAS: CONDICIONALES EN SCRATCH", 15, 14);
+  
+  doc.setFontSize(10);
+  doc.setFont("helvetica", "normal");
+  doc.setTextColor(226, 232, 240);
+  doc.text("Clase 4 · Docente: Mario Morena", 15, 22);
+
+  // Student Info Box
+  doc.setDrawColor(203, 213, 225);
+  doc.setFillColor(248, 250, 252);
+  doc.roundedRect(15, 36, 180, 18, 3, 3, 'FD');
+
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(11);
+  doc.setTextColor(15, 23, 42);
+  doc.text(`Estudiante: ${nombre}`, 20, 44);
+  doc.text(`Cédula (CI): ${ci}`, 120, 44);
+  doc.text(`Fecha: ${new Date().toLocaleDateString('es-UY')}`, 120, 50);
+
+  let currentY = 60;
+
+  for (let i = 1; i <= 9; i++) {
+    const rawResp = document.getElementById('sol-ch' + i).value.trim();
+    const resp = rawResp || "Sin respuesta escrita.";
+    const imgData = imagenesBase64[i-1];
+    const isCompleted = done[i-1] || rawResp.length > 0 || imgData;
+
+    doc.setFontSize(10);
+    const splitResp = doc.splitTextToSize(`Respuesta: ${resp}`, 174);
+    
+    let sectionHeight = 12 + (splitResp.length * 5);
+    if (imgData) sectionHeight += 65; // Image height (58mm) + margin (7mm)
+
+    if (currentY + sectionHeight > 275) {
+      doc.addPage();
+      currentY = 20;
+      
+      doc.setDrawColor(234, 179, 8);
+      doc.setLineWidth(0.5);
+      doc.line(15, 12, 195, 12);
+      
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(9);
+      doc.setTextColor(100, 116, 139);
+      doc.text(`Reporte de Entregas Scratch — Estudiante: ${nombre}`, 15, 10);
+      doc.text(`Página ${doc.internal.getNumberOfPages()}`, 175, 10);
+      
+      currentY = 18;
+    }
+
+    doc.setDrawColor(226, 232, 240);
+    doc.setLineWidth(0.3);
+    doc.line(15, currentY, 195, currentY);
+    currentY += 5;
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(11);
+    doc.setTextColor(30, 41, 59);
+    doc.text(`Desafío ${i}: ${titulos[i-1]}`, 15, currentY);
+
+    if (isCompleted) {
+      doc.setTextColor(22, 101, 52);
+      doc.text("[COMPLETADO]", 155, currentY);
+    } else {
+      doc.setTextColor(185, 28, 28);
+      doc.text("[NO COMPLETADO]", 150, currentY);
+    }
+    currentY += 6;
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(10);
+    doc.setTextColor(51, 65, 85);
+    
+    for (let line of splitResp) {
+      doc.text(line, 18, currentY);
+      currentY += 5;
+    }
+    currentY += 2;
+
+    if (imgData) {
+      try {
+        const format = imgData.toLowerCase().includes('png') ? 'PNG' : 'JPEG';
+        const imgW = 110;
+        const imgH = 58;
+        const imgX = 15 + (180 - imgW) / 2;
+        
+        doc.addImage(imgData, format, imgX, currentY, imgW, imgH);
+        currentY += imgH + 5;
+      } catch (err) {
+        console.error("Error drawing image in PDF:", err);
+        doc.setTextColor(239, 68, 68);
+        doc.setFont("helvetica", "italic");
+        doc.setFontSize(9);
+        doc.text("(Error al insertar captura de pantalla en el reporte)", 18, currentY);
+        currentY += 6;
+      }
+    } else {
+      doc.setFont("helvetica", "italic");
+      doc.setFontSize(9);
+      doc.setTextColor(148, 163, 184);
+      doc.text("Sin captura de pantalla adjunta.", 18, currentY);
+      currentY += 6;
+    }
+
+    currentY += 2;
+  }
+
+  doc.save(`Reporte_Condicionales_Scratch_de_${nombre.replace(/\s+/g, '_')}.pdf`);
+  mostrarSiguientePaso();
+}
+
+function mostrarSiguientePaso() {
+  const nextCard = document.getElementById('next-class-card');
+  if (nextCard) {
+    nextCard.style.display = 'block';
+    nextCard.scrollIntoView({ behavior: 'smooth' });
+  }
+}
+
+function descargarReporteTXT() {
+  const nombre = document.getElementById('student-name').value.trim();
+  const ci = getCleanCI();
+  if(!nombre) { alert("⚠️ Escribí tu nombre antes de descargar el reporte."); return; }
+  if(!ci) { alert("⚠️ Escribí tu Cédula de Identidad (CI) antes de descargar el reporte."); return; }
+
+  const completedCount = done.filter(Boolean).length;
+  if (completedCount < 9) {
+    alert(`⚠️ No se puede generar el reporte: Tenés ${completedCount} de 9 actividades guardadas.\n\nPara poder descargar tu reporte debés completar la consigna y hacer clic en "✓ Guardar" en los 9 desafíos de la clase.`);
+    return;
+  }
+
+  const titulos = [
+    "Detección de Teclas con Bloque 'Si'",
+    "Aviso de Límite al Tocar el Borde",
+    "Detector de Peligro / Color Rojo",
+    "Semáforo Inteligente con 'Si ... Si No'",
+    "Evaluador de Puntajes (> 50)",
+    "Pregunta y Control de Entrada de Usuario",
+    "La Llave y el Cofre (Condición Compuesta con 'Y')",
+    "Control de Vidas y Game Over",
+    "Proyecto Integrador: Laberinto Inteligente"
+  ];
+  
+  let contenido = `======================================================================\n`;
+  contenido += `REPORTE: CONDICIONALES EN SCRATCH — CLASE 4\n`;
+  contenido += `======================================================================\n\n`;
+  contenido += `Estudiante: ${nombre}\n`;
+  contenido += `Cédula (CI): ${ci}\n`;
+  contenido += `Profesor: Mario Morena\n`;
+  contenido += `Fecha de generación: ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\n\n`;
+  contenido += `----------------------------------------------------------------------\n\n`;
+  
+  for(let i=1; i<=9; i++) {
+    const rawResp = document.getElementById('sol-ch'+i).value.trim();
+    const resp = rawResp || "Sin respuesta escrita.";
+    const imgData = imagenesBase64[i-1] ? "Sí (Captura de pantalla adjunta en la entrega)" : "No adjuntada";
+    
+    const isCompleted = done[i-1] || rawResp.length > 0 || imagenesBase64[i-1];
+    const status = isCompleted ? "COMPLETADO" : "NO COMPLETADO";
+    
+    contenido += `Desafío ${i}: ${titulos[i-1]} — [${status}]\n`;
+    contenido += `Respuesta escrita: ${resp}\n`;
+    contenido += `Captura de pantalla: ${imgData}\n`;
+    contenido += `\n----------------------------------------------------------------------\n\n`;
+  }
+  
+  const blob = new Blob([contenido], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `Reporte_Condicionales_Scratch_de_${nombre.replace(/\s+/g, '_')}.txt`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  mostrarSiguientePaso();
+}
+
+// Auto-save listeners
 const ciInputEl = document.getElementById('student-ci');
 if (ciInputEl) {
   ciInputEl.addEventListener('input', () => {
@@ -908,9 +1073,9 @@ if (nameInputEl) {
 }
 
 for (let i = 1; i <= 9; i++) {
-  const ansEl = document.getElementById(`ans${i}`);
-  if (ansEl) {
-    ansEl.addEventListener('input', () => {
+  const ta = document.getElementById('sol-ch' + i);
+  if (ta) {
+    ta.addEventListener('input', () => {
       saveProgress();
     });
   }
