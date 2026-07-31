@@ -85,11 +85,22 @@ body.all-caps, body.all-caps .block, body.all-caps textarea, body.all-caps input
 .ch-solution-area label { font-size: 14px; font-weight: 700; display: block; margin-bottom: 4px; }
 .ch-solution-area textarea { width: 100%; height: 65px; padding: 8px; font-size: 15px; font-family: inherit; border: 1.5px solid #cbd5e1; border-radius: 8px; resize: none; }
 
-.ch-footer { display: flex; align-items: center; gap: 12px; margin-top: 10px; }
+.ch-footer { display: flex; align-items: center; gap: 12px; margin-top: 10px; flex-wrap: wrap; }
 .btn-done { font-family: inherit; font-size: 14px; font-weight: 700; padding: 6px 16px; border-radius: 20px; border: none; background: #1e293b; color: #fff; cursor: pointer; }
 .done-msg { font-size: 14px; font-weight: 700; color: #16a34a; display: none; }
-.ch-card.done .btn-done { display: none; }
-.ch-card.done .done-msg { display: block; }
+.ch-actions-done { display: none; gap: 8px; align-items: center; }
+.ch-card.done .btn-done { display: none; } 
+.ch-card.done .done-msg { display: inline-block; }
+.ch-card.done .ch-actions-done { display: inline-flex; }
+
+.btn-edit-ch { background: #f1f5f9; color: #334155; border: 1.5px solid #cbd5e1; padding: 4px 12px; border-radius: 16px; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+.btn-edit-ch:hover { background: #e2e8f0; color: #0f172a; }
+
+.btn-del-ch { background: #fef2f2; color: #991b1b; border: 1.5px solid #fca5a5; padding: 4px 12px; border-radius: 16px; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+.btn-del-ch:hover { background: #fee2e2; color: #7f1d1d; }
+
+.btn-del-img { margin-top: 6px; background: #fff1f2; color: #be123c; border: 1px solid #fecdd3; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s; display: none; }
+.btn-del-img:hover { background: #ffe4e6; }
 
 .progress-container { background: var(--card); padding: 1.5rem; border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 2.5rem; text-align: center; }
 .progress-title { font-size: 16px; font-weight: 800; color: var(--text-muted); }
@@ -184,10 +195,15 @@ body.all-caps, body.all-caps .block, body.all-caps textarea, body.all-caps input
       <div class="evidence-container">
         <div class="drop-zone" id="dz-1"><span id="txt-dz-1">📋 Clic acá y presioná Ctrl+V para pegar captura</span><img id="img-dz-1" style="display:none;"></div>
         <input type="file" id="fi-1" accept="image/*" style="display:none;">
+        <button type="button" class="btn-del-img" id="btn-del-img-1" onclick="quitarImagen(1)">🗑️ Quitar captura</button>
       </div>
       <div class="ch-footer">
         <button class="btn-done" onclick="markDone(1)">✓ Guardar</button>
         <span class="done-msg">✅ Guardado</span>
+        <div class="ch-actions-done">
+          <button type="button" class="btn-edit-ch" onclick="unmarkDone(1)">✏️ Editar</button>
+          <button type="button" class="btn-del-ch" onclick="clearChallenge(1)">🗑️ Borrar respuesta</button>
+        </div>
       </div>
     </div>
 
@@ -207,10 +223,15 @@ body.all-caps, body.all-caps .block, body.all-caps textarea, body.all-caps input
       <div class="evidence-container">
         <div class="drop-zone" id="dz-2"><span id="txt-dz-2">📋 Clic acá y presioná Ctrl+V para pegar captura</span><img id="img-dz-2" style="display:none;"></div>
         <input type="file" id="fi-2" accept="image/*" style="display:none;">
+        <button type="button" class="btn-del-img" id="btn-del-img-2" onclick="quitarImagen(2)">🗑️ Quitar captura</button>
       </div>
       <div class="ch-footer">
         <button class="btn-done" onclick="markDone(2)">✓ Guardar</button>
         <span class="done-msg">✅ Guardado</span>
+        <div class="ch-actions-done">
+          <button type="button" class="btn-edit-ch" onclick="unmarkDone(2)">✏️ Editar</button>
+          <button type="button" class="btn-del-ch" onclick="clearChallenge(2)">🗑️ Borrar respuesta</button>
+        </div>
       </div>
     </div>
 
@@ -230,10 +251,15 @@ body.all-caps, body.all-caps .block, body.all-caps textarea, body.all-caps input
       <div class="evidence-container">
         <div class="drop-zone" id="dz-3"><span id="txt-dz-3">📋 Clic acá y presioná Ctrl+V para pegar captura</span><img id="img-dz-3" style="display:none;"></div>
         <input type="file" id="fi-3" accept="image/*" style="display:none;">
+        <button type="button" class="btn-del-img" id="btn-del-img-3" onclick="quitarImagen(3)">🗑️ Quitar captura</button>
       </div>
       <div class="ch-footer">
         <button class="btn-done" onclick="markDone(3)">✓ Guardar</button>
         <span class="done-msg">✅ Guardado</span>
+        <div class="ch-actions-done">
+          <button type="button" class="btn-edit-ch" onclick="unmarkDone(3)">✏️ Editar</button>
+          <button type="button" class="btn-del-ch" onclick="clearChallenge(3)">🗑️ Borrar respuesta</button>
+        </div>
       </div>
     </div>
 
@@ -258,10 +284,15 @@ body.all-caps, body.all-caps .block, body.all-caps textarea, body.all-caps input
       <div class="evidence-container">
         <div class="drop-zone" id="dz-4"><span id="txt-dz-4">📋 Clic acá y presioná Ctrl+V para pegar captura</span><img id="img-dz-4" style="display:none;"></div>
         <input type="file" id="fi-4" accept="image/*" style="display:none;">
+        <button type="button" class="btn-del-img" id="btn-del-img-4" onclick="quitarImagen(4)">🗑️ Quitar captura</button>
       </div>
       <div class="ch-footer">
         <button class="btn-done" onclick="markDone(4)">✓ Guardar</button>
         <span class="done-msg">✅ Guardado</span>
+        <div class="ch-actions-done">
+          <button type="button" class="btn-edit-ch" onclick="unmarkDone(4)">✏️ Editar</button>
+          <button type="button" class="btn-del-ch" onclick="clearChallenge(4)">🗑️ Borrar respuesta</button>
+        </div>
       </div>
     </div>
 
@@ -281,10 +312,15 @@ body.all-caps, body.all-caps .block, body.all-caps textarea, body.all-caps input
       <div class="evidence-container">
         <div class="drop-zone" id="dz-5"><span id="txt-dz-5">📋 Clic acá y presioná Ctrl+V para pegar captura</span><img id="img-dz-5" style="display:none;"></div>
         <input type="file" id="fi-5" accept="image/*" style="display:none;">
+        <button type="button" class="btn-del-img" id="btn-del-img-5" onclick="quitarImagen(5)">🗑️ Quitar captura</button>
       </div>
       <div class="ch-footer">
         <button class="btn-done" onclick="markDone(5)">✓ Guardar</button>
         <span class="done-msg">✅ Guardado</span>
+        <div class="ch-actions-done">
+          <button type="button" class="btn-edit-ch" onclick="unmarkDone(5)">✏️ Editar</button>
+          <button type="button" class="btn-del-ch" onclick="clearChallenge(5)">🗑️ Borrar respuesta</button>
+        </div>
       </div>
     </div>
 
@@ -304,10 +340,15 @@ body.all-caps, body.all-caps .block, body.all-caps textarea, body.all-caps input
       <div class="evidence-container">
         <div class="drop-zone" id="dz-6"><span id="txt-dz-6">📋 Clic acá y presioná Ctrl+V para pegar captura</span><img id="img-dz-6" style="display:none;"></div>
         <input type="file" id="fi-6" accept="image/*" style="display:none;">
+        <button type="button" class="btn-del-img" id="btn-del-img-6" onclick="quitarImagen(6)">🗑️ Quitar captura</button>
       </div>
       <div class="ch-footer">
         <button class="btn-done" onclick="markDone(6)">✓ Guardar</button>
         <span class="done-msg">✅ Guardado</span>
+        <div class="ch-actions-done">
+          <button type="button" class="btn-edit-ch" onclick="unmarkDone(6)">✏️ Editar</button>
+          <button type="button" class="btn-del-ch" onclick="clearChallenge(6)">🗑️ Borrar respuesta</button>
+        </div>
       </div>
     </div>
 
@@ -332,10 +373,15 @@ body.all-caps, body.all-caps .block, body.all-caps textarea, body.all-caps input
       <div class="evidence-container">
         <div class="drop-zone" id="dz-7"><span id="txt-dz-7">📋 Clic acá y presioná Ctrl+V para pegar captura</span><img id="img-dz-7" style="display:none;"></div>
         <input type="file" id="fi-7" accept="image/*" style="display:none;">
+        <button type="button" class="btn-del-img" id="btn-del-img-7" onclick="quitarImagen(7)">🗑️ Quitar captura</button>
       </div>
       <div class="ch-footer">
         <button class="btn-done" onclick="markDone(7)">✓ Guardar</button>
         <span class="done-msg">✅ Guardado</span>
+        <div class="ch-actions-done">
+          <button type="button" class="btn-edit-ch" onclick="unmarkDone(7)">✏️ Editar</button>
+          <button type="button" class="btn-del-ch" onclick="clearChallenge(7)">🗑️ Borrar respuesta</button>
+        </div>
       </div>
     </div>
 
@@ -355,10 +401,15 @@ body.all-caps, body.all-caps .block, body.all-caps textarea, body.all-caps input
       <div class="evidence-container">
         <div class="drop-zone" id="dz-8"><span id="txt-dz-8">📋 Clic acá y presioná Ctrl+V para pegar captura</span><img id="img-dz-8" style="display:none;"></div>
         <input type="file" id="fi-8" accept="image/*" style="display:none;">
+        <button type="button" class="btn-del-img" id="btn-del-img-8" onclick="quitarImagen(8)">🗑️ Quitar captura</button>
       </div>
       <div class="ch-footer">
         <button class="btn-done" onclick="markDone(8)">✓ Guardar</button>
         <span class="done-msg">✅ Guardado</span>
+        <div class="ch-actions-done">
+          <button type="button" class="btn-edit-ch" onclick="unmarkDone(8)">✏️ Editar</button>
+          <button type="button" class="btn-del-ch" onclick="clearChallenge(8)">🗑️ Borrar respuesta</button>
+        </div>
       </div>
     </div>
 
@@ -378,10 +429,15 @@ body.all-caps, body.all-caps .block, body.all-caps textarea, body.all-caps input
       <div class="evidence-container">
         <div class="drop-zone" id="dz-9"><span id="txt-dz-9">📋 Clic acá y presioná Ctrl+V para pegar captura</span><img id="img-dz-9" style="display:none;"></div>
         <input type="file" id="fi-9" accept="image/*" style="display:none;">
+        <button type="button" class="btn-del-img" id="btn-del-img-9" onclick="quitarImagen(9)">🗑️ Quitar captura</button>
       </div>
       <div class="ch-footer">
         <button class="btn-done" onclick="markDone(9)">✓ Guardar</button>
         <span class="done-msg">✅ Guardado</span>
+        <div class="ch-actions-done">
+          <button type="button" class="btn-edit-ch" onclick="unmarkDone(9)">✏️ Editar</button>
+          <button type="button" class="btn-del-ch" onclick="clearChallenge(9)">🗑️ Borrar respuesta</button>
+        </div>
       </div>
     </div>
 
@@ -528,14 +584,68 @@ function resetFormFields() {
     if (ta) ta.value = "";
     const imgElement = document.getElementById('img-dz-' + (i + 1));
     const txtElement = document.getElementById('txt-dz-' + (i + 1));
+    const delBtn = document.getElementById('btn-del-img-' + (i + 1));
     if (imgElement && txtElement) {
       imgElement.src = "";
       imgElement.style.display = 'none';
       txtElement.style.opacity = '1';
     }
+    if (delBtn) delBtn.style.display = 'none';
   }
   document.getElementById('pbar').style.width = '0%';
   document.getElementById('ptxt').textContent = "0 de 9 desafíos guardados.";
+}
+
+function unmarkDone(n) {
+  done[n - 1] = false;
+  const ch = document.getElementById('ch' + n);
+  if (ch) ch.classList.remove('done');
+  const count = done.filter(Boolean).length;
+  document.getElementById('pbar').style.width = (count / 9 * 100) + '%';
+  document.getElementById('ptxt').textContent = `${count} de 9 desafíos guardados.`;
+  saveProgress();
+  updateStatusBadge('info', `✏️ Desafío ${n} habilitado para edición.`);
+}
+
+function clearChallenge(n) {
+  done[n - 1] = false;
+  imagenesBase64[n - 1] = "";
+  const ch = document.getElementById('ch' + n);
+  if (ch) ch.classList.remove('done');
+  
+  const ta = document.getElementById('sol-ch' + n);
+  if (ta) ta.value = "";
+  
+  const imgElement = document.getElementById('img-dz-' + n);
+  const txtElement = document.getElementById('txt-dz-' + n);
+  const delBtn = document.getElementById('btn-del-img-' + n);
+  if (imgElement && txtElement) {
+    imgElement.src = "";
+    imgElement.style.display = 'none';
+    txtElement.style.opacity = '1';
+  }
+  if (delBtn) delBtn.style.display = 'none';
+  
+  const count = done.filter(Boolean).length;
+  document.getElementById('pbar').style.width = (count / 9 * 100) + '%';
+  document.getElementById('ptxt').textContent = `${count} de 9 desafíos guardados.`;
+  saveProgress();
+  updateStatusBadge('info', `🗑️ Respuesta del Desafío ${n} eliminada.`);
+}
+
+function quitarImagen(n) {
+  imagenesBase64[n - 1] = "";
+  const imgElement = document.getElementById('img-dz-' + n);
+  const txtElement = document.getElementById('txt-dz-' + n);
+  const delBtn = document.getElementById('btn-del-img-' + n);
+  if (imgElement && txtElement) {
+    imgElement.src = "";
+    imgElement.style.display = 'none';
+    txtElement.style.opacity = '1';
+  }
+  if (delBtn) delBtn.style.display = 'none';
+  saveProgress();
+  updateStatusBadge('info', `🗑️ Captura del Desafío ${n} eliminada.`);
 }
 
 function updateStudentRegistry(ci, name, classId, className, storageKey) {
@@ -656,15 +766,25 @@ function loadStateForCI(ci) {
       }
       if (state.imagenes) {
         state.imagenes.forEach((val, i) => {
+          const imgElement = document.getElementById('img-dz-' + (i + 1));
+          const txtElement = document.getElementById('txt-dz-' + (i + 1));
+          const delBtn = document.getElementById('btn-del-img-' + (i + 1));
           if (val) {
             imagenesBase64[i] = val;
-            const imgElement = document.getElementById('img-dz-' + (i + 1));
-            const txtElement = document.getElementById('txt-dz-' + (i + 1));
             if (imgElement && txtElement) {
               imgElement.src = val;
               imgElement.style.display = 'block';
               txtElement.style.opacity = '0.1';
             }
+            if (delBtn) delBtn.style.display = 'inline-block';
+          } else {
+            imagenesBase64[i] = "";
+            if (imgElement && txtElement) {
+              imgElement.src = "";
+              imgElement.style.display = 'none';
+              txtElement.style.opacity = '1';
+            }
+            if (delBtn) delBtn.style.display = 'none';
           }
         });
       }
@@ -811,6 +931,8 @@ function cargarImagen(file, imgElement, txtElement, index) {
   reader.onload = function(e) {
     imgElement.src = e.target.result; imgElement.style.display = 'block';
     txtElement.style.opacity = '0.1'; imagenesBase64[index-1] = e.target.result;
+    const delBtn = document.getElementById('btn-del-img-' + index);
+    if (delBtn) delBtn.style.display = 'inline-block';
     saveProgress();
   };
   reader.readAsDataURL(file);
@@ -1055,13 +1177,65 @@ function descargarReporteTXT() {
   mostrarSiguientePaso();
 }
 
+function handleCIChange(isBlurOrChange = false) {
+  const newCI = getCleanCI();
+  
+  if (!isBlurOrChange) {
+    if (newCI) {
+      updateStatusBadge('info', `🔑 Cédula ingresada: ${newCI} (completá o hacé clic fuera para confirmar)`);
+    } else {
+      updateStatusBadge('warning', `⚠️ Ingresá tu Cédula de Identidad para guardar tu avance individual.`);
+    }
+    return;
+  }
+
+  const oldCI = activeSelectedCI;
+  if (newCI !== oldCI) {
+    const oldKey = getStorageKey(oldCI);
+    const newKey = getStorageKey(newCI);
+    
+    const existingData = localStorage.getItem(newKey);
+    const hasCurrentWork = done.some(Boolean) || respuestasHaveContent() || imagenesBase64.some(Boolean);
+
+    if (existingData && !hasCurrentWork) {
+      activeSelectedCI = newCI;
+      loadStateForCI(newCI);
+    } else {
+      activeSelectedCI = newCI;
+      saveProgress();
+      if (oldKey && oldKey !== newKey && localStorage.getItem(oldKey)) {
+        try {
+          const oldParsed = JSON.parse(localStorage.getItem(oldKey));
+          if (!oldParsed.ci || oldParsed.ci === oldCI) {
+            localStorage.removeItem(oldKey);
+          }
+        } catch(e){}
+      }
+    }
+  } else {
+    saveProgress();
+  }
+}
+
+function respuestasHaveContent() {
+  for (let i = 1; i <= 9; i++) {
+    const ta = document.getElementById('sol-ch' + i);
+    if (ta && ta.value.trim().length > 0) return true;
+  }
+  return false;
+}
+
 // Auto-save listeners
 const ciInputEl = document.getElementById('student-ci');
 if (ciInputEl) {
   ciInputEl.addEventListener('input', () => {
-    activeSelectedCI = getCleanCI();
-    loadStateForCI(activeSelectedCI);
-    saveProgress();
+    handleCIChange(false);
+  });
+  ciInputEl.addEventListener('change', () => {
+    handleCIChange(true);
+  });
+  ciInputEl.addEventListener('blur', () => {
+    handleCIChange(true);
   });
 }
 
