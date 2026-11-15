@@ -112,8 +112,24 @@ body.all-caps, body.all-caps .block, body.all-caps textarea, body.all-caps input
 #reporte-pdf { position: absolute; left: -9999px; top: -9999px; width: 750px; font-family: 'Nunito', sans-serif; padding: 40px; color: #1e293b; background: #fff; box-sizing: border-box; }
 .page-footer { background: #1e293b; color: rgba(255,255,255,0.6); text-align: center; padding: 1.5rem; font-size: 14px; }
 </style>
+<link rel="stylesheet" href="assets/sitio.css">
 </head>
 <body>
+
+<a class="skip-link" href="#contenido">Saltar al contenido</a>
+<nav class="site-nav" aria-label="Navegación principal">
+  <div class="nav-inner">
+    <a class="nav-marca" href="index.html">Programación con Scratch</a>
+    <a class="nav-item" href="index.html">Inicio</a>
+    <a class="nav-item" href="index.html#clases" aria-current="page">Clases</a>
+    <a class="nav-item" href="recursos.html">Recursos</a>
+    <a class="nav-item" href="infografia.html">Infografía</a>
+    <a class="nav-item" href="formulario.html">Encuesta</a>
+    <a class="nav-item" href="ciudadania.html">Ciudadanía digital</a>
+    <a class="nav-item" href="acerca.html">Acerca del sitio</a>
+  </div>
+</nav>
+
 
 <header class="page-header">
   <div class="header-inner">
@@ -123,10 +139,9 @@ body.all-caps, body.all-caps .block, body.all-caps textarea, body.all-caps input
   </div>
 </header>
 
-<main class="main">
+<main class="main" id="contenido">
   <div class="acc-bar" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
     <a href="index.html" class="btn-acc" style="text-decoration: none; background: #ffffff; border: 1.5px solid #cbd5e1; display: inline-flex; align-items: center; gap: 8px; color: var(--text); padding: 6px 16px; border-radius: 20px; font-weight: 700; font-size: 14px;">🏠 Volver al Portal</a>
-    <button class="btn-acc" id="caps-btn" onclick="toggleAllCaps()">🗣️ TODO MAYÚSCULAS</button>
   </div>
 
   <div class="student-info-card">
@@ -138,14 +153,16 @@ body.all-caps, body.all-caps .block, body.all-caps textarea, body.all-caps input
     </div>
     <div class="student-fields" style="display: flex; gap: 15px; flex-wrap: wrap; margin-top: 10px;">
       <div style="flex: 1; min-width: 200px;">
-        <label for="student-ci" style="display: block; font-size: 13px; font-weight: 700; color: var(--text-muted); margin-bottom: 4px;">Cédula de Identidad (CI):</label>
-        <input type="text" id="student-ci" placeholder="Ej: 12345678 (sin puntos/guiones)" style="width: 100%; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 10px 14px; font-size: 15px; font-weight: 700;">
+        <label for="student-ci" style="display: block; font-size: 13px; font-weight: 700; color: var(--text-muted); margin-bottom: 4px;">Código de estudiante:</label>
+        <input type="text" id="student-ci" placeholder="Ej: MM-07 (iniciales y número de lista)" style="width: 100%; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 10px 14px; font-size: 15px; font-weight: 700;">
       </div>
       <div style="flex: 2; min-width: 240px;">
-        <label for="student-name" style="display: block; font-size: 13px; font-weight: 700; color: var(--text-muted); margin-bottom: 4px;">Nombre y Apellido:</label>
-        <input type="text" id="student-name" placeholder="Escribí tu nombre completo acá..." style="width: 100%; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 10px 14px; font-size: 15px;">
+        <label for="student-name" style="display: block; font-size: 13px; font-weight: 700; color: var(--text-muted); margin-bottom: 4px;">Nombre y inicial del apellido:</label>
+        <input type="text" id="student-name" placeholder="Ej: Mario M." style="width: 100%; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 10px 14px; font-size: 15px;">
       </div>
     </div>
+    
+    <p style="margin:12px 0 0; font-size:13.5px; color:#334155; background:#f0fdf4; border-left:5px solid #59C059; border-radius:8px; padding:10px 12px; line-height:1.5;"><strong>No escribas tu cédula.</strong> Usá tu código: tus iniciales y tu número de lista. Ejemplo: MM-07. Lo que escribas queda guardado solo en esta computadora.</p>
     <div id="save-status-badge" style="margin-top: 10px; padding: 8px 12px; border-radius: 8px; font-size: 13px; font-weight: 700; display: none;"></div>
   </div>
 
@@ -179,7 +196,7 @@ body.all-caps, body.all-caps .block, body.all-caps textarea, body.all-caps input
       <div class="ch-hint">La variable aparece como un marcador naranja en la pantalla.</div>
       <div class="ch-solution-area"><textarea id="sol-ch1" placeholder="Cuando corro el programa, aparece en pantalla..."></textarea></div>
       <div class="evidence-container">
-        <div class="drop-zone" id="dz-1"><span id="txt-dz-1">📋 Clic acá y presioná Ctrl+V para pegar captura</span><img id="img-dz-1" style="display:none;"></div>
+        <div class="drop-zone" id="dz-1" tabindex="0" role="button" aria-label="Zona para pegar la captura del desafío 1. Presioná Enter y después Ctrl+V."><span id="txt-dz-1">📋 Clic acá y presioná Ctrl+V para pegar captura</span><img id="img-dz-1" alt="Captura de pantalla del programa del desafío 1, pegada por el estudiante." style="display:none;"></div>
         <button type="button" class="btn-del-img" id="btn-del-img-1" onclick="quitarImagen(1)">🗑️ Quitar captura</button>
         <input type="file" id="fi-1" accept="image/*" style="display:none;">
       </div>
@@ -199,7 +216,7 @@ body.all-caps, body.all-caps .block, body.all-caps textarea, body.all-caps input
       <div class="ch-hint">Cada segundo suma 1. Contá las vueltas del bucle.</div>
       <div class="ch-solution-area"><textarea id="sol-ch2" placeholder="Después de 5 segundos, la variable vale..."></textarea></div>
       <div class="evidence-container">
-        <div class="drop-zone" id="dz-2"><span id="txt-dz-2">📋 Clic acá y presioná Ctrl+V para pegar captura</span><img id="img-dz-2" style="display:none;"></div>
+        <div class="drop-zone" id="dz-2" tabindex="0" role="button" aria-label="Zona para pegar la captura del desafío 2. Presioná Enter y después Ctrl+V."><span id="txt-dz-2">📋 Clic acá y presioná Ctrl+V para pegar captura</span><img id="img-dz-2" alt="Captura de pantalla del programa del desafío 2, pegada por el estudiante." style="display:none;"></div>
         <button type="button" class="btn-del-img" id="btn-del-img-2" onclick="quitarImagen(2)">🗑️ Quitar captura</button>
         <input type="file" id="fi-2" accept="image/*" style="display:none;">
       </div>
@@ -219,7 +236,7 @@ body.all-caps, body.all-caps .block, body.all-caps textarea, body.all-caps input
       <div class="ch-hint">Uno reemplaza el valor, el otro lo suma.</div>
       <div class="ch-solution-area"><textarea id="sol-ch3" placeholder="Fijar deja el valor en... Cambiar deja el valor en... porque..."></textarea></div>
       <div class="evidence-container">
-        <div class="drop-zone" id="dz-3"><span id="txt-dz-3">📋 Clic acá y presioná Ctrl+V para pegar captura</span><img id="img-dz-3" style="display:none;"></div>
+        <div class="drop-zone" id="dz-3" tabindex="0" role="button" aria-label="Zona para pegar la captura del desafío 3. Presioná Enter y después Ctrl+V."><span id="txt-dz-3">📋 Clic acá y presioná Ctrl+V para pegar captura</span><img id="img-dz-3" alt="Captura de pantalla del programa del desafío 3, pegada por el estudiante." style="display:none;"></div>
         <button type="button" class="btn-del-img" id="btn-del-img-3" onclick="quitarImagen(3)">🗑️ Quitar captura</button>
         <input type="file" id="fi-3" accept="image/*" style="display:none;">
       </div>
@@ -244,7 +261,7 @@ body.all-caps, body.all-caps .block, body.all-caps textarea, body.all-caps input
       <div class="ch-hint">El bloque de evento va en el sprite, no en el escenario.</div>
       <div class="ch-solution-area"><textarea id="sol-ch4" placeholder="Describí los bloques que usaste y el resultado al hacer clic 3 veces..."></textarea></div>
       <div class="evidence-container">
-        <div class="drop-zone" id="dz-4"><span id="txt-dz-4">📋 Clic acá y presioná Ctrl+V para pegar captura</span><img id="img-dz-4" style="display:none;"></div>
+        <div class="drop-zone" id="dz-4" tabindex="0" role="button" aria-label="Zona para pegar la captura del desafío 4. Presioná Enter y después Ctrl+V."><span id="txt-dz-4">📋 Clic acá y presioná Ctrl+V para pegar captura</span><img id="img-dz-4" alt="Captura de pantalla del programa del desafío 4, pegada por el estudiante." style="display:none;"></div>
         <button type="button" class="btn-del-img" id="btn-del-img-4" onclick="quitarImagen(4)">🗑️ Quitar captura</button>
         <input type="file" id="fi-4" accept="image/*" style="display:none;">
       </div>
@@ -264,7 +281,7 @@ body.all-caps, body.all-caps .block, body.all-caps textarea, body.all-caps input
       <div class="ch-hint">Usá <em>cambiar [vidas] por (-1)</em> y un condicional para detectar el 0.</div>
       <div class="ch-solution-area"><textarea id="sol-ch5" placeholder="Describí la secuencia de bloques que usaste para restar vidas y detectar el game over..."></textarea></div>
       <div class="evidence-container">
-        <div class="drop-zone" id="dz-5"><span id="txt-dz-5">📋 Clic acá y presioná Ctrl+V para pegar captura</span><img id="img-dz-5" style="display:none;"></div>
+        <div class="drop-zone" id="dz-5" tabindex="0" role="button" aria-label="Zona para pegar la captura del desafío 5. Presioná Enter y después Ctrl+V."><span id="txt-dz-5">📋 Clic acá y presioná Ctrl+V para pegar captura</span><img id="img-dz-5" alt="Captura de pantalla del programa del desafío 5, pegada por el estudiante." style="display:none;"></div>
         <button type="button" class="btn-del-img" id="btn-del-img-5" onclick="quitarImagen(5)">🗑️ Quitar captura</button>
         <input type="file" id="fi-5" accept="image/*" style="display:none;">
       </div>
@@ -284,7 +301,7 @@ body.all-caps, body.all-caps .block, body.all-caps textarea, body.all-caps input
       <div class="ch-hint">Usá un bucle <em>repetir (30)</em> con <em>cambiar [tiempo] por (-1)</em> y <em>esperar (1) segundos</em>.</div>
       <div class="ch-solution-area"><textarea id="sol-ch6" placeholder="El bloque que detiene todo el programa es... La secuencia fue..."></textarea></div>
       <div class="evidence-container">
-        <div class="drop-zone" id="dz-6"><span id="txt-dz-6">📋 Clic acá y presioná Ctrl+V para pegar captura</span><img id="img-dz-6" style="display:none;"></div>
+        <div class="drop-zone" id="dz-6" tabindex="0" role="button" aria-label="Zona para pegar la captura del desafío 6. Presioná Enter y después Ctrl+V."><span id="txt-dz-6">📋 Clic acá y presioná Ctrl+V para pegar captura</span><img id="img-dz-6" alt="Captura de pantalla del programa del desafío 6, pegada por el estudiante." style="display:none;"></div>
         <button type="button" class="btn-del-img" id="btn-del-img-6" onclick="quitarImagen(6)">🗑️ Quitar captura</button>
         <input type="file" id="fi-6" accept="image/*" style="display:none;">
       </div>
@@ -309,7 +326,7 @@ body.all-caps, body.all-caps .block, body.all-caps textarea, body.all-caps input
       <div class="ch-hint">Usá el operador <em>(puntaje) mod (50) = (0)</em> para detectar múltiplos.</div>
       <div class="ch-solution-area"><textarea id="sol-ch7" placeholder="Describí la lógica del condicional que detecta el cambio de nivel..."></textarea></div>
       <div class="evidence-container">
-        <div class="drop-zone" id="dz-7"><span id="txt-dz-7">📋 Clic acá y presioná Ctrl+V para pegar captura</span><img id="img-dz-7" style="display:none;"></div>
+        <div class="drop-zone" id="dz-7" tabindex="0" role="button" aria-label="Zona para pegar la captura del desafío 7. Presioná Enter y después Ctrl+V."><span id="txt-dz-7">📋 Clic acá y presioná Ctrl+V para pegar captura</span><img id="img-dz-7" alt="Captura de pantalla del programa del desafío 7, pegada por el estudiante." style="display:none;"></div>
         <button type="button" class="btn-del-img" id="btn-del-img-7" onclick="quitarImagen(7)">🗑️ Quitar captura</button>
         <input type="file" id="fi-7" accept="image/*" style="display:none;">
       </div>
@@ -329,7 +346,7 @@ body.all-caps, body.all-caps .block, body.all-caps textarea, body.all-caps input
       <div class="ch-hint">El orden de los bloques importa. ¿Qué bloque está de más?</div>
       <div class="ch-solution-area"><textarea id="sol-ch8" placeholder="La variable termina valiendo... El error es... La corrección sería..."></textarea></div>
       <div class="evidence-container">
-        <div class="drop-zone" id="dz-8"><span id="txt-dz-8">📋 Clic acá y presioná Ctrl+V para pegar captura</span><img id="img-dz-8" style="display:none;"></div>
+        <div class="drop-zone" id="dz-8" tabindex="0" role="button" aria-label="Zona para pegar la captura del desafío 8. Presioná Enter y después Ctrl+V."><span id="txt-dz-8">📋 Clic acá y presioná Ctrl+V para pegar captura</span><img id="img-dz-8" alt="Captura de pantalla del programa del desafío 8, pegada por el estudiante." style="display:none;"></div>
         <button type="button" class="btn-del-img" id="btn-del-img-8" onclick="quitarImagen(8)">🗑️ Quitar captura</button>
         <input type="file" id="fi-8" accept="image/*" style="display:none;">
       </div>
@@ -349,7 +366,7 @@ body.all-caps, body.all-caps .block, body.all-caps textarea, body.all-caps input
       <div class="ch-hint">Para el récord, usá un condicional: si (puntaje) > (récord), entonces fijar [récord] a (puntaje).</div>
       <div class="ch-solution-area"><textarea id="sol-ch9" placeholder="Describí cómo organizaste los tres sistemas de variables y la lógica del récord..."></textarea></div>
       <div class="evidence-container">
-        <div class="drop-zone" id="dz-9"><span id="txt-dz-9">📋 Clic acá y presioná Ctrl+V para pegar captura</span><img id="img-dz-9" style="display:none;"></div>
+        <div class="drop-zone" id="dz-9" tabindex="0" role="button" aria-label="Zona para pegar la captura del desafío 9. Presioná Enter y después Ctrl+V."><span id="txt-dz-9">📋 Clic acá y presioná Ctrl+V para pegar captura</span><img id="img-dz-9" alt="Captura de pantalla del programa del desafío 9, pegada por el estudiante." style="display:none;"></div>
         <button type="button" class="btn-del-img" id="btn-del-img-9" onclick="quitarImagen(9)">🗑️ Quitar captura</button>
         <input type="file" id="fi-9" accept="image/*" style="display:none;">
       </div>
@@ -396,9 +413,7 @@ body.all-caps, body.all-caps .block, body.all-caps textarea, body.all-caps input
   <div id="pdf-contenido-desafios"></div>
 </div>
 
-<footer class="page-footer">
-  Ficha Práctica Automatizada · Creado por <strong>Mario Morena</strong>
-</footer>
+
 
 <!-- MODAL SELECCIÓN DE ARCHIVOS DE ESTUDIANTES -->
 <div id="file-select-modal" style="display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.75); z-index: 9000; align-items: center; justify-content: center; backdrop-filter: blur(4px); padding: 20px;">
@@ -572,7 +587,7 @@ function updateStudentRegistry(ci, name, classId, className, storageKey) {
     const registry = regData ? JSON.parse(regData) : {};
     const keyId = ci ? `ci_${ci}` : 'general';
     if (!registry[keyId]) {
-      registry[keyId] = { ci: ci || "Sin CI", name: name || "Estudiante", classes: {}, lastUpdated: new Date().toISOString() };
+      registry[keyId] = { ci: ci || "Sin código", name: name || "Estudiante", classes: {}, lastUpdated: new Date().toISOString() };
     }
     registry[keyId].name = name || registry[keyId].name || "Sin Nombre";
     registry[keyId].lastUpdated = new Date().toISOString();
@@ -616,7 +631,7 @@ function saveProgress() {
     localStorage.setItem(key, JSON.stringify(state));
     updateStudentRegistry(ci, nombre, 'scratch3', 'Clase 3: Variables de Control', key);
     if (ci) {
-      updateStatusBadge('success', `✅ Progreso guardado automáticamente para CI: ${ci}`);
+      updateStatusBadge('success', `✅ Progreso guardado automáticamente para Código: ${ci}`);
     } else {
       updateStatusBadge('info', `✅ Progreso guardado en este equipo.`);
     }
@@ -718,7 +733,7 @@ function loadStateForCI(ci) {
       document.getElementById('ptxt').textContent = `${count} de 9 desafíos guardados.`;
 
       if (ci) {
-        updateStatusBadge('success', `✅ Trabajo cargado para: ${state.nombre || 'Estudiante'} (CI: ${ci})`);
+        updateStatusBadge('success', `✅ Trabajo cargado para: ${state.nombre || 'Estudiante'} (código: ${ci})`);
       } else {
         updateStatusBadge('info', `ℹ️ Se cargó el trabajo previo guardado en este equipo.`);
       }
@@ -728,9 +743,9 @@ function loadStateForCI(ci) {
   } else {
     resetFormFields();
     if (ci) {
-      updateStatusBadge('info', `📄 Ficha nueva iniciada para la Cédula: ${ci}`);
+      updateStatusBadge('info', `📄 Ficha nueva iniciada para el código: ${ci}`);
     } else {
-      updateStatusBadge('warning', `⚠️ Ingresá tu Cédula de Identidad para guardar tu avance individual.`);
+      updateStatusBadge('warning', `⚠️ Ingresá tu código de estudiante para guardar tu avance individual.`);
     }
   }
 }
@@ -751,7 +766,7 @@ function openFileSelectionModal(customFilesList = null) {
         <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 14px; display: flex; justify-content: space-between; align-items: center; gap: 10px;">
           <div>
             <div style="font-weight: 800; font-size: 15px; color: #0f172a;">👤 ${f.name || 'Estudiante'}</div>
-            <div style="font-size: 13px; color: #475569; font-weight: 700; margin-top: 2px;">🔑 CI: ${f.ci || 'Sin Cédula'}</div>
+            <div style="font-size: 13px; color: #475569; font-weight: 700; margin-top: 2px;">🔑 Código: ${f.ci || 'Sin código'}</div>
             <div style="font-size: 11px; color: #94a3b8; margin-top: 2px;">🕒 Última modificación: ${dateStr}</div>
           </div>
           <button onclick="selectStudentFile('${f.ci}')" style="background: #2563eb; color: white; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 800; font-size: 13px; cursor: pointer; flex-shrink: 0; box-shadow: 0 2px 6px rgba(37,99,235,0.2);">
@@ -785,7 +800,7 @@ function createNewStudentFile() {
   if (ciInput) ciInput.value = "";
   document.getElementById('student-name').value = "";
   resetFormFields();
-  updateStatusBadge('info', `📄 Ficha NUEVA iniciada. Ingresá tu Cédula y Nombre completo para guardar.`);
+  updateStatusBadge('info', `📄 Ficha NUEVA iniciada. Ingresá tu código y tu nombre para guardar.`);
   closeFileSelectModal();
 }
 
@@ -856,9 +871,9 @@ function handleCIChange(isBlurOrChange = false) {
   
   if (!isBlurOrChange) {
     if (newCI) {
-      updateStatusBadge('info', `🔑 Cédula ingresada: ${newCI} (completá o hacé clic fuera para confirmar)`);
+      updateStatusBadge('info', `🔑 Código ingresado: ${newCI} (completá o hacé clic fuera para confirmar)`);
     } else {
-      updateStatusBadge('warning', `⚠️ Ingresá tu Cédula de Identidad para guardar tu avance individual.`);
+      updateStatusBadge('warning', `⚠️ Ingresá tu código de estudiante para guardar tu avance individual.`);
     }
     return;
   }
@@ -950,7 +965,7 @@ function cargarImagen(file, imgElement, txtElement, index) {
 
 function toggleAllCaps() {
   document.body.classList.toggle('all-caps');
-  document.getElementById('caps-btn').classList.toggle('active');
+  var b = document.getElementById('caps-btn'); if (b) b.classList.toggle('active');
 }
 
 function markDone(n) {
@@ -966,7 +981,7 @@ function generarReportePDF() {
   const nombre = document.getElementById('student-name').value.trim();
   const ci = getCleanCI();
   if(!nombre) { alert("⚠️ Escribí tu nombre antes de descargar el PDF."); return; }
-  if(!ci) { alert("⚠️ Escribí tu Cédula de Identidad (CI) antes de descargar el PDF."); return; }
+  if(!ci) { alert("⚠️ Escribí tu código de estudiante antes de descargar el PDF."); return; }
 
   const completedCount = done.filter(Boolean).length;
   if (completedCount < 9) {
@@ -1027,7 +1042,7 @@ function generarReportePDF() {
   doc.text(nombre, 42, 50);
   
   doc.setFont("helvetica", "bold");
-  doc.text("Cédula (CI):", 20, 58);
+  doc.text("Código de estudiante:", 20, 58);
   doc.setFont("helvetica", "normal");
   doc.text(ci, 42, 58);
   
@@ -1167,7 +1182,7 @@ function descargarReporteTXT() {
   const nombre = document.getElementById('student-name').value.trim();
   const ci = getCleanCI();
   if(!nombre) { alert("⚠️ Escribí tu nombre antes de descargar el reporte."); return; }
-  if(!ci) { alert("⚠️ Escribí tu Cédula de Identidad (CI) antes de descargar el reporte."); return; }
+  if(!ci) { alert("⚠️ Escribí tu código de estudiante antes de descargar el reporte."); return; }
 
   const completedCount = done.filter(Boolean).length;
   if (completedCount < 9) {
@@ -1185,7 +1200,7 @@ function descargarReporteTXT() {
   contenido += `REPORTE: VARIABLES JUEGOS EN SCRATCH — CLASE 3\n`;
   contenido += `======================================================================\n\n`;
   contenido += `Estudiante: ${nombre}\n`;
-  contenido += `Cédula (CI): ${ci}\n`;
+  contenido += `Código de estudiante: ${ci}\n`;
   contenido += `Profesor: Mario Morena\n`;
   contenido += `Fecha de generación: ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\n\n`;
   contenido += `----------------------------------------------------------------------\n\n`;
@@ -1216,5 +1231,16 @@ function descargarReporteTXT() {
   mostrarSiguientePaso();
 }
 </script>
+<footer class="site-footer">
+  <div class="foot-inner">
+    <p><strong>Portal de Programación con Scratch</strong> · Autor: <strong>Mario Morena</strong> · 2026<br>
+    Profesorado de Informática, CeRP del Centro — Florida, Uruguay.</p>
+    <p class="foot-lic">Contenido propio bajo licencia <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es" target="_blank" rel="noopener">Creative Commons Atribución-NoComercial-CompartirIgual 4.0</a>.
+    El recurso <em>Tu huella digital</em> se publica bajo CC BY-SA 4.0. Los materiales de terceros conservan su licencia y están atribuidos en <a href="acerca.html">Acerca del sitio</a>.</p>
+    <p class="foot-lic">Este sitio no envía datos a ningún servidor. <a href="acerca.html">Cómo se tratan los datos</a>.</p>
+  </div>
+</footer>
+<script src="assets/sitio.js"></script>
+
 </body>
 </html>

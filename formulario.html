@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Encuesta y código QR — Portal de Programación con Scratch</title>
+<meta name="description" content="Instrumento de recolección de datos para el proyecto de programación en 7.º año: diseño de las preguntas, enlace, código QR y cartelería de difusión.">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" onerror="window.qrFallo=true"></script>
+<link rel="stylesheet" href="assets/sitio.css">
+</head>
+<body style="font-family:'Nunito',sans-serif; background:#F7F4EF; margin:0; color:#1a1a2e;">
+
+<a class="skip-link" href="#contenido">Saltar al contenido</a>
+<nav class="site-nav" aria-label="Navegación principal">
+  <div class="nav-inner">
+    <a class="nav-marca" href="index.html">Programación con Scratch</a>
+    <a class="nav-item" href="index.html">Inicio</a>
+    <a class="nav-item" href="index.html#clases">Clases</a>
+    <a class="nav-item" href="recursos.html">Recursos</a>
+    <a class="nav-item" href="infografia.html">Infografía</a>
+    <a class="nav-item" href="formulario.html" aria-current="page">Encuesta</a>
+    <a class="nav-item" href="ciudadania.html">Ciudadanía digital</a>
+    <a class="nav-item" href="acerca.html">Acerca del sitio</a>
+  </div>
+</nav>
+
+
+<header class="pag-header">
+  <div class="ph-inner">
+    <h1>¿Querés programar con nosotros?</h1>
+    <p>Instrumento para consultar a los otros grupos del liceo si quieren sumarse al proyecto y de qué forma.</p>
+  </div>
+</header>
+
+<main class="wrap" id="contenido">
+
+  <h2>Qué se quiere averiguar y para qué</h2>
+  <p>Los estudiantes de 7.º quieren abrir el proyecto a los demás grupos del liceo. Antes de organizar nada hay que saber tres cosas: cuántos quieren participar, en qué horario pueden, y con qué equipo cuentan. Sin esos datos no se puede decidir ni el cupo ni el día.</p>
+  <p>Cada pregunta del formulario responde a una de esas tres cosas. Ninguna pregunta está porque sí: la que no cambie una decisión, no va.</p>
+
+  <div class="aviso privacidad">
+    <p><strong>Privacidad.</strong> La encuesta es anónima. No pide cédula, ni nombre, ni teléfono, ni foto. Se pregunta el grupo, no la persona. Los datos se usan solo para organizar el taller y se borran cuando termina.</p>
+  </div>
+
+  <h2>Las preguntas y por qué cada tipo</h2>
+
+  <table class="tabla">
+    <caption>Diseño del instrumento: ocho preguntas, ocho tipos distintos</caption>
+    <thead>
+      <tr><th scope="col">Pregunta</th><th scope="col">Tipo</th><th scope="col">Qué informa y qué decide</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>¿En qué grupo estás?</td><td>Lista desplegable</td><td>Permite contar por grupo sin identificar personas. Decide en qué grupos conviene difundir más.</td></tr>
+      <tr><td>¿Querés participar del taller de programación?</td><td>Opción múltiple</td><td>Da el número total de interesados. Decide si hay taller y cuántos cupos.</td></tr>
+      <tr><td>¿Qué días podrías venir?</td><td>Casillas de verificación</td><td>Varias respuestas a la vez. Decide el día del taller.</td></tr>
+      <tr><td>¿Hasta qué fecha podrías anotarte?</td><td>Fecha</td><td>Marca el cierre real de la inscripción. Decide el cronograma.</td></tr>
+      <tr><td>¿Cuánto sabés de programación hoy?</td><td>Escala lineal, de 1 a 5</td><td>Da el punto de partida del grupo y se puede promediar. Decide con qué nivel arranca el taller.</td></tr>
+      <tr><td>¿Con qué contás? Computadora, internet en casa, celular</td><td>Cuadrícula</td><td>Tres ítems con la misma escala, en poco espacio. Decide si el taller puede dejar tarea domiciliaria.</td></tr>
+      <tr><td>¿Qué te gustaría crear? Un juego, una animación, una historia…</td><td>Texto corto</td><td>Orienta los ejemplos de clase hacia lo que ellos quieren hacer.</td></tr>
+      <tr><td>Mirá esta imagen. ¿Qué pensás que hace este programa?</td><td>Párrafo, con imagen en la pregunta</td><td>Muestra cómo leen un programa antes de empezar. Decide por dónde arrancar la primera clase.</td></tr>
+    </tbody>
+  </table>
+
+  <p>Las ocho preguntas son obligatorias, el formulario tiene un tema de fondo aplicado y está dividido en tres secciones cortas: quién sos, si querés venir, y con qué contás. Las secciones no son decorativas: un formulario largo y plano se abandona a la mitad.</p>
+
+  <h2>Enlace y código QR</h2>
+
+  <div class="qr-caja">
+    <div class="qr-lienzo" id="qr-lienzo">Generando el código…</div>
+    <div class="qr-datos">
+      <p style="margin-top:0;"><strong>Enlace de la encuesta:</strong></p>
+      <!-- Para publicar la encuesta real: reemplazar el texto de abajo por el enlace del formulario. El QR se regenera solo. -->
+      <code class="qr-url" id="qr-url">https://mmorena02.github.io/scratch/</code>
+      <p style="margin-top:12px; font-size:15px; color:#5b6478;">El enlace va escrito al lado del QR a propósito: un código QR no sirve a quien no puede usar la cámara, y el enlace en texto cumple la misma función.</p>
+    </div>
+  </div>
+
+  <div class="aviso ojo" style="margin-top:16px;">
+    <p><strong>Falta un paso.</strong> El código de arriba apunta al sitio. Cuando el formulario esté creado y publicado, hay que pegar su enlace en esta página y el QR se arma solo.</p>
+  </div>
+
+  <h2>Cartelería para los pasillos</h2>
+  <p>Este es el cartel que se imprime y se pega. Tiene las cuatro cosas que un cartel necesita: qué es, para quién, qué hay que hacer y el código.</p>
+
+  <div style="background:#2c1b4d; border-radius:16px; padding:2rem 1.75rem; color:#fff; text-align:center;">
+    <p style="font-size:14px; font-weight:800; letter-spacing:.14em; color:#FFD464; margin:0 0 10px;">LICEO · TALLER ABIERTO</p>
+    <p style="font-size:33px; font-weight:800; line-height:1.15; margin:0 0 12px; color:#fff;">¿Querés aprender a programar?</p>
+    <p style="font-size:19px; margin:0 0 6px; color:rgba(255,255,255,.9);">Hacemos juegos y animaciones con Scratch.</p>
+    <p style="font-size:19px; margin:0 0 20px; color:rgba(255,255,255,.9);">No hace falta saber nada de antes.</p>
+    <div style="background:#fff; border-radius:12px; padding:14px; display:inline-block;">
+      <div class="qr-lienzo" id="qr-lienzo-cartel" style="width:160px; height:160px; border:none;">…</div>
+    </div>
+    <p style="font-size:17px; font-weight:800; margin:16px 0 4px; color:#FFD464;">Escaneá el código y contestá 8 preguntas</p>
+    <p style="font-size:16px; margin:0; color:rgba(255,255,255,.88);">Para estudiantes de 7.º, 8.º y 9.º · Dura 3 minutos · Es anónimo</p>
+  </div>
+
+  <p style="margin-top:14px; font-size:15px; color:#5b6478;">El cartel dice a quién está dirigido, cuánto lleva y que es anónimo. Las tres cosas que hacen que alguien se detenga a contestar.</p>
+
+  <h2>Qué se hace después con los datos</h2>
+  <p>Las respuestas caen en una planilla de cálculo. Ahí se cuenta cuántos quieren participar por grupo, se promedia la escala de conocimiento previo y se cruza el día más votado con la disponibilidad del salón de informática. Recoger datos no es analizarlos: lo que define el taller es la lectura de esa planilla.</p>
+
+</main>
+
+<script>
+/* El cartel usa el mismo enlace que la caja de arriba. */
+document.addEventListener('DOMContentLoaded', function () {
+  var destino = document.getElementById('qr-lienzo-cartel');
+  var fuente = document.getElementById('qr-url');
+  if (!destino || !fuente) return;
+  var url = (fuente.textContent || '').trim();
+  if (typeof window.QRCode === 'undefined') {
+    destino.style.color = '#1a1a2e';
+    destino.textContent = 'Pegar aquí el QR';
+    return;
+  }
+  destino.innerHTML = '';
+  new window.QRCode(destino, { text: url, width: 150, height: 150, colorDark: '#1a1a2e', colorLight: '#ffffff' });
+  var im = destino.querySelector('img');
+  if (im) im.setAttribute('alt', 'Código QR del cartel, lleva a la encuesta del taller.');
+});
+</script>
+
+<footer class="site-footer">
+  <div class="foot-inner">
+    <p><strong>Portal de Programación con Scratch</strong> · Autor: <strong>Mario Morena</strong> · 2026<br>
+    Profesorado de Informática, CeRP del Centro — Florida, Uruguay.</p>
+    <p class="foot-lic">Contenido propio bajo licencia <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es" target="_blank" rel="noopener">Creative Commons Atribución-NoComercial-CompartirIgual 4.0</a>.
+    El recurso <em>Tu huella digital</em> se publica bajo CC BY-SA 4.0. Los materiales de terceros conservan su licencia y están atribuidos en <a href="acerca.html">Acerca del sitio</a>.</p>
+    <p class="foot-lic">Este sitio no envía datos a ningún servidor. <a href="acerca.html">Cómo se tratan los datos</a>.</p>
+  </div>
+</footer>
+<script src="assets/sitio.js"></script>
+
+</body>
+</html>

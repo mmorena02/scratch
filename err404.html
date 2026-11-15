@@ -122,10 +122,23 @@ body.all-caps { text-transform: uppercase; }
   100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255,140,0,0); }
 }
 </style>
+<link rel="stylesheet" href="assets/sitio.css">
 </head>
 <body>
 
-<button class="btn-accessibility" onclick="toggleAllCaps()" id="capsBtn">Abc → ABC</button>
+<a class="skip-link" href="#contenido">Saltar al contenido</a>
+<nav class="site-nav" aria-label="Navegación principal">
+  <div class="nav-inner">
+    <a class="nav-marca" href="index.html">Programación con Scratch</a>
+    <a class="nav-item" href="index.html">Inicio</a>
+    <a class="nav-item" href="index.html#clases">Clases</a>
+    <a class="nav-item" href="recursos.html">Recursos</a>
+    <a class="nav-item" href="infografia.html">Infografía</a>
+    <a class="nav-item" href="formulario.html">Encuesta</a>
+    <a class="nav-item" href="ciudadania.html">Ciudadanía digital</a>
+    <a class="nav-item" href="acerca.html">Acerca del sitio</a>
+  </div>
+</nav>
 
 <header class="portal-header">
   <div class="header-inner">
@@ -133,7 +146,7 @@ body.all-caps { text-transform: uppercase; }
   </div>
 </header>
 
-<main class="main">
+<main class="main" id="contenido">
   <div class="maintenance-card">
     <div class="icon-container">🚀</div>
     <h2>Desafío en Construcción</h2>
@@ -148,6 +161,7 @@ body.all-caps { text-transform: uppercase; }
 function toggleAllCaps() {
   document.body.classList.toggle('all-caps');
   const btn = document.getElementById('capsBtn');
+  if (!btn) return;
   if (document.body.classList.contains('all-caps')) {
     btn.textContent = "ABC → Abc";
   } else {
@@ -155,6 +169,17 @@ function toggleAllCaps() {
   }
 }
 </script>
+
+<footer class="site-footer">
+  <div class="foot-inner">
+    <p><strong>Portal de Programación con Scratch</strong> · Autor: <strong>Mario Morena</strong> · 2026<br>
+    Profesorado de Informática, CeRP del Centro — Florida, Uruguay.</p>
+    <p class="foot-lic">Contenido propio bajo licencia <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es" target="_blank" rel="noopener">Creative Commons Atribución-NoComercial-CompartirIgual 4.0</a>.
+    El recurso <em>Tu huella digital</em> se publica bajo CC BY-SA 4.0. Los materiales de terceros conservan su licencia y están atribuidos en <a href="acerca.html">Acerca del sitio</a>.</p>
+    <p class="foot-lic">Este sitio no envía datos a ningún servidor. <a href="acerca.html">Cómo se tratan los datos</a>.</p>
+  </div>
+</footer>
+<script src="assets/sitio.js"></script>
 
 </body>
 </html>

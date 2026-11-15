@@ -128,10 +128,23 @@ body.all-caps { text-transform: uppercase; }
 /* ── ACCESIBILIDAD ── */
 .btn-accessibility { position: fixed; bottom: 20px; right: 20px; background: #2c1b4d; color: white; border: none; padding: 12px 20px; border-radius: 30px; font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 800; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 1000; }
 </style>
+<link rel="stylesheet" href="assets/sitio.css">
 </head>
 <body>
 
-<button class="btn-accessibility" onclick="toggleAllCaps()" id="capsBtn">Abc → ABC</button>
+<a class="skip-link" href="#contenido">Saltar al contenido</a>
+<nav class="site-nav" aria-label="Navegación principal">
+  <div class="nav-inner">
+    <a class="nav-marca" href="index.html">Programación con Scratch</a>
+    <a class="nav-item" href="index.html" aria-current="page">Inicio</a>
+    <a class="nav-item" href="index.html#clases">Clases</a>
+    <a class="nav-item" href="recursos.html">Recursos</a>
+    <a class="nav-item" href="infografia.html">Infografía</a>
+    <a class="nav-item" href="formulario.html">Encuesta</a>
+    <a class="nav-item" href="ciudadania.html">Ciudadanía digital</a>
+    <a class="nav-item" href="acerca.html">Acerca del sitio</a>
+  </div>
+</nav>
 
 <header class="portal-header">
   <div class="header-inner">
@@ -140,15 +153,16 @@ body.all-caps { text-transform: uppercase; }
   </div>
 </header>
 
-<main class="main">
+<main class="main" id="contenido">
 
-  <div class="section-label">Secuencia Completa de Clases</div>
+  <div class="section-label" id="clases">Secuencia Completa de Clases</div>
 
-  <div class="proposals-grid">
+  <p style="font-size:15px; color:#6b7280; margin:-8px 0 18px;">Las clases 1 a 4 están disponibles. Las siguientes se publican a medida que se prueban en clase.</p>
+    <div class="proposals-grid">
 
     <a href="scratch1.html" class="proposal-card p-c1">
       <div class="prop-content">
-        <div class="prop-icon">👣</div>
+        <div class="prop-icon" aria-hidden="true">👣</div>
         <div class="prop-details">
           <h2>Clase 1: Secuencias + Condicionales</h2>
           <p>Pasos lógicos, estructuras condicionales (si/sino) y lectura de sensores básicos del entorno.</p>
@@ -159,7 +173,7 @@ body.all-caps { text-transform: uppercase; }
 
     <a href="scratch2.html" class="proposal-card p-c2">
       <div class="prop-content">
-        <div class="prop-icon">🔄</div>
+        <div class="prop-icon" aria-hidden="true">🔄</div>
         <div class="prop-details">
           <h2>Clase 2: Bucles Eficientes</h2>
           <p>Optimización mediante estructuras de repetición (repetir, por siempre) y patrones geométricos.</p>
@@ -170,7 +184,7 @@ body.all-caps { text-transform: uppercase; }
 
     <a href="scratch3.html" class="proposal-card p-c3">
       <div class="prop-content">
-        <div class="prop-icon">📦</div>
+        <div class="prop-icon" aria-hidden="true">📦</div>
         <div class="prop-details">
           <h2>Clase 3: Variables de Control</h2>
           <p>Uso de variables (fijar, cambiar, mostrar) para almacenar puntajes, estados y datos dinámicos.</p>
@@ -181,7 +195,7 @@ body.all-caps { text-transform: uppercase; }
 
     <a href="scratch4.html" class="proposal-card p-c4">
       <div class="prop-content">
-        <div class="prop-icon">🔀</div>
+        <div class="prop-icon" aria-hidden="true">🔀</div>
         <div class="prop-details">
           <h2>Clase 4: Condicionales y Toma de Decisiones</h2>
           <p>Estructuras condicionales (si ... entonces, si ... si no), sensores y toma de decisiones lógicas en Scratch.</p>
@@ -190,82 +204,82 @@ body.all-caps { text-transform: uppercase; }
       <div class="prop-arrow">→</div>
     </a>
 
-    <a href="err404.html" class="proposal-card p-c5">
+    <div class="proposal-card p-c5" style="opacity:.72; box-shadow:none;">
       <div class="prop-content">
-        <div class="prop-icon">⌨️</div>
+        <div class="prop-icon" aria-hidden="true">⌨️</div>
         <div class="prop-details">
           <h2>Clase 5: Interactividad Avanzada</h2>
           <p>Diseño de interfaces de usuario interactivas usando entradas por teclado, preguntas y respuestas.</p>
         </div>
       </div>
-      <div class="prop-arrow">→</div>
-    </a>
+      <span style="flex-shrink:0; background:#f1f3f8; color:#475569; border:1px solid #cbd5e1; border-radius:20px; padding:5px 12px; font-size:12px; font-weight:800; white-space:nowrap;">En preparación</span>
+    </div>
 
-    <a href="err404.html" class="proposal-card p-c6">
+    <div class="proposal-card p-c6" style="opacity:.72; box-shadow:none;">
       <div class="prop-content">
-        <div class="prop-icon">👥</div>
+        <div class="prop-icon" aria-hidden="true">👥</div>
         <div class="prop-details">
           <h2>Clase 6: Clonación en Masa</h2>
           <p>Optimización y generación dinámica de múltiples objetos independientes (crear clon, al comenzar como clon).</p>
         </div>
       </div>
-      <div class="prop-arrow">→</div>
-    </a>
+      <span style="flex-shrink:0; background:#f1f3f8; color:#475569; border:1px solid #cbd5e1; border-radius:20px; padding:5px 12px; font-size:12px; font-weight:800; white-space:nowrap;">En preparación</span>
+    </div>
 
-    <a href="err404.html" class="proposal-card p-c7">
+    <div class="proposal-card p-c7" style="opacity:.72; box-shadow:none;">
       <div class="prop-content">
-        <div class="prop-icon">📊</div>
+        <div class="prop-icon" aria-hidden="true">📊</div>
         <div class="prop-details">
           <h2>Clase 7: Manejo de Listas</h2>
           <p>Estructuras de datos complejas mediante el uso de arreglos (agregar ítem, longitud de lista, buscar).</p>
         </div>
       </div>
-      <div class="prop-arrow">→</div>
-    </a>
+      <span style="flex-shrink:0; background:#f1f3f8; color:#475569; border:1px solid #cbd5e1; border-radius:20px; padding:5px 12px; font-size:12px; font-weight:800; white-space:nowrap;">En preparación</span>
+    </div>
 
-    <a href="err404.html" class="proposal-card p-c8">
+    <div class="proposal-card p-c8" style="opacity:.72; box-shadow:none;">
       <div class="prop-content">
-        <div class="prop-icon">🎵</div>
+        <div class="prop-icon" aria-hidden="true">🎵</div>
         <div class="prop-details">
           <h2>Clase 8: Extensión de Música</h2>
           <p>Composición y algoritmos avanzados aplicados a la creación y secuenciación musical programada.</p>
         </div>
       </div>
-      <div class="prop-arrow">→</div>
-    </a>
+      <span style="flex-shrink:0; background:#f1f3f8; color:#475569; border:1px solid #cbd5e1; border-radius:20px; padding:5px 12px; font-size:12px; font-weight:800; white-space:nowrap;">En preparación</span>
+    </div>
 
-    <a href="err404.html" class="proposal-card p-c9">
+    <div class="proposal-card p-c9" style="opacity:.72; box-shadow:none;">
       <div class="prop-content">
-        <div class="prop-icon">🤖</div>
+        <div class="prop-icon" aria-hidden="true">🤖</div>
         <div class="prop-details">
           <h2>Clase 9: Inteligencia Artificial Básica</h2>
           <p>Integración de servicios cognitivos mediante las extensiones de Traducción (Translate) y Texto a Voz (Text to Speech).</p>
         </div>
       </div>
-      <div class="prop-arrow">→</div>
-    </a>
+      <span style="flex-shrink:0; background:#f1f3f8; color:#475569; border:1px solid #cbd5e1; border-radius:20px; padding:5px 12px; font-size:12px; font-weight:800; white-space:nowrap;">En preparación</span>
+    </div>
 
-    <a href="err404.html" class="proposal-card p-c10">
+    <div class="proposal-card p-c10" style="opacity:.72; box-shadow:none;">
       <div class="prop-content">
-        <div class="prop-icon">🧠</div>
+        <div class="prop-icon" aria-hidden="true">🧠</div>
         <div class="prop-details">
           <h2>Clase 10: Machine Learning práctico</h2>
           <p>Conexión e implementación de modelos predictivos propios entrenados con la plataforma Machine Learning for Kids.</p>
         </div>
       </div>
-      <div class="prop-arrow">→</div>
-    </a>
+      <span style="flex-shrink:0; background:#f1f3f8; color:#475569; border:1px solid #cbd5e1; border-radius:20px; padding:5px 12px; font-size:12px; font-weight:800; white-space:nowrap;">En preparación</span>
+    </div>
 
-    <a href="err404.html" class="proposal-card p-c11">
+    <div class="proposal-card p-c11" style="opacity:.72; box-shadow:none;">
       <div class="prop-content">
-        <div class="prop-icon">👁️</div>
+        <div class="prop-icon" aria-hidden="true">👁️</div>
         <div class="prop-details">
           <h2>Clase 11: Visión Artificial computacional</h2>
           <p>Creación de interacciones físicas en tiempo real empleando la extensión de detección de video (Video Sensing).</p>
         </div>
       </div>
-      <div class="prop-arrow">→</div>
-    </a>
+      <span style="flex-shrink:0; background:#f1f3f8; color:#475569; border:1px solid #cbd5e1; border-radius:20px; padding:5px 12px; font-size:12px; font-weight:800; white-space:nowrap;">En preparación</span>
+    </div>
 
   </div>
 
@@ -308,7 +322,7 @@ body.all-caps { text-transform: uppercase; }
       <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #f1f5f9; padding-bottom: 14px; margin-bottom: 16px;">
         <div>
           <h2 style="font-size: 20px; font-weight: 800; color: #1e293b;">🛠️ Panel de Control y Recuperación de Archivos</h2>
-          <p style="font-size: 13px; color: #64748b;">Gestión de fichas guardadas, edición de Cédula y continuidad de trabajo</p>
+          <p style="font-size: 13px; color: #64748b;">Gestión de fichas guardadas, edición del código y continuidad de trabajo</p>
         </div>
         <button onclick="logoutAdmin()" style="background: #f1f5f9; color: #475569; border: none; padding: 8px 14px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer;">Cerrar Sesión</button>
       </div>
@@ -346,7 +360,7 @@ body.all-caps { text-transform: uppercase; }
   </div>
 </div>
 
-</main>
+
 
 <script>
 const ADMIN_CODE = "6709";
@@ -354,6 +368,7 @@ const ADMIN_CODE = "6709";
 function toggleAllCaps() {
   document.body.classList.toggle('all-caps');
   const btn = document.getElementById('capsBtn');
+  if (!btn) return;
   if (document.body.classList.contains('all-caps')) {
     btn.textContent = "ABC → Abc";
   } else {
@@ -416,7 +431,7 @@ function verifyAdminPin() {
 }
 
 function openWorksheet(page, ci) {
-  if (ci && ci !== 'general' && ci !== 'Sin CI registrado') {
+  if (ci && ci !== 'general' && ci !== 'Sin código registrado') {
     try { localStorage.setItem('scratch_last_ci', ci); } catch(e){}
     window.location.href = `${page}.html?ci=${encodeURIComponent(ci)}`;
   } else {
@@ -458,7 +473,7 @@ function renderAdminData() {
       if (!studentMap[studentKey]) {
         studentMap[studentKey] = {
           ciKey: studentKey,
-          ciDisplay: ciClean || 'Sin Cédula (CI)',
+          ciDisplay: ciClean || 'Sin código',
           hasCi: !!ciClean,
           name: parsed.nombre || 'Estudiante sin nombre',
           files: []
@@ -511,8 +526,8 @@ function renderAdminData() {
   let html = '';
   studentsList.forEach((st, idx) => {
     const ciBadge = st.hasCi
-      ? `<span style="background: #dcfce7; color: #15803d; padding: 2px 8px; border-radius: 6px; font-size: 12px; font-weight: 800;">CI: ${st.ciDisplay}</span>`
-      : `<span style="background: #fef3c7; color: #b45309; padding: 2px 8px; border-radius: 6px; font-size: 12px; font-weight: 800;">⚠️ Faltan datos (Sin CI)</span>`;
+      ? `<span style="background: #dcfce7; color: #15803d; padding: 2px 8px; border-radius: 6px; font-size: 12px; font-weight: 800;">Código: ${st.ciDisplay}</span>`
+      : `<span style="background: #fef3c7; color: #b45309; padding: 2px 8px; border-radius: 6px; font-size: 12px; font-weight: 800;">⚠️ Faltan datos (Sin código)</span>`;
 
     let filesHtml = '';
     st.files.forEach(f => {
@@ -540,7 +555,7 @@ function renderAdminData() {
           </div>
           <div style="display: flex; gap: 6px;">
             <button onclick="toggleEditForm('${idx}')" style="background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; padding: 5px 10px; border-radius: 6px; font-size: 12px; font-weight: 800; cursor: pointer;">
-              ✏️ ${st.hasCi ? 'Editar Datos' : '➕ Asignar Cédula'}
+              ✏️ ${st.hasCi ? 'Editar Datos' : '➕ Asignar código'}
             </button>
             <button onclick="deleteStudentData('${st.ciKey}')" style="background: #fef2f2; color: #dc2626; border: 1px solid #fca5a5; padding: 5px 10px; border-radius: 6px; font-size: 12px; font-weight: 800; cursor: pointer;">
               🗑️ Borrar
@@ -550,15 +565,15 @@ function renderAdminData() {
 
         <!-- FORMULARIO INLINE EDICION -->
         <div id="edit-form-${idx}" style="display: none; background: #fffbebfb; border: 1px solid #fde047; border-radius: 8px; padding: 12px; margin-top: 10px;">
-          <div style="font-size: 13px; font-weight: 800; color: #92400e; margin-bottom: 8px;">✏️ Asignar o Editar Cédula y Nombre</div>
+          <div style="font-size: 13px; font-weight: 800; color: #92400e; margin-bottom: 8px;">✏️ Asignar o editar código y nombre</div>
           <div style="display: flex; gap: 10px; flex-wrap: wrap;">
             <div style="flex: 1; min-width: 150px;">
-              <label style="font-size: 11px; font-weight: 700; color: #78350f; display: block; margin-bottom: 2px;">Cédula de Identidad (CI):</label>
-              <input type="text" id="edit-ci-${idx}" value="${st.hasCi ? st.ciKey : ''}" placeholder="Ej: 12345678" style="width: 100%; border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px 10px; font-size: 13px; font-weight: 700;">
+              <label style="font-size: 11px; font-weight: 700; color: #78350f; display: block; margin-bottom: 2px;">Código de estudiante:</label>
+              <input type="text" id="edit-ci-${idx}" value="${st.hasCi ? st.ciKey : ''}" placeholder="Ej: MM-07" style="width: 100%; border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px 10px; font-size: 13px; font-weight: 700;">
             </div>
             <div style="flex: 2; min-width: 180px;">
-              <label style="font-size: 11px; font-weight: 700; color: #78350f; display: block; margin-bottom: 2px;">Nombre Completo:</label>
-              <input type="text" id="edit-name-${idx}" value="${st.name}" placeholder="Nombre del estudiante" style="width: 100%; border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px 10px; font-size: 13px;">
+              <label style="font-size: 11px; font-weight: 700; color: #78350f; display: block; margin-bottom: 2px;">Nombre e inicial del apellido:</label>
+              <input type="text" id="edit-name-${idx}" value="${st.name}" placeholder="Nombre e inicial" style="width: 100%; border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px 10px; font-size: 13px;">
             </div>
           </div>
           <div style="margin-top: 10px; display: flex; gap: 8px; justify-content: flex-end;">
@@ -667,7 +682,7 @@ function saveStudentEdit(oldCiKey, idx) {
 
         const newRegKey = newCI ? `ci_${newCI}` : 'general';
         if (!registry[newRegKey]) {
-          registry[newRegKey] = { ci: newCI || 'Sin CI', name: newName || 'Estudiante', classes: {}, lastUpdated: new Date().toISOString() };
+          registry[newRegKey] = { ci: newCI || 'Sin código', name: newName || 'Estudiante', classes: {}, lastUpdated: new Date().toISOString() };
         } else {
           if (newName) registry[newRegKey].name = newName;
           registry[newRegKey].lastUpdated = new Date().toISOString();
@@ -680,16 +695,16 @@ function saveStudentEdit(oldCiKey, idx) {
       try { localStorage.setItem('scratch_last_ci', newCI); } catch(e){}
     }
 
-    showAdminBanner(`✅ Datos actualizados con éxito: ${newName || 'Estudiante'} ${newCI ? '(CI: ' + newCI + ')' : '(Sin Cédula)'}`, "success");
+    showAdminBanner(`✅ Datos actualizados con éxito: ${newName || 'Estudiante'} ${newCI ? '(código: ' + newCI + ')' : '(Sin código)'}`, "success");
     renderAdminData();
   };
 
   if (!newCI) {
     showCustomConfirm(
-      "¿Guardar sin Cédula?",
-      "No ingresaste Cédula de Identidad para el estudiante. ¿Deseás guardar la ficha como registro general?",
+      "¿Guardar sin código?",
+      "No ingresaste código de estudiante para el estudiante. ¿Deseás guardar la ficha como registro general?",
       doSave,
-      () => showAdminBanner("⚠️ Edición cancelada. No se modificó la Cédula.", "info"),
+      () => showAdminBanner("⚠️ Edición cancelada. No se modificó el código.", "info"),
       false
     );
   } else {
@@ -698,11 +713,11 @@ function saveStudentEdit(oldCiKey, idx) {
 }
 
 function deleteStudentData(ci) {
-  const displayCi = (ci && ci !== 'general') ? ci : 'Sin Cédula';
+  const displayCi = (ci && ci !== 'general') ? ci : 'Sin código';
   
   showCustomConfirm(
     "🗑️ Borrar Archivo de Estudiante",
-    `¿Confirmás eliminar todos los registros guardados para el estudiante (CI: "${displayCi}") en este equipo?`,
+    `¿Confirmás eliminar todos los registros guardados para el estudiante (código: "${displayCi}") en este equipo?`,
     () => {
       try {
         const regData = localStorage.getItem('scratch_students_registry');
@@ -723,7 +738,7 @@ function deleteStudentData(ci) {
       }
       keysToRemove.forEach(k => localStorage.removeItem(k));
 
-      showAdminBanner(`🗑️ Registro del estudiante (CI: "${displayCi}") eliminado de este equipo.`, "success");
+      showAdminBanner(`🗑️ Registro del estudiante (código: "${displayCi}") eliminado de este equipo.`, "success");
       renderAdminData();
     },
     () => {
@@ -757,6 +772,17 @@ function clearAllStudentData() {
   );
 }
 </script>
+
+<footer class="site-footer">
+  <div class="foot-inner">
+    <p><strong>Portal de Programación con Scratch</strong> · Autor: <strong>Mario Morena</strong> · 2026<br>
+    Profesorado de Informática, CeRP del Centro — Florida, Uruguay.</p>
+    <p class="foot-lic">Contenido propio bajo licencia <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es" target="_blank" rel="noopener">Creative Commons Atribución-NoComercial-CompartirIgual 4.0</a>.
+    El recurso <em>Tu huella digital</em> se publica bajo CC BY-SA 4.0. Los materiales de terceros conservan su licencia y están atribuidos en <a href="acerca.html">Acerca del sitio</a>.</p>
+    <p class="foot-lic">Este sitio no envía datos a ningún servidor. <a href="acerca.html">Cómo se tratan los datos</a>.</p>
+  </div>
+</footer>
+<script src="assets/sitio.js"></script>
 
 </body>
 </html>
