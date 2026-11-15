@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 790" width="1000" height="790" role="img" aria-labelledby="infTitulo infDesc">
+<title id="infTitulo">Cuatro ideas para programar en Scratch: secuencia, bucle, condicional y variable</title>
+<desc id="infDesc">Infografía con cuatro paneles. Panel 1, secuencia: una cosa después de la otra, como seguir una receta; ejemplo: mover 10 pasos, girar 15 grados, decir hola. Panel 2, bucle: repetir sin escribir de nuevo, como dar cuatro vueltas a la cancha; ejemplo: repetir 4 veces mover 100 pasos y girar 90 grados, dibuja un cuadrado. Panel 3, condicional: si pasa esto, entonces hace esto, como si llueve llevo paraguas; ejemplo: si toca el borde, entonces rebotar. Panel 4, variable: una caja que guarda un dato, como el marcador de un partido; ejemplo: poner puntos en cero y cambiar puntos por uno.</desc>
+
+<rect width="1000" height="790" fill="#F7F4EF"/>
+
+<rect x="0" y="0" width="1000" height="112" fill="#2c1b4d"/>
+<text x="500" y="52" text-anchor="middle" font-family="Verdana, Geneva, sans-serif" font-size="34" font-weight="bold" fill="#FFFFFF">CUATRO IDEAS PARA PROGRAMAR</text>
+<text x="500" y="88" text-anchor="middle" font-family="Verdana, Geneva, sans-serif" font-size="20" fill="#FFD464">Secuencia · Bucle · Condicional · Variable</text>
+
+<!-- PANEL 1: SECUENCIA -->
+<g>
+  <rect x="28" y="140" width="456" height="290" rx="16" fill="#FFFFFF" stroke="#4C97FF" stroke-width="4"/>
+  <rect x="28" y="140" width="456" height="56" rx="16" fill="#4C97FF"/>
+  <rect x="28" y="180" width="456" height="16" fill="#4C97FF"/>
+  <text x="56" y="178" font-family="Verdana, Geneva, sans-serif" font-size="25" font-weight="bold" fill="#FFFFFF">1. SECUENCIA</text>
+  <text x="56" y="238" font-family="Verdana, Geneva, sans-serif" font-size="23" font-weight="bold" fill="#1a1a2e">Una cosa después de la otra.</text>
+  <text x="56" y="272" font-family="Verdana, Geneva, sans-serif" font-size="19" fill="#4a5568">Como seguir los pasos de una receta.</text>
+  <rect x="56" y="294" width="300" height="34" rx="8" fill="#4C97FF"/>
+  <text x="70" y="318" font-family="Verdana, Geneva, sans-serif" font-size="17" font-weight="bold" fill="#FFFFFF">mover 10 pasos</text>
+  <rect x="56" y="334" width="300" height="34" rx="8" fill="#4C97FF"/>
+  <text x="70" y="358" font-family="Verdana, Geneva, sans-serif" font-size="17" font-weight="bold" fill="#FFFFFF">girar 15 grados</text>
+  <rect x="56" y="374" width="300" height="34" rx="8" fill="#9966FF"/>
+  <text x="70" y="398" font-family="Verdana, Geneva, sans-serif" font-size="17" font-weight="bold" fill="#FFFFFF">decir Hola</text>
+  <text x="378" y="320" font-family="Verdana, Geneva, sans-serif" font-size="30" fill="#4C97FF">1</text>
+  <text x="378" y="360" font-family="Verdana, Geneva, sans-serif" font-size="30" fill="#4C97FF">2</text>
+  <text x="378" y="400" font-family="Verdana, Geneva, sans-serif" font-size="30" fill="#4C97FF">3</text>
+</g>
+
+<!-- PANEL 2: BUCLE -->
+<g>
+  <rect x="516" y="140" width="456" height="290" rx="16" fill="#FFFFFF" stroke="#FF8C00" stroke-width="4"/>
+  <rect x="516" y="140" width="456" height="56" rx="16" fill="#FF8C00"/>
+  <rect x="516" y="180" width="456" height="16" fill="#FF8C00"/>
+  <text x="544" y="178" font-family="Verdana, Geneva, sans-serif" font-size="25" font-weight="bold" fill="#FFFFFF">2. BUCLE</text>
+  <text x="544" y="238" font-family="Verdana, Geneva, sans-serif" font-size="23" font-weight="bold" fill="#1a1a2e">Repetir sin escribir de nuevo.</text>
+  <text x="544" y="272" font-family="Verdana, Geneva, sans-serif" font-size="19" fill="#4a5568">Como dar 4 vueltas a la cancha.</text>
+  <rect x="544" y="294" width="320" height="114" rx="10" fill="#FF8C00"/>
+  <text x="558" y="318" font-family="Verdana, Geneva, sans-serif" font-size="17" font-weight="bold" fill="#FFFFFF">repetir 4 veces</text>
+  <rect x="572" y="328" width="278" height="30" rx="7" fill="#FFFFFF"/>
+  <text x="584" y="349" font-family="Verdana, Geneva, sans-serif" font-size="16" font-weight="bold" fill="#1a1a2e">mover 100 pasos</text>
+  <rect x="572" y="364" width="278" height="30" rx="7" fill="#FFFFFF"/>
+  <text x="584" y="385" font-family="Verdana, Geneva, sans-serif" font-size="16" font-weight="bold" fill="#1a1a2e">girar 90 grados</text>
+  <rect x="886" y="300" width="62" height="62" fill="none" stroke="#FF8C00" stroke-width="5"/>
+  <text x="917" y="388" text-anchor="middle" font-family="Verdana, Geneva, sans-serif" font-size="16" font-weight="bold" fill="#9a4b00">cuadrado</text>
+</g>
+
+<!-- PANEL 3: CONDICIONAL -->
+<g>
+  <rect x="28" y="450" width="456" height="290" rx="16" fill="#FFFFFF" stroke="#FFB900" stroke-width="4"/>
+  <rect x="28" y="450" width="456" height="56" rx="16" fill="#FFB900"/>
+  <rect x="28" y="490" width="456" height="16" fill="#FFB900"/>
+  <text x="56" y="488" font-family="Verdana, Geneva, sans-serif" font-size="25" font-weight="bold" fill="#1a1a2e">3. CONDICIONAL</text>
+  <text x="56" y="548" font-family="Verdana, Geneva, sans-serif" font-size="23" font-weight="bold" fill="#1a1a2e">Si pasa esto, hace esto.</text>
+  <text x="56" y="582" font-family="Verdana, Geneva, sans-serif" font-size="19" fill="#4a5568">Como: si llueve, llevo paraguas.</text>
+  <rect x="56" y="604" width="330" height="96" rx="10" fill="#FFB900"/>
+  <text x="70" y="630" font-family="Verdana, Geneva, sans-serif" font-size="17" font-weight="bold" fill="#1a1a2e">si toca el borde</text>
+  <rect x="84" y="640" width="288" height="30" rx="7" fill="#FFFFFF"/>
+  <text x="96" y="661" font-family="Verdana, Geneva, sans-serif" font-size="16" font-weight="bold" fill="#1a1a2e">rebotar</text>
+  <text x="70" y="692" font-family="Verdana, Geneva, sans-serif" font-size="15" fill="#5a4300">si no pasa, sigue de largo</text>
+</g>
+
+<!-- PANEL 4: VARIABLE -->
+<g>
+  <rect x="516" y="450" width="456" height="290" rx="16" fill="#FFFFFF" stroke="#9966FF" stroke-width="4"/>
+  <rect x="516" y="450" width="456" height="56" rx="16" fill="#9966FF"/>
+  <rect x="516" y="490" width="456" height="16" fill="#9966FF"/>
+  <text x="544" y="488" font-family="Verdana, Geneva, sans-serif" font-size="25" font-weight="bold" fill="#FFFFFF">4. VARIABLE</text>
+  <text x="544" y="548" font-family="Verdana, Geneva, sans-serif" font-size="23" font-weight="bold" fill="#1a1a2e">Una caja que guarda un dato.</text>
+  <text x="544" y="582" font-family="Verdana, Geneva, sans-serif" font-size="19" fill="#4a5568">Como el marcador de un partido.</text>
+  <rect x="544" y="604" width="300" height="34" rx="8" fill="#9966FF"/>
+  <text x="558" y="628" font-family="Verdana, Geneva, sans-serif" font-size="17" font-weight="bold" fill="#FFFFFF">poner puntos en 0</text>
+  <rect x="544" y="646" width="300" height="34" rx="8" fill="#9966FF"/>
+  <text x="558" y="670" font-family="Verdana, Geneva, sans-serif" font-size="17" font-weight="bold" fill="#FFFFFF">cambiar puntos por 1</text>
+  <rect x="862" y="600" width="86" height="80" rx="10" fill="#f5f3ff" stroke="#9966FF" stroke-width="4"/>
+  <text x="905" y="638" text-anchor="middle" font-family="Verdana, Geneva, sans-serif" font-size="15" font-weight="bold" fill="#5b21b6">puntos</text>
+  <text x="905" y="666" text-anchor="middle" font-family="Verdana, Geneva, sans-serif" font-size="26" font-weight="bold" fill="#5b21b6">3</text>
+</g>
+
+<text x="28" y="772" font-family="Verdana, Geneva, sans-serif" font-size="15" fill="#5b6478">Mario Morena · 2026 · Portal de Programación con Scratch</text>
+<text x="972" y="772" text-anchor="end" font-family="Verdana, Geneva, sans-serif" font-size="15" fill="#5b6478">Licencia CC BY-NC-SA 4.0</text>
+</svg>
